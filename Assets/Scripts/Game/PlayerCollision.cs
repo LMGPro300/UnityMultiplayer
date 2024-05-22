@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class PlayerCollision : MonoBehaviour{
+public class PlayerCollision : NetworkBehaviour//MonoBehaviour//
+{
     [SerializeField] private int jumpFrameBuffer = 100;
     private bool isGrounded = false;
     private int currentJumpFrame;
@@ -32,6 +34,9 @@ public class PlayerCollision : MonoBehaviour{
         isGrounded = false;
     }
 
+    public void DidJump(){
+        isGrounded = false;
+    }
 
     public bool GetIsGrounded(){
         return isGrounded;

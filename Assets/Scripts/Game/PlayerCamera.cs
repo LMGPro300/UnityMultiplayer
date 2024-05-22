@@ -1,11 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class PlayerCamera : MonoBehaviour{
-    [SerializeField] private Transform cam;
+public class PlayerCamera : NetworkBehaviour//MonoBehaviour
+{
+    [SerializeField] private Camera _camera;
     [SerializeField] private float sensX = 50.0f, sensY = -50.0f;
     private float camAngle = 0f;
+    private Transform cam;
+
+    public void Awake(){
+        cam = _camera.transform;
+    }
+
+    public override void OnNetworkSpawn(){
+        Debug.Log("spawned in");
+        base.OnNetworkSpawn();
+        if (!IsOwner) return; 
+        _camera.enabled = true;
+    }
 
     public void RecieveInput(Vector2 mouseInput){
         transform.rotation *= Quaternion.Euler(0f, mouseInput.x * Time.deltaTime * sensX, 0f);
