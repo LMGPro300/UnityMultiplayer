@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Funny Slope
+  - ground
   layers:
   - Default
   - TransparentFX
