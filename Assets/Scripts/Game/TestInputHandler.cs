@@ -4,12 +4,12 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Unity.Netcode;
 
-public class InputHandler : NetworkBehaviour//MonoBehaviour
+public class TestInputHandler : NetworkBehaviour//MonoBehaviour
 {
     [SerializeField] PlayerCamera playerCamera;
-    [SerializeField] PlayerMovement playerMovement;
+    //[SerializeField] PlayerMovement playerMovement;
     //[SerializeField] PlayerShoot playerShoot;
-    [SerializeField] PlayerPickUp playerPickUp;
+    [SerializeField] TestMovement testMovement;
 
     private PlayerControls PlayerControlsActionMap;
     private PlayerControls.KeyboardActions keyboardMovement;
@@ -18,17 +18,15 @@ public class InputHandler : NetworkBehaviour//MonoBehaviour
     private Vector2 keyboardInput;
     private float jumpInput;
     private float shootInput;
-    private float pickUpInput;
 
     void Awake()
     {
+        Debug.Log(IsOwner);
         PlayerControlsActionMap = new PlayerControls();
         keyboardMovement = PlayerControlsActionMap.Keyboard;
-        keyboardMovement.JUMP.performed += ctx => jumpInput = ctx.ReadValue<float>();
+        //keyboardMovement.JUMP.performed += ctx => jumpInput = ctx.ReadValue<float>();
         keyboardMovement.MOUSE.performed += ctx => mouseInput = ctx.ReadValue<Vector2>();
         keyboardMovement.MOVEMENT.performed += ctx => keyboardInput = ctx.ReadValue<Vector2>();
-        keyboardMovement.PICKUP.performed += ctx => pickUpInput = ctx.ReadValue<float>();
-
         //keyboardMovement.Primary.performed += ctx => shootInput = ctx.ReadValue<float>();
     }
     private void OnEnable(){
@@ -48,9 +46,9 @@ public class InputHandler : NetworkBehaviour//MonoBehaviour
     { 
         if (!IsOwner) return;
         playerCamera.RecieveInput(mouseInput);
-        playerMovement.RecieveKeyboardInput(keyboardInput);
-        playerMovement.RecieveJumpInput(jumpInput);
-        playerPickUp.RecievePickUpInput(pickUpInput);
+        //playerMovement.RecieveKeyboardInput(keyboardInput);
+        testMovement.RecieveKeyboardInput(keyboardInput);
+        //playerMovement.RecieveJumpInput(jumpInput);
         //playerShoot.RecieveShootInput(shootInput);      
     }
 }

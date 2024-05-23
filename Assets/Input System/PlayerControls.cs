@@ -53,6 +53,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""PICKUP"",
+                    ""type"": ""Button"",
+                    ""id"": ""4a55d355-fcca-4dbd-83cc-9d8e9475bc8e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -132,6 +141,17 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""JUMP"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""44a5e388-7bb0-425f-b3af-866d4ea20dc6"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PICKUP"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -143,6 +163,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Keyboard_MOVEMENT = m_Keyboard.FindAction("MOVEMENT", throwIfNotFound: true);
         m_Keyboard_MOUSE = m_Keyboard.FindAction("MOUSE", throwIfNotFound: true);
         m_Keyboard_JUMP = m_Keyboard.FindAction("JUMP", throwIfNotFound: true);
+        m_Keyboard_PICKUP = m_Keyboard.FindAction("PICKUP", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -207,6 +228,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Keyboard_MOVEMENT;
     private readonly InputAction m_Keyboard_MOUSE;
     private readonly InputAction m_Keyboard_JUMP;
+    private readonly InputAction m_Keyboard_PICKUP;
     public struct KeyboardActions
     {
         private @PlayerControls m_Wrapper;
@@ -214,6 +236,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @MOVEMENT => m_Wrapper.m_Keyboard_MOVEMENT;
         public InputAction @MOUSE => m_Wrapper.m_Keyboard_MOUSE;
         public InputAction @JUMP => m_Wrapper.m_Keyboard_JUMP;
+        public InputAction @PICKUP => m_Wrapper.m_Keyboard_PICKUP;
         public InputActionMap Get() { return m_Wrapper.m_Keyboard; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -232,6 +255,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @JUMP.started += instance.OnJUMP;
             @JUMP.performed += instance.OnJUMP;
             @JUMP.canceled += instance.OnJUMP;
+            @PICKUP.started += instance.OnPICKUP;
+            @PICKUP.performed += instance.OnPICKUP;
+            @PICKUP.canceled += instance.OnPICKUP;
         }
 
         private void UnregisterCallbacks(IKeyboardActions instance)
@@ -245,6 +271,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @JUMP.started -= instance.OnJUMP;
             @JUMP.performed -= instance.OnJUMP;
             @JUMP.canceled -= instance.OnJUMP;
+            @PICKUP.started -= instance.OnPICKUP;
+            @PICKUP.performed -= instance.OnPICKUP;
+            @PICKUP.canceled -= instance.OnPICKUP;
         }
 
         public void RemoveCallbacks(IKeyboardActions instance)
@@ -267,5 +296,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnMOVEMENT(InputAction.CallbackContext context);
         void OnMOUSE(InputAction.CallbackContext context);
         void OnJUMP(InputAction.CallbackContext context);
+        void OnPICKUP(InputAction.CallbackContext context);
     }
 }

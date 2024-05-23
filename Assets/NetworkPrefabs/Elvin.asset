@@ -10,17 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e651dbb3fbac04af2b8f5abf007ddc23, type: 3}
-  m_Name: DefaultNetworkPrefabs
+  m_Name: Elvin
   m_EditorClassIdentifier: 
-  IsDefault: 1
+  IsDefault: 0
   List:
   - Override: 0
     Prefab: {fileID: 4169232969310089731, guid: cac3921efd480064b8fe9962b79237bb, type: 3}
-    SourcePrefabToOverride: {fileID: 0}
-    SourceHashToOverride: 0
-    OverridingTargetPrefab: {fileID: 0}
-  - Override: 0
-    Prefab: {fileID: 5906022451638123846, guid: 64ba7976d02e806459ac6706e497fe60, type: 3}
     SourcePrefabToOverride: {fileID: 0}
     SourceHashToOverride: 0
     OverridingTargetPrefab: {fileID: 0}
