@@ -8,6 +8,7 @@ public class InventorySystem : MonoBehaviour
 {
     private Dictionary<InventoryItemData, InventoryItem> item_dict;
     public List<InventoryItem> inventory;
+    public List<GameObject> droppedItems;
 
     private void Awake()
     {
@@ -50,4 +51,27 @@ public class InventorySystem : MonoBehaviour
         }
     }
     
+    public void DropItem()
+    {
+        InventoryItem itemToDrop = inventory[0];
+        InventoryItemData referenceData = inventory[0].data;
+        GameObject itemToSpawn = droppedItems[0];
+
+        if (itemToDrop == null)
+        {
+            return;
+        }
+        
+        //foreach (GameObject item in droppedItems)
+        //{
+        //    if (item == referenceData.prefab)
+        //    {
+        //        itemToSpawn = item;
+        //        break;
+        //    }
+        //}
+
+        GameObject droppedItem = Instantiate(itemToSpawn);
+        droppedItem.transform.position = droppedItem.transform.position + new Vector3(0f, 10f, 0f);
+    }
 }

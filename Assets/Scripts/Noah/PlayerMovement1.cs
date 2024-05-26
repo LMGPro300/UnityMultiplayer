@@ -20,11 +20,8 @@ public class PlayerMovement1 : MonoBehaviour
     public Camera playerCam;
     [SerializeField]
     public GameObject inventory;
-    [SerializeField]
-    public GameObject droppedItem;
-    [SerializeField]
-    public dropItem dropItemScript;
 
+    private dropItem dropItemReference;
     bool isGrounded = true;
     Rigidbody rb;
     Vector2 strafeInput;
@@ -45,6 +42,7 @@ public class PlayerMovement1 : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         myInventory = inventory.GetComponent<InventorySystem>();
+        dropItemReference = GetComponent<dropItem>();
     }
 
     // Update is called once per frame
@@ -91,7 +89,7 @@ public class PlayerMovement1 : MonoBehaviour
 
     public void playerDropItem(InputAction.CallbackContext ctx)
     {
-        dropItemScript.playerDropItem();
+        myInventory.DropItem();
     }
 
     private void OnDisable()

@@ -5,8 +5,16 @@ using UnityEngine;
 
 public class dropItem : MonoBehaviour
 {
+    [SerializeField]
+    List<GameObject> droppedItems;
+
+    Dictionary<InventoryItemData, GameObject> droppedItemsDict;
+
+    public void Start()
+    {
+    }
     public void playerDropItem()
     {
-        Dictionary<InventoryItemData, GameObject> model_dict;
+        return;
     }
 }
