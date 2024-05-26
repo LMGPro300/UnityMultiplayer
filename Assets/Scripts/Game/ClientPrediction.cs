@@ -23,6 +23,9 @@ public class ClientPrediction : NetworkBehaviour
     //Client movement
     [SerializeField] private PlayerMovement playerMovement;
     [SerializeField] private Rigidbody rb;
+    [SerializeField] private float reconcilThreshold = 10f;
+    [SerializeField] private GameObject serverCube;
+    [SerializeField] private GameObject clientCube;
 
     public void Awake(){
         networkTimer = new NetworkTimer(v_serverTickRate);
@@ -35,6 +38,12 @@ public class ClientPrediction : NetworkBehaviour
 
     public void Update(){
         networkTimer.Update(Time.deltaTime);
+    }
+
+    public void RecieveTeleportInput(float teleportInput){
+        if(teleportInput == 1){
+            transform.position += transform.forward * 1f;
+        }
     }
 
     public struct InputPayload : INetworkSerializable{
@@ -68,7 +77,11 @@ public class ClientPrediction : NetworkBehaviour
             InputPayload inputPayload = serverInputQueue.Dequeue();
 
             bufferIndex = inputPayload.tick % v_bufferSize;
+            int previousBufferIndex = bufferIndex - 1;
+            if (previousBufferIndex < 0) previousBufferIndex = v_bufferSize - 1;
+
             StatePayload statePayload = SimulateMovement(inputPayload);
+            serverCube.transform.position = statePayload.position;
             serverStateBuffer.Add(statePayload, bufferIndex);
         }
         if (bufferIndex == -1) return;
@@ -84,7 +97,7 @@ public class ClientPrediction : NetworkBehaviour
     public StatePayload SimulateMovement(InputPayload inputPayload){
         Physics.simulationMode = SimulationMode.Script;
 
-        playerMovement.Move();
+        playerMovement.Move(inputPayload.inputVector);
 
         Physics.Simulate(Time.fixedDeltaTime);
         Physics.simulationMode = SimulationMode.FixedUpdate;
@@ -112,10 +125,58 @@ public class ClientPrediction : NetworkBehaviour
         SendToServerRpc(inputPayload);
 
         StatePayload statePayload = ProcessMovement(inputPayload);
+        clientCube.transform.position = statePayload.position;
         clientStateBuffer.Add(statePayload, bufferIndex);
 
-        //HandleServerReconciliation();
+        HandleServerReconciliation();
     }
+
+    public bool ShouldReconcil(){
+        bool isNewServerState = !lastServerState.Equals(default);
+        bool isLastStateUndefinedOrDifferent = lastProcessedState.Equals(default) || !lastProcessedState.Equals(lastServerState);
+        return isNewServerState && isLastStateUndefinedOrDifferent;
+    }
+
+    public void HandleServerReconciliation(){
+        if (!ShouldReconcil()) return;
+
+        float positionError;
+        int bufferIndex;
+        StatePayload rewindState = default;
+
+        bufferIndex = lastServerState.tick % v_bufferSize;
+        if (bufferIndex - 1 < 0) return;
+
+        rewindState = IsHost ? serverStateBuffer.Get(bufferIndex-1) : lastServerState;
+        positionError = Vector3.Distance(rewindState.position, clientStateBuffer.Get(bufferIndex).position);
+        
+        if (positionError > reconcilThreshold){
+            ReconcileState(rewindState);
+            Debug.Log("just reconciled");
+        }
+
+        lastProcessedState = lastServerState;
+    }
+
+    public void ReconcileState(StatePayload rewindState){
+        transform.position = rewindState.position;
+        transform.rotation = rewindState.rotation;
+        rb.velocity = rewindState.velocity;
+
+        if (!rewindState.Equals(lastServerState)) return;
+
+        clientStateBuffer.Add(rewindState, rewindState.tick);
+
+        int tickToReplay = lastServerState.tick;
+
+        while (tickToReplay < networkTimer.currentTick){
+            int bufferIndex = tickToReplay % v_bufferSize;
+            StatePayload statePayload = ProcessMovement(clientInputBuffer.Get(bufferIndex));
+            clientStateBuffer.Add(statePayload, bufferIndex);
+            tickToReplay++;
+        }
+    }
+    
 
     [ServerRpc]
     public void SendToServerRpc(InputPayload inputPayload){
@@ -123,7 +184,7 @@ public class ClientPrediction : NetworkBehaviour
     }
 
     public StatePayload ProcessMovement(InputPayload input){
-        playerMovement.Move();
+        playerMovement.Move(input.inputVector);
         return new StatePayload(){
             tick = input.tick,
             position = transform.position,

@@ -18,6 +18,7 @@ public class TestInputHandler : NetworkBehaviour//MonoBehaviour
     private Vector2 keyboardInput;
     private float jumpInput;
     private float shootInput;
+    private float teleportInput;
 
     void Awake()
     {
@@ -27,6 +28,7 @@ public class TestInputHandler : NetworkBehaviour//MonoBehaviour
         //keyboardMovement.JUMP.performed += ctx => jumpInput = ctx.ReadValue<float>();
         keyboardMovement.MOUSE.performed += ctx => mouseInput = ctx.ReadValue<Vector2>();
         keyboardMovement.MOVEMENT.performed += ctx => keyboardInput = ctx.ReadValue<Vector2>();
+        keyboardMovement.TELEPORT.performed += ctx => teleportInput = ctx.ReadValue<float>();
         //keyboardMovement.Primary.performed += ctx => shootInput = ctx.ReadValue<float>();
     }
     private void OnEnable(){
@@ -48,6 +50,8 @@ public class TestInputHandler : NetworkBehaviour//MonoBehaviour
         playerCamera.RecieveInput(mouseInput);
         //playerMovement.RecieveKeyboardInput(keyboardInput);
         testMovement.RecieveKeyboardInput(keyboardInput);
+        testMovement.RecieveTeleportInput(teleportInput);
+        teleportInput = 0f;
         //playerMovement.RecieveJumpInput(jumpInput);
         //playerShoot.RecieveShootInput(shootInput);      
     }
