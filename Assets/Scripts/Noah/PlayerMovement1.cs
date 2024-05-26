@@ -68,13 +68,19 @@ public class PlayerMovement1 : MonoBehaviour
 
     public void OnCollisionEnter(Collision collision)
     {
+
+        Debug.Log(collision.collider.tag);
+
         if (collision.collider.tag == "ground") {
             isGrounded = true;
         }
 
-        if (collision.collider.tag == "item")
-        {
-            collision.collider.GetComponent<ItemObject>().pickUpItem();
+        if (collision.collider.tag == "item") { 
+            Debug.Log("this ran");
+            if (collision.collider.GetComponent<ItemObject>().canPickUp)
+            {
+                myInventory.PickUpItem(collision.collider.GetComponent<ItemObject>().referenceItem, collision.collider.gameObject);
+            }
         }
     }
 
@@ -89,7 +95,7 @@ public class PlayerMovement1 : MonoBehaviour
 
     public void playerDropItem(InputAction.CallbackContext ctx)
     {
-        myInventory.DropItem();
+        myInventory.DropItem(transform, playerCam.transform);
     }
 
     private void OnDisable()
