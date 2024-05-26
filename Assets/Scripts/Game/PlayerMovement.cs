@@ -17,6 +17,9 @@ public class PlayerMovement : NetworkBehaviour//MonoBehaviour
 
     public void Awake(){
         Debug.Log("am awaken");
+        Debug.Log(IsOwner + " am owner");
+        Debug.Log(IsClient + " am client");
+        
 
     }
     
@@ -76,6 +79,7 @@ public class PlayerMovement : NetworkBehaviour//MonoBehaviour
     }
 
     void FixedUpdate(){
+
         if (!IsOwner) return;
 
         while (clientPrediction.networkTimer.ShouldTick()){
@@ -87,7 +91,7 @@ public class PlayerMovement : NetworkBehaviour//MonoBehaviour
     
 
 
-    public void Move(){
+    public void Move(Vector3 wishDirection){
         Vector3 finalVelo = new Vector3();
         //ebug.Log(playerCollision.GetIsGrounded());
         if(playerCollision.GetIsAir()){ 

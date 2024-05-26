@@ -62,6 +62,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""TELEPORT"",
+                    ""type"": ""Button"",
+                    ""id"": ""61a0a612-0a43-45f8-bca9-862164a5f326"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -152,6 +161,17 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""PICKUP"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a2480b11-cec3-404e-8267-aa9d0a365180"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TELEPORT"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -164,6 +184,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Keyboard_MOUSE = m_Keyboard.FindAction("MOUSE", throwIfNotFound: true);
         m_Keyboard_JUMP = m_Keyboard.FindAction("JUMP", throwIfNotFound: true);
         m_Keyboard_PICKUP = m_Keyboard.FindAction("PICKUP", throwIfNotFound: true);
+        m_Keyboard_TELEPORT = m_Keyboard.FindAction("TELEPORT", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -229,6 +250,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Keyboard_MOUSE;
     private readonly InputAction m_Keyboard_JUMP;
     private readonly InputAction m_Keyboard_PICKUP;
+    private readonly InputAction m_Keyboard_TELEPORT;
     public struct KeyboardActions
     {
         private @PlayerControls m_Wrapper;
@@ -237,6 +259,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @MOUSE => m_Wrapper.m_Keyboard_MOUSE;
         public InputAction @JUMP => m_Wrapper.m_Keyboard_JUMP;
         public InputAction @PICKUP => m_Wrapper.m_Keyboard_PICKUP;
+        public InputAction @TELEPORT => m_Wrapper.m_Keyboard_TELEPORT;
         public InputActionMap Get() { return m_Wrapper.m_Keyboard; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -258,6 +281,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @PICKUP.started += instance.OnPICKUP;
             @PICKUP.performed += instance.OnPICKUP;
             @PICKUP.canceled += instance.OnPICKUP;
+            @TELEPORT.started += instance.OnTELEPORT;
+            @TELEPORT.performed += instance.OnTELEPORT;
+            @TELEPORT.canceled += instance.OnTELEPORT;
         }
 
         private void UnregisterCallbacks(IKeyboardActions instance)
@@ -274,6 +300,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @PICKUP.started -= instance.OnPICKUP;
             @PICKUP.performed -= instance.OnPICKUP;
             @PICKUP.canceled -= instance.OnPICKUP;
+            @TELEPORT.started -= instance.OnTELEPORT;
+            @TELEPORT.performed -= instance.OnTELEPORT;
+            @TELEPORT.canceled -= instance.OnTELEPORT;
         }
 
         public void RemoveCallbacks(IKeyboardActions instance)
@@ -297,5 +326,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnMOUSE(InputAction.CallbackContext context);
         void OnJUMP(InputAction.CallbackContext context);
         void OnPICKUP(InputAction.CallbackContext context);
+        void OnTELEPORT(InputAction.CallbackContext context);
     }
 }

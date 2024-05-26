@@ -5,8 +5,8 @@ using UnityEngine;
 public class NetworkTimer
 {
     private float timer;
-    private float MinTimeBetweenTick;
-    public int currentTick;
+    private float MinTimeBetweenTick { get; }
+    public int currentTick { get; private set; }
 
 
     public NetworkTimer(float serverTickRate){
@@ -20,7 +20,7 @@ public class NetworkTimer
     public float networkDeltaTime(float deltaTime){
         //Debug.Log(Time.deltaTime);
         //Debug.Log(deltaTime);
-        return MinTimeBetweenTick;// Time.fixedDeltaTime;//(MinTimeBetweenTick / (1f / Time.deltaTime)) * (1f/MinTimeBetweenTick)/2;//MinTimeBetweenTick * (MinTimeBetweenTick / (1f / Time.deltaTime));//MinTimeBetweenTick / (60f / Time.deltaTime);
+        return MinTimeBetweenTick;//Time.deltaTime;//MinTimeBetweenTick;// Time.fixedDeltaTime;//(MinTimeBetweenTick / (1f / Time.deltaTime)) * (1f/MinTimeBetweenTick)/2;//MinTimeBetweenTick * (MinTimeBetweenTick / (1f / Time.deltaTime));//MinTimeBetweenTick / (60f / Time.deltaTime);
     }
 
     public bool ShouldTick(){
