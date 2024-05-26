@@ -15,4 +15,4 @@ MonoBehaviour:
   id: 0
   displayName: Chris Xu
   icon: {fileID: 21300000, guid: ffc8dc57403c18543a29e6b32912bfc7, type: 3}
-  prefab: {fileID: 0}
+  prefab: {fileID: 8966078293913454310, guid: 23128da85374607448509c4f075b6032, type: 3}

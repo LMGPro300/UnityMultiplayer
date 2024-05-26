@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Funny Slope
   - ground
+  - item
+  - tag
   layers:
   - Default
   - TransparentFX

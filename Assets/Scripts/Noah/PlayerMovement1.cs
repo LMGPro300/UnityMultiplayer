@@ -13,27 +13,38 @@ public class PlayerMovement1 : MonoBehaviour
     [SerializeField]
     public InputAction jump;
     [SerializeField]
+    public InputAction drop;
+    [SerializeField]
     public float playerSpeed = 20f, mouseSens = 0f;
     [SerializeField]
     public Camera playerCam;
+    [SerializeField]
+    public GameObject inventory;
+    [SerializeField]
+    public GameObject droppedItem;
+    [SerializeField]
+    public dropItem dropItemScript;
 
     bool isGrounded = true;
-
     Rigidbody rb;
     Vector2 strafeInput;
     Vector2 mouseInput;
     Vector3 playerVelocity;
     float camAngle;
+    InventorySystem myInventory;
 
     void Start()
     {
         movement.Enable();
         looking.Enable();
         jump.Enable();
+        drop.Enable();
         jump.performed += playerJump;
+        drop.performed += playerDropItem;
         rb = GetComponent<Rigidbody>();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        myInventory = inventory.GetComponent<InventorySystem>();
     }
 
     // Update is called once per frame
@@ -43,12 +54,11 @@ public class PlayerMovement1 : MonoBehaviour
         strafeInput = movement.ReadValue<Vector2>();
         playerVelocity = new Vector3(strafeInput.x, 0f, strafeInput.y);
         playerVelocity = transform.TransformDirection(playerVelocity);
+        moveCamera();
     }
-    
-    private void FixedUpdate()
+
+    void moveCamera()
     {
-        //transform.Rotate(0f, mouseSens*mouseInput.y*Time.fixedDeltaTime, 0f);
-        /*rb.velocity = new Vector3(playerVelocity.x * playerSpeed * Time.fixedDeltaTime, rb.velocity.y, playerVelocity.y * playerSpeed * Time.fixedDeltaTime);*/
         float pastGrav = rb.velocity.y;
         rb.velocity = playerVelocity * Time.fixedDeltaTime * playerSpeed;
         rb.velocity = new Vector3(rb.velocity.x, pastGrav, rb.velocity.z);
@@ -60,10 +70,13 @@ public class PlayerMovement1 : MonoBehaviour
 
     public void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("hello there");
         if (collision.collider.tag == "ground") {
-            Debug.Log("this ran too");
             isGrounded = true;
+        }
+
+        if (collision.collider.tag == "item")
+        {
+            collision.collider.GetComponent<ItemObject>().pickUpItem();
         }
     }
 
@@ -76,10 +89,16 @@ public class PlayerMovement1 : MonoBehaviour
         }
     }
 
+    public void playerDropItem(InputAction.CallbackContext ctx)
+    {
+        dropItemScript.playerDropItem();
+    }
+
     private void OnDisable()
     {
         movement.Disable();
         looking.Disable();
         jump.Disable();
+        drop.Disable();
     }
 }
