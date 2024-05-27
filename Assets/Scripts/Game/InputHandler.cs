@@ -10,7 +10,7 @@ public class InputHandler : NetworkBehaviour//MonoBehaviour
     [SerializeField] PlayerMovement playerMovement;
     //[SerializeField] PlayerShoot playerShoot;
     [SerializeField] PlayerPickUp playerPickUp;
-    [SerializeField] ClientPrediction clientPrediction;
+    //[SerializeField] PlayerPrediction clientPrediction;
 
     private PlayerControls PlayerControlsActionMap;
     private PlayerControls.KeyboardActions keyboardMovement;
@@ -20,7 +20,7 @@ public class InputHandler : NetworkBehaviour//MonoBehaviour
     private float jumpInput;
     private float shootInput;
     private float pickUpInput;
-    private float teleportInput;
+    //private float teleportInput;
 
     void Awake()
     {
@@ -30,7 +30,7 @@ public class InputHandler : NetworkBehaviour//MonoBehaviour
         keyboardMovement.MOUSE.performed += ctx => mouseInput = ctx.ReadValue<Vector2>();
         keyboardMovement.MOVEMENT.performed += ctx => keyboardInput = ctx.ReadValue<Vector2>();
         keyboardMovement.PICKUP.performed += ctx => pickUpInput = ctx.ReadValue<float>();
-        keyboardMovement.TELEPORT.performed += ctx => teleportInput = ctx.ReadValue<float>();
+        //keyboardMovement.TELEPORT.performed += ctx => teleportInput = ctx.ReadValue<float>();
 
         //keyboardMovement.Primary.performed += ctx => shootInput = ctx.ReadValue<float>();
     }
@@ -54,7 +54,8 @@ public class InputHandler : NetworkBehaviour//MonoBehaviour
         playerMovement.RecieveKeyboardInput(keyboardInput);
         playerMovement.RecieveJumpInput(jumpInput);
         playerPickUp.RecievePickUpInput(pickUpInput);
-        clientPrediction.RecieveTeleportInput(teleportInput);
+        //clientPrediction.RecieveTeleportInput(teleportInput);
+        //teleportInput = 0f;
         //playerShoot.RecieveShootInput(shootInput);      
     }
 }

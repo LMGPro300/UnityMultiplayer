@@ -8,22 +8,15 @@ public class PlayerMovement : NetworkBehaviour//MonoBehaviour
     [SerializeField] private Rigidbody rb;
     [SerializeField] private float maxAccelAir, jumpSpeed, accelGround, friction, maxSpeed, airControl, gravity, accelAir;
     [SerializeField] private PlayerCollision playerCollision;
-    [SerializeField] private ClientPrediction clientPrediction;
-
     public Vector3 wishDirection;
-    private NetworkTimer networkTimer;
     private float jumpInput;
 
-
-    public void Awake(){
-        Debug.Log("am awaken");
-        Debug.Log(IsOwner + " am owner");
-        Debug.Log(IsClient + " am client");
-        
-
+    public override void OnNetworkSpawn(){
+        base.OnNetworkSpawn();
+        if (!IsOwner) return; 
+        transform.position = new Vector3(0f, 10f, 0f);
+        //transform.rotation = Quaternion.Euler(-90f, 0f, 0f) * transform.rotation;
     }
-    
-
     private void Gravity(){
         if(playerCollision.GetIsGrounded() == false){
             rb.velocity += new Vector3(0,-gravity*Time.deltaTime,0);
@@ -77,21 +70,7 @@ public class PlayerMovement : NetworkBehaviour//MonoBehaviour
         //Debug.Log(accelVel);
         return rb.velocity +  wishDir * accelVel;
     }
-
-    void FixedUpdate(){
-
-        if (!IsOwner) return;
-
-        while (clientPrediction.networkTimer.ShouldTick()){
-            clientPrediction.HandleClientTick();
-            clientPrediction.HandleServerTick();
-        }
-    }
-
-    
-
-
-    public void Move(Vector3 wishDirection){
+    public void Move(Vector3 wishDirection, float jumpInput){
         Vector3 finalVelo = new Vector3();
         //ebug.Log(playerCollision.GetIsGrounded());
         if(playerCollision.GetIsAir()){ 
@@ -138,6 +117,14 @@ public class PlayerMovement : NetworkBehaviour//MonoBehaviour
 
     public Vector3 getWishDir(){
         return wishDirection;
+    }
+
+    public float getJumpInput(){
+        return this.jumpInput;
+    }
+
+    public bool IsMoving(){
+        return rb.velocity.x + rb.velocity.z > 0.1;
     }
 
 
