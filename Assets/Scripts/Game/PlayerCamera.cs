@@ -19,6 +19,7 @@ public class PlayerCamera : NetworkBehaviour//MonoBehaviour
         base.OnNetworkSpawn();
         if (!IsOwner) return; 
         _camera.enabled = true;
+        //transform.rotation = Quaternion.Euler(-90f, 0f, 0f) * transform.rotation;
     }
 
     public void RecieveInput(Vector2 mouseInput){

@@ -779,8 +779,8 @@ MonoBehaviour:
   createLobbyButton: {fileID: 40938929}
   quickJoinButton: {fileID: 2108195028}
   gameScene:
-    asset: {fileID: 102900000, guid: 53b8652b965808b488f897617ea76bd4, type: 3}
-    guid: 53b8652b965808b488f897617ea76bd4
+    asset: {fileID: 102900000, guid: 9fc0d4010bbf28b4594072e72b8655ab, type: 3}
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
 --- !u!1 &1577072325
 GameObject:
   m_ObjectHideFlags: 0
