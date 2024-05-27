@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -5,19 +6,27 @@ using UnityEngine;
 
 public class ItemObject : MonoBehaviour
 {
-    public InventoryItemData referenceItem;
     [SerializeField]
-    public GameObject myInventory;
-    InventorySystem system;
+    public InventoryItemData referenceItem;
 
-    public void Start()
+    [SerializeField]
+    public float pickupBufferSeconds = 2f;
+
+    [SerializeField]
+    public List<Collider> noCollidePlayer;
+
+    public bool canPickUp = false;
+    CountdownTimer pickupCooldown;
+
+    public void Awake()
     {
-        system = myInventory.GetComponent<InventorySystem>();
+        pickupCooldown = new CountdownTimer(pickupBufferSeconds);
+        pickupCooldown.Start();
+        pickupCooldown.OnTimerStop += () => { canPickUp = true; Debug.Log("omg omg you can pick up the item now"); };
     }
 
-    public void pickUpItem()
+    void Update()
     {
-        system.Add(referenceItem);
-        Destroy(gameObject);
+        pickupCooldown.Tick(Time.deltaTime);
     }
 }
