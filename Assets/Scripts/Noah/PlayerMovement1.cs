@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEditor;
 
 public class PlayerMovement1 : MonoBehaviour
 {
@@ -69,14 +70,13 @@ public class PlayerMovement1 : MonoBehaviour
     public void OnCollisionEnter(Collision collision)
     {
 
-        Debug.Log(collision.collider.tag);
+        Debug.Log(collision.collider.gameObject.name);
 
         if (collision.collider.tag == "ground") {
             isGrounded = true;
         }
 
-        if (collision.collider.tag == "item") { 
-            Debug.Log("this ran");
+        if (collision.collider.tag == "item") {
             if (collision.collider.GetComponent<ItemObject>().canPickUp)
             {
                 myInventory.PickUpItem(collision.collider.GetComponent<ItemObject>().referenceItem, collision.collider.gameObject);

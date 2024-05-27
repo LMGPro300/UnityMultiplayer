@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.PlasticSCM.Editor.WebApi;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
@@ -30,6 +31,7 @@ public class InventorySystem : MonoBehaviour
         item_dict = new Dictionary<InventoryItemData, InventoryItem>();
         numKeys.Enable();
         numKeys.performed += ChangeSlot;
+        UpdateHotbar();
     }
 
     private void OnDisable()
@@ -57,6 +59,7 @@ public class InventorySystem : MonoBehaviour
             inventory.Add(newItem);
             item_dict.Add(referenceData, newItem);
         }
+        UpdateHotbar();
     }
 
     public void Remove(InventoryItemData referenceData)
@@ -98,8 +101,18 @@ public class InventorySystem : MonoBehaviour
 
     public void ChangeSlot(InputAction.CallbackContext ctx)
     {
-        hotbarChild.transform.Find("Slot " + curSlot).GetComponent<Image>().color = Color.white;
         curSlot = int.Parse(ctx.control.name);
-        hotbarChild.transform.Find("Slot " + ctx.control.name).GetComponent<Image>().color = Color.green;
+        UpdateHotbar();
+    }
+
+    public void UpdateHotbar()
+    {
+        for (int i = 1; i <= inventory.Count; i++)
+        {
+            Debug.Log("alskdjflaksdjflkasjdflkjasdf");
+            GameObject mySlotObject = hotbarChild.transform.Find("Slot " + i).gameObject;
+            mySlotObject.GetComponent<Image>().color = (i != curSlot ? Color.white : Color.green);
+            mySlotObject.transform.Find("Image").GetComponent<Image>().sprite = inventory[i-1].data.icon;
+        }
     }
 }
