@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c7bc46021ae383348bce277e8221c88d, type: 3}
-  m_Name: Gray Cube
+  m_Name: Green Cube
   m_EditorClassIdentifier: 
   id: 0
   displayName: Gray
-  icon: {fileID: 21300000, guid: 512923e60a15f9a4a9d8b3b8e8a78b43, type: 3}
-  prefab: {fileID: 5787373178358721160, guid: b908f64d03778b24cbddb65ebe33c2e4, type: 3}
+  icon: {fileID: 21300000, guid: 610b76fa9bc764a449ecabb3b33362db, type: 3}
+  prefab: {fileID: 5787373178358721160, guid: 9f6ad84f301eca14a9c3c7e7601f0a3c, type: 3}

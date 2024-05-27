@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6035889355617224480}
   - component: {fileID: 8376849215360813705}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Green Cube
   m_TagString: item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -64,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: bfae9aaeb6cb14c4dbfffd4b0892f92b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -146,7 +146,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38659efb261298244b559836de9077d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  referenceItem: {fileID: 11400000, guid: 0c35789c28cddb74781aa2442fbcbc64, type: 2}
+  referenceItem: {fileID: 11400000, guid: 93b6d695dbc67b24ea0bfe02196ab1fe, type: 2}
   pickupBufferSeconds: 2
   noCollidePlayer: []
   canPickUp: 0

@@ -52,6 +52,7 @@ public class InventorySystem : MonoBehaviour
         if (item_dict.TryGetValue(referenceData, out InventoryItem value))
         {
             value.AddToStack();
+            Debug.Log("added to stack");
         }
         else
         {
@@ -59,6 +60,7 @@ public class InventorySystem : MonoBehaviour
             inventory.Add(newItem);
             item_dict.Add(referenceData, newItem);
         }
+        Debug.Log(inventory.Count);
         UpdateHotbar();
     }
 
@@ -73,15 +75,27 @@ public class InventorySystem : MonoBehaviour
                 item_dict.Remove(referenceData);
             }
         }
+        Debug.Log(inventory.Count);
+        UpdateHotbar();
     }
 
     public void DropItem(Transform playerTransform, Transform cameraTransform)
     {
-        Debug.Log("we made it here");
-        InventoryItem itemToDrop = inventory[0];
-        InventoryItemData referenceData = inventory[0].data;
-        Debug.Log("akjdsfalskdjf");
-        GameObject itemToSpawn = droppedItems[0];
+        if (curSlot > inventory.Count)
+        {
+            return;
+        }
+
+        InventoryItem itemToDrop = inventory[curSlot-1];
+        InventoryItemData referenceData = inventory[curSlot-1].data;
+        GameObject itemToSpawn = null;
+        foreach (GameObject go in droppedItems)
+        {
+            if (go.GetComponent<ItemObject>().referenceItem == referenceData)
+            {
+                itemToSpawn = go;
+            }
+        }
 
         if (itemToDrop == null)
         {
@@ -91,6 +105,7 @@ public class InventorySystem : MonoBehaviour
         GameObject droppedItem = Instantiate(itemToSpawn);
         droppedItem.transform.position = playerTransform.position + (cameraTransform.forward * 2f);
         droppedItem.GetComponent<Rigidbody>().AddForce((Vector3.up * 4f) + (cameraTransform.forward * 4f), ForceMode.Impulse);
+        Remove(referenceData);
     }
 
     public void PickUpItem(InventoryItemData referenceData, GameObject go)
@@ -107,12 +122,19 @@ public class InventorySystem : MonoBehaviour
 
     public void UpdateHotbar()
     {
-        for (int i = 1; i <= inventory.Count; i++)
+        for (int i = 1; i <= 6; i++)
         {
-            Debug.Log("alskdjflaksdjflkasjdflkjasdf");
             GameObject mySlotObject = hotbarChild.transform.Find("Slot " + i).gameObject;
-            mySlotObject.GetComponent<Image>().color = (i != curSlot ? Color.white : Color.green);
-            mySlotObject.transform.Find("Image").GetComponent<Image>().sprite = inventory[i-1].data.icon;
+            if (i <= inventory.Count)
+            {
+                mySlotObject.GetComponent<Image>().color = (i != curSlot ? Color.white : Color.green);
+                mySlotObject.transform.Find("Image").GetComponent<Image>().sprite = inventory[i - 1].data.icon;
+            }
+            else
+            {
+                mySlotObject.GetComponent<Image>().color = (i != curSlot ? Color.white : Color.green);
+                mySlotObject.transform.Find("Image").GetComponent<Image>().sprite = null;
+            }
         }
     }
 }
