@@ -88,14 +88,7 @@ public class InventorySystem : MonoBehaviour
 
         InventoryItem itemToDrop = inventory[curSlot-1];
         InventoryItemData referenceData = inventory[curSlot-1].data;
-        GameObject itemToSpawn = null;
-        foreach (GameObject go in droppedItems)
-        {
-            if (go.GetComponent<ItemObject>().referenceItem == referenceData)
-            {
-                itemToSpawn = go;
-            }
-        }
+        GameObject itemToSpawn = itemToDrop.data.prefab;
 
         if (itemToDrop == null)
         {
