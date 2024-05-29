@@ -84,6 +84,27 @@ public class LobbyAuth : MonoBehaviour
         }
     }
 
+    public async Task CreateRelay(){
+        try{
+            Allocation allocation = await AllocateRelay();
+            string relayJoinCode = await GetRelayJoinCode(allocation);
+            NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(new RelayServerData(allocation, connectionType));
+            NetworkManager.Singleton.StartHost();
+        } catch (RelayServiceException e){
+            Debug.LogError("Failed to create RELAY " + e.Message);
+        }
+    }
+
+    public async Task JoinRelay2(string relayJoinCode){
+        try{
+            pollForUpdatesTimer.Start();
+            JoinAllocation joinAllocation = await JoinRelay(relayJoinCode);
+            NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(new RelayServerData(joinAllocation, connectionType));
+            NetworkManager.Singleton.StartClient();
+        } catch (RelayServiceException e){
+            Debug.LogError("Failed to join RELAY " + e.Message);
+        }
+    }
 
     public async Task CreateLobby(){
         try{
