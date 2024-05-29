@@ -15,4 +15,7 @@ MonoBehaviour:
   id: 0
   displayName: Gray
   icon: {fileID: 21300000, guid: 8624e786d536f39479ec368e281f75e7, type: 3}
-  prefab: {fileID: 5787373178358721160, guid: 76789c0989b26e841a6b4b68a4d91749, type: 3}
+  prefab: {fileID: 5787373178358721160, guid: 32fb66c662fd9444c968c8d52c607bd7, type: 3}
+  displayPrefab: {fileID: 5787373178358721160, guid: 76789c0989b26e841a6b4b68a4d91749, type: 3}
+  isWeapon: 0
+  weapon: {fileID: 0}

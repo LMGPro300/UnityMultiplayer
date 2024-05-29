@@ -103,6 +103,7 @@ public class InventorySystem : MonoBehaviour
         droppedItem.transform.position = playerTransform.position + (cameraTransform.forward * 2f);
         droppedItem.GetComponent<Rigidbody>().AddForce((Vector3.up * 4f) + (cameraTransform.forward * 4f), ForceMode.Impulse);
         Remove(referenceData);
+        UpdateHotbar();
     }
 
     public void PickUpItem(InventoryItemData referenceData, GameObject go)
@@ -113,10 +114,13 @@ public class InventorySystem : MonoBehaviour
 
     public void ChangeSlot(InputAction.CallbackContext ctx)
     {
+        Debug.Log("lkdfjslkasdfjl;kjadsfklj;adf");
+        int pastSlot = curSlot;
         curSlot = int.Parse(ctx.control.name);
+        Debug.Log(curSlot);
         UpdateHotbar();        
         //check if selected valid item
-        pickUpAnimation.changeSlot(inventory[curSlot-1].data.prefab);
+        //pickUpAnimation.changeSlot(inventory[curSlot-1].data.displayPrefab);
     }
 
     public void UpdateHotbar()
@@ -135,5 +139,6 @@ public class InventorySystem : MonoBehaviour
                 mySlotObject.transform.Find("Image").GetComponent<Image>().sprite = null;
             }
         }
+        //pickUpAnimation.changeSlot(inventory[curSlot - 1].data.displayPrefab);
     }
 }

@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c7bc46021ae383348bce277e8221c88d, type: 3}
-  m_Name: Green Cube
+  m_Name: Aayan Grenade
   m_EditorClassIdentifier: 
-  id: 0
-  displayName: Gray
-  icon: {fileID: 21300000, guid: 610b76fa9bc764a449ecabb3b33362db, type: 3}
-  prefab: {fileID: 5787373178358721160, guid: 9f6ad84f301eca14a9c3c7e7601f0a3c, type: 3}
-  displayPrefab: {fileID: 5787373178358721160, guid: 0fcf2be59bfb3c1418b1f65a601da990, type: 3}
+  id: 45968045986
+  displayName: Aayan Grenade :)
+  icon: {fileID: 21300000, guid: f937af326b68158498aab2e6ea9d4d0d, type: 3}
+  prefab: {fileID: 8575070067094607916, guid: 8a80f9a144f41534ea73640b33fed2f8, type: 3}
+  displayPrefab: {fileID: 8575070067094607916, guid: 8a80f9a144f41534ea73640b33fed2f8, type: 3}
   isWeapon: 0
   weapon: {fileID: 0}
