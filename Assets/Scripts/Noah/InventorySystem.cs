@@ -17,13 +17,17 @@ public class InventorySystem : MonoBehaviour
     public GameObject hotbarChild;
     [SerializeField]
     public InputAction numKeys;
+
+
+    [SerializeField] PickUpAnimation pickUpAnimation;
     
 
     public Dictionary<InventoryItemData, InventoryItem> item_dict;
     public List<InventoryItem> inventory;
-    public List<GameObject> droppedItems;
+    //public List<GameObject> droppedItems;
 
     private int curSlot = 1;
+    
 
     private void Awake()
     {
@@ -110,7 +114,9 @@ public class InventorySystem : MonoBehaviour
     public void ChangeSlot(InputAction.CallbackContext ctx)
     {
         curSlot = int.Parse(ctx.control.name);
-        UpdateHotbar();
+        UpdateHotbar();        
+        //check if selected valid item
+        pickUpAnimation.changeSlot(inventory[curSlot-1].data.prefab);
     }
 
     public void UpdateHotbar()
