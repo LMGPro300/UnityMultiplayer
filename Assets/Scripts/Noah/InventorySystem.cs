@@ -33,15 +33,23 @@ public class InventorySystem : MonoBehaviour
     private void Update()
     {
         inventoryIsDisplayed = displayRadialMenu.inProgress;
+        //if displaying radial inventory
         if (inventoryIsDisplayed && !hotbarChild.activeInHierarchy) 
         {
             hotbarChild.SetActive(true);
+            RadialMouseLogic();
             UpdateHotbar();
         }
         else if (!inventoryIsDisplayed && hotbarChild.activeInHierarchy)
         {
             hotbarChild.SetActive(false);
         }
+    }
+
+    private void RadialMouseLogic()
+    {
+        Vector2 mousePos = getMouseCoords.ReadValue<Vector2>();
+        Debug.Log(Mathf.Atan2(-mousePos.y, mousePos.x));
     }
 
     private void Awake()
