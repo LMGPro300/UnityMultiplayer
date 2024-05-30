@@ -26,7 +26,6 @@ public class InventorySystem : MonoBehaviour
 
     public Dictionary<InventoryItemData, InventoryItem> item_dict;
     public InventoryItem[] inventory;
-    //public List<InventoryItem> inventory;
 
     private int curSlot = 1;
     private bool inventoryIsDisplayed = false;
@@ -37,13 +36,13 @@ public class InventorySystem : MonoBehaviour
         if (inventoryIsDisplayed && !hotbarChild.activeInHierarchy) 
         {
             hotbarChild.SetActive(true);
+            UpdateHotbar();
         }
         else if (!inventoryIsDisplayed && hotbarChild.activeInHierarchy)
         {
             hotbarChild.SetActive(false);
         }
     }
-
 
     private void Awake()
     {
@@ -157,21 +156,21 @@ public class InventorySystem : MonoBehaviour
 
     public void UpdateHotbar()
     {
-        if (!inventoryIsDisplayed) { return; }
-        for (int i = 1; i <= 6; i++)
-        {
-            GameObject mySlotObject = hotbarChild.transform.Find("Section " + i).gameObject;
-            mySlotObject.GetComponent<Image>().color = (i != curSlot ? Color.white : Color.green);
-            mySlotObject.transform.Find("Image").GetComponent<Image>().sprite = inventory[i - 1] != null ? inventory[i - 1].data.icon : null;
-        }
         //pass in a display item only if selecting an item already
-        if (inventory[curSlot-1] != null)
+        if (inventory[curSlot - 1] != null)
         {
             pickUpAnimation.changeSlot(inventory[curSlot - 1].data.displayPrefab);
         }
         else
         {
             pickUpAnimation.changeSlot(null);
+        }
+        if (!hotbarChild.activeSelf) { return; }
+        for (int i = 1; i <= 6; i++)
+        {
+            GameObject mySlotObject = hotbarChild.transform.Find("Section " + i).gameObject;
+            mySlotObject.GetComponent<Image>().color = (i != curSlot ? Color.white : Color.green);
+            mySlotObject.transform.Find("Image").GetComponent<Image>().sprite = inventory[i - 1] != null ? inventory[i - 1].data.icon : null;
         }
     }
 }
