@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.PlasticSCM.Editor.WebApi;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -24,7 +25,6 @@ public class InventorySystem : MonoBehaviour
 
     public Dictionary<InventoryItemData, InventoryItem> item_dict;
     public List<InventoryItem> inventory;
-    //public List<GameObject> droppedItems;
 
     private int curSlot = 1;
     
@@ -118,9 +118,7 @@ public class InventorySystem : MonoBehaviour
         int pastSlot = curSlot;
         curSlot = int.Parse(ctx.control.name);
         Debug.Log(curSlot);
-        UpdateHotbar();        
-        //check if selected valid item
-        //pickUpAnimation.changeSlot(inventory[curSlot-1].data.displayPrefab);
+        UpdateHotbar();
     }
 
     public void UpdateHotbar()
@@ -128,17 +126,17 @@ public class InventorySystem : MonoBehaviour
         for (int i = 1; i <= 6; i++)
         {
             GameObject mySlotObject = hotbarChild.transform.Find("Slot " + i).gameObject;
-            if (i <= inventory.Count)
-            {
-                mySlotObject.GetComponent<Image>().color = (i != curSlot ? Color.white : Color.green);
-                mySlotObject.transform.Find("Image").GetComponent<Image>().sprite = inventory[i - 1].data.icon;
-            }
-            else
-            {
-                mySlotObject.GetComponent<Image>().color = (i != curSlot ? Color.white : Color.green);
-                mySlotObject.transform.Find("Image").GetComponent<Image>().sprite = null;
-            }
+            mySlotObject.GetComponent<Image>().color = (i != curSlot ? Color.white : Color.green);
+            mySlotObject.transform.Find("Image").GetComponent<Image>().sprite = i <= inventory.Count ? inventory[i - 1].data.icon : null;
         }
-        //pickUpAnimation.changeSlot(inventory[curSlot - 1].data.displayPrefab);
+        //pass in a display item only if selecting an item already
+        if (curSlot <= inventory.Count)
+        {
+            pickUpAnimation.changeSlot(inventory[curSlot - 1].data.displayPrefab);
+        }
+        else
+        {
+            pickUpAnimation.changeSlot(null);
+        }
     }
 }

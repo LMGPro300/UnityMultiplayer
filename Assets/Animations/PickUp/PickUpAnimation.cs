@@ -11,10 +11,22 @@ public class PickUpAnimation : MonoBehaviour
     public GameObject previousDisplayItem;
 
     public void changeSlot(GameObject prefab){
+        //if switching to empty hotbar slot
+        if (prefab == null)
+        {
+            //if already rendering no item, return
+            if (previousDisplayItem == null) { return; }
+            //otherwise destroy the previous item rendered
+            Destroy(previousDisplayItem);
+            previousDisplayItem = null;
+            return;
+        }
+        //if switching from a previously rendered item
         if (previousDisplayItem != null)
         {
             Destroy(previousDisplayItem);
         }
+        //create and render new item, remembering to store it as a previous display item
         GameObject droppedItem = Instantiate(prefab, itemLocation);
         animator.Play("Armature|PickUp");
         previousDisplayItem = droppedItem;
