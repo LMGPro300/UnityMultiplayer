@@ -11,12 +11,13 @@ public class TestLobby : MonoBehaviour
 {   
     private Lobby hostLobby;
     public Lobby joinnedLobby;
+    [SerializeField] LobbyAuth lobbyAuth;
     public string PlayerId { get; private set; }
     public string PlayerName { get; private set; }
 
     const float v_lobbyHeartbeatInterval = 20f;
 
-    const float v_lobbyPollInterval = 65f;
+    const float v_lobbyPollInterval = 5f;
     public CountdownTimer heartbeatTimer = new CountdownTimer(v_lobbyHeartbeatInterval);
     public CountdownTimer pollForUpdatesTimer = new CountdownTimer(v_lobbyPollInterval);
 
@@ -121,6 +122,8 @@ public class TestLobby : MonoBehaviour
             };
             Lobby lobby = await Lobbies.Instance.JoinLobbyByCodeAsync(lobbyCode, joinLobbyByCodeOptions);
             joinnedLobby = lobby;
+            await HandlePollForUpdateAsync();
+            pollForUpdatesTimer.Start();
         } catch(LobbyServiceException e){
             joinnedLobby = null;
             Debug.LogError("Failed to join lobby " + e.Message);
@@ -134,6 +137,8 @@ public class TestLobby : MonoBehaviour
             };
             Lobby lobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobbyId, joinLobbyByIdOptions);
             joinnedLobby = lobby;
+            await HandlePollForUpdateAsync();
+            pollForUpdatesTimer.Start();
         } catch(LobbyServiceException e){
             joinnedLobby = null;
             Debug.LogError("Failed to join lobby " + e.Message);
@@ -209,12 +214,15 @@ public class TestLobby : MonoBehaviour
 
     public async Task HandlePollForUpdateAsync(){
         try{
+            if (joinnedLobby == null) return;
             Lobby lobby = await LobbyService.Instance.GetLobbyAsync(joinnedLobby.Id);
             joinnedLobby = lobby;
 
             if(joinnedLobby.Data["RelayJoinCode"].Value != "0"){
                 if (PlayerId == joinnedLobby.HostId) return;
-                await LobbyAuth.Instance.JoinRelay2(joinnedLobby.Data["RelayJoinCode"].Value);
+                Debug.Log(joinnedLobby);
+                Debug.Log(joinnedLobby.Data["RelayJoinCode"].Value);
+                await lobbyAuth.JoinRelay2(joinnedLobby.Data["RelayJoinCode"].Value);
 
                 joinnedLobby = null;
             }
