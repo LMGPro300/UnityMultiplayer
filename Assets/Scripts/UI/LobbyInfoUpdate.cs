@@ -9,19 +9,19 @@ public class LobbyInfoUpdate : MonoBehaviour
     [SerializeField] private TextMeshProUGUI lobbyNameText;
     [SerializeField] private TextMeshProUGUI maxPlayersText;
     [SerializeField] private Button joinLobbyButton;
-    private string lobbyCode;
+    private string lobbyId;
 
     void Awake(){
         joinLobbyButton.onClick.AddListener(JoinLobby);
     }
 
     async void JoinLobby(){
-        await LobbyManagerUI.Instance.JoinLobby(lobbyCode);
+        await LobbyManagerUI.Instance.JoinLobbyById(lobbyId);
     }
 
-    public void SetLobbyInfo(string lobbyName, int maxPlayers, int currentPlayers, string lobbyCode){
+    public void SetLobbyInfo(string lobbyName, int maxPlayers, int currentPlayers, string lobbyId){
         lobbyNameText.text = lobbyName;
         maxPlayersText.text = currentPlayers + "/" + maxPlayers;
-        this.lobbyCode = lobbyCode;        
+        this.lobbyId = lobbyId;        
     }
 }

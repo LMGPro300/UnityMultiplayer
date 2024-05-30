@@ -77,6 +77,7 @@ public class TestLobby : MonoBehaviour
             Debug.Log("Make lobby with code: " + lobby.LobbyCode);
             hostLobby = lobby;
             joinnedLobby = hostLobby;
+            heartbeatTimer.Start();
         }catch (LobbyServiceException e){
             Debug.LogError("Failed to create lobby: " + e.Message);
         }
@@ -125,6 +126,20 @@ public class TestLobby : MonoBehaviour
             Debug.LogError("Failed to join lobby " + e.Message);
         }
     }
+
+    public async Task JoinLobbyById(string lobbyId){
+        try{
+            JoinLobbyByIdOptions joinLobbyByIdOptions = new JoinLobbyByIdOptions{
+                Player = GetPlayer()
+            };
+            Lobby lobby = await LobbyService.Instance.JoinLobbyByIdAsync(lobbyId, joinLobbyByIdOptions);
+            joinnedLobby = lobby;
+        } catch(LobbyServiceException e){
+            joinnedLobby = null;
+            Debug.LogError("Failed to join lobby " + e.Message);
+        }
+    }
+
 
     private async void QuickJoinLobby(string lobbyCode){
         try{
