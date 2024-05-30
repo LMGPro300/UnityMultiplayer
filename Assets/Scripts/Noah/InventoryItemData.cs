@@ -10,6 +10,7 @@ public class InventoryItemData : ScriptableObject
     public string displayName;
     public Sprite icon;
     public GameObject prefab;
+    public GameObject displayPrefab;
     public bool isWeapon;
-    WeaponData weapon = null;
+    public WeaponData weapon = null;
 }

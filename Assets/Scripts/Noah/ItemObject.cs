@@ -12,9 +12,6 @@ public class ItemObject : MonoBehaviour
     [SerializeField]
     public float pickupBufferSeconds = 2f;
 
-    [SerializeField]
-    public List<Collider> noCollidePlayer;
-
     public bool canPickUp = false;
     CountdownTimer pickupCooldown;
 

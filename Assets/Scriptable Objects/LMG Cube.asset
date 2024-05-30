@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7bc46021ae383348bce277e8221c88d, type: 3}
+  m_Name: LMG Cube
+  m_EditorClassIdentifier: 
+  id: 34895
+  displayName: LMG Cube :)
+  icon: {fileID: 21300000, guid: 87d6cb50cc0c58a44ac1990f4e438d60, type: 3}
+  prefab: {fileID: 6434806948864910684, guid: 83b764709cf59b44da31f1851cca461c, type: 3}
+  displayPrefab: {fileID: 6434806948864910684, guid: 7f7c5e733a40df8469c1d3a2a0af34be, type: 3}
+  isWeapon: 1
+  weapon: {fileID: 11400000, guid: 462ce9feefa12654786f856f78634b20, type: 2}

@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Scripts/UI/LobbyUpdater.cs.meta
 guid: 1694158172af1514a8efb8df827a4a1d
+========
+guid: 3cacaf548e37f8d4cbbe24eb61e2904d
+>>>>>>>> 959663f3d650fc319350d8c3d2889d7ea9d8cbe6:Assets/Scripts/Noah/WeaponFire.cs.meta
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2

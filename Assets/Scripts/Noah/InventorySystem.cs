@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.PlasticSCM.Editor.WebApi;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -12,28 +13,44 @@ using UnityEngine.UI;
 public class InventorySystem : MonoBehaviour
 {
     [SerializeField]
-    public float pickupBufferSeconds = 2f;
-    [SerializeField]
     public GameObject hotbarChild;
     [SerializeField]
     public InputAction numKeys;
-
+    [SerializeField]
+    public InputAction displayRadialMenu;
+    [SerializeField]
+    public InputAction getMouseCoords;
 
     [SerializeField] PickUpAnimation pickUpAnimation;
     
 
     public Dictionary<InventoryItemData, InventoryItem> item_dict;
-    public List<InventoryItem> inventory;
-    //public List<GameObject> droppedItems;
+    public InventoryItem[] inventory;
+    //public List<InventoryItem> inventory;
 
     private int curSlot = 1;
-    
+    private bool inventoryIsDisplayed = false;
+
+    private void Update()
+    {
+        inventoryIsDisplayed = displayRadialMenu.inProgress;
+        if (inventoryIsDisplayed && !hotbarChild.activeInHierarchy) 
+        {
+            hotbarChild.SetActive(true);
+        }
+        else if (!inventoryIsDisplayed && hotbarChild.activeInHierarchy)
+        {
+            hotbarChild.SetActive(false);
+        }
+    }
+
 
     private void Awake()
     {
-        inventory = new List<InventoryItem>();
+        inventory = new InventoryItem[6];
         item_dict = new Dictionary<InventoryItemData, InventoryItem>();
         numKeys.Enable();
+        displayRadialMenu.Enable();
         numKeys.performed += ChangeSlot;
         UpdateHotbar();
     }
@@ -41,6 +58,7 @@ public class InventorySystem : MonoBehaviour
     private void OnDisable()
     {
         numKeys.Disable();
+        displayRadialMenu.Disable();
     }
 
     public InventoryItem Get(InventoryItemData referenceData) { 
@@ -61,11 +79,18 @@ public class InventorySystem : MonoBehaviour
         else
         {
             InventoryItem newItem = new InventoryItem(referenceData);
-            inventory.Add(newItem);
+            addToBestSlot(newItem);
             item_dict.Add(referenceData, newItem);
         }
-        Debug.Log(inventory.Count);
         UpdateHotbar();
+    }
+
+    public void addToBestSlot(InventoryItem itemToAdd)
+    {
+        for (int i = 0; i <  inventory.Length; i++)
+        {
+            if (inventory[i] == null) {inventory[i] = itemToAdd; break;}
+        }
     }
 
     public void Remove(InventoryItemData referenceData)
@@ -75,17 +100,24 @@ public class InventorySystem : MonoBehaviour
             value.RemoveFromStack();
             if (value.stackSize == 0)
             {
-                inventory.Remove(value);
+                removeItemFromSlot(value);
                 item_dict.Remove(referenceData);
             }
         }
-        Debug.Log(inventory.Count);
         UpdateHotbar();
+    }
+
+    public void removeItemFromSlot(InventoryItem itemToRemove)
+    {
+        for (int i = 0; i < inventory.Length; i++)
+        {
+            if (inventory[i] == itemToRemove) { inventory[i] = null; break; }
+        }
     }
 
     public void DropItem(Transform playerTransform, Transform cameraTransform)
     {
-        if (curSlot > inventory.Count)
+        if (inventory[curSlot-1] == null)
         {
             return;
         }
@@ -103,6 +135,7 @@ public class InventorySystem : MonoBehaviour
         droppedItem.transform.position = playerTransform.position + (cameraTransform.forward * 2f);
         droppedItem.GetComponent<Rigidbody>().AddForce((Vector3.up * 4f) + (cameraTransform.forward * 4f), ForceMode.Impulse);
         Remove(referenceData);
+        UpdateHotbar();
     }
 
     public void PickUpItem(InventoryItemData referenceData, GameObject go)
@@ -113,27 +146,32 @@ public class InventorySystem : MonoBehaviour
 
     public void ChangeSlot(InputAction.CallbackContext ctx)
     {
+        if (!inventoryIsDisplayed)
+        {
+            return;
+        }
+        int pastSlot = curSlot;
         curSlot = int.Parse(ctx.control.name);
-        UpdateHotbar();        
-        //check if selected valid item
-        pickUpAnimation.changeSlot(inventory[curSlot-1].data.prefab);
+        UpdateHotbar();
     }
 
     public void UpdateHotbar()
     {
+        if (!inventoryIsDisplayed) { return; }
         for (int i = 1; i <= 6; i++)
         {
-            GameObject mySlotObject = hotbarChild.transform.Find("Slot " + i).gameObject;
-            if (i <= inventory.Count)
-            {
-                mySlotObject.GetComponent<Image>().color = (i != curSlot ? Color.white : Color.green);
-                mySlotObject.transform.Find("Image").GetComponent<Image>().sprite = inventory[i - 1].data.icon;
-            }
-            else
-            {
-                mySlotObject.GetComponent<Image>().color = (i != curSlot ? Color.white : Color.green);
-                mySlotObject.transform.Find("Image").GetComponent<Image>().sprite = null;
-            }
+            GameObject mySlotObject = hotbarChild.transform.Find("Section " + i).gameObject;
+            mySlotObject.GetComponent<Image>().color = (i != curSlot ? Color.white : Color.green);
+            mySlotObject.transform.Find("Image").GetComponent<Image>().sprite = inventory[i - 1] != null ? inventory[i - 1].data.icon : null;
+        }
+        //pass in a display item only if selecting an item already
+        if (inventory[curSlot-1] != null)
+        {
+            pickUpAnimation.changeSlot(inventory[curSlot - 1].data.displayPrefab);
+        }
+        else
+        {
+            pickUpAnimation.changeSlot(null);
         }
     }
 }
