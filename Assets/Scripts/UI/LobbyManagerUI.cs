@@ -101,6 +101,19 @@ public class LobbyManagerUI : MonoBehaviour
         }
     }
 
+    public async Task JoinLobbyById(string lobbyId){
+        lobbyListPanel.SetActive(false);
+        lobbyPanel.SetActive(true);
+        startGameButton.gameObject.SetActive(false);
+        await testLobby.JoinLobbyById(lobbyId);
+        lobbyNameText.text = testLobby.name;
+
+        if (testLobby.joinnedLobby == null){
+            lobbyListPanel.SetActive(true);
+            lobbyPanel.SetActive(false);
+        }
+    }
+
     public async void StartGame(){
         await lobbyAuth.CreateLobbyRelay(testLobby.joinnedLobby);
         Loader.LoadScene(gameScene);
@@ -122,7 +135,7 @@ public class LobbyManagerUI : MonoBehaviour
             offset -= lobbySpacing;
 
             LobbyInfoUpdate lobbyInfoUpdate = newLobbyUI.GetComponent<LobbyInfoUpdate>();
-            lobbyInfoUpdate.SetLobbyInfo(lobby.Name, lobby.MaxPlayers, lobby.Players.Count, lobby.LobbyCode);
+            lobbyInfoUpdate.SetLobbyInfo(lobby.Name, lobby.MaxPlayers, lobby.Players.Count, lobby.Id);
         }
     }
 
