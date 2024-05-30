@@ -21,6 +21,8 @@ public class PlayerMovement1 : MonoBehaviour
     public Camera playerCam;
     [SerializeField]
     public GameObject inventory;
+    [SerializeField]
+    public GameObject radialInventory;
 
     private dropItem dropItemReference;
     bool isGrounded = true;

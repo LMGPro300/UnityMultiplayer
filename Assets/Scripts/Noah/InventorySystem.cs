@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.PlasticSCM.Editor.WebApi;
 using Unity.VisualScripting;
 using UnityEditor;
@@ -20,6 +21,10 @@ public class InventorySystem : MonoBehaviour
     public InputAction displayRadialMenu;
     [SerializeField]
     public InputAction getMouseCoords;
+    [SerializeField]
+    public GameObject displayIcon;
+    [SerializeField]
+    public Sprite blankImage;
 
     [SerializeField] PickUpAnimation pickUpAnimation;
     
@@ -56,11 +61,9 @@ public class InventorySystem : MonoBehaviour
 
     private void RadialMouseLogic()
     {
-        Debug.Log(canvas.rect.width / 2);
         Vector2 mousePos = getMouseCoords.ReadValue<Vector2>();
-        float mouseAngle = fixAngleVal(Mathf.Atan2(mousePos.y-Screen.height/2, mousePos.x-Screen.width/2) * Mathf.Rad2Deg);
-        Debug.Log(mouseAngle + " " + (int)((mouseAngle + (90f - mouseAngle)) / 60f));
-        ChangeSlot((int)((mouseAngle+(90-mouseAngle) / 60)));
+        float mouseAngle = fixAngleVal((Mathf.Atan2(-(mousePos.y - Screen.height / 2), mousePos.x - Screen.width / 2) * Mathf.Rad2Deg) - 270 + 360) % 360;
+        ChangeSlot((int)((mouseAngle) / 60f) + 1);
     }
 
     private float fixAngleVal(float angle)
@@ -208,8 +211,24 @@ public class InventorySystem : MonoBehaviour
         for (int i = 1; i <= 6; i++)
         {
             GameObject mySlotObject = hotbarChild.transform.Find("Section " + i).gameObject;
-            mySlotObject.GetComponent<Image>().color = (i != curSlot ? Color.white : Color.green);
-            mySlotObject.transform.Find("Image").GetComponent<Image>().sprite = inventory[i - 1] != null ? inventory[i - 1].data.icon : null;
+            mySlotObject.GetComponent<Image>().color = (i != curSlot ? new Color32(125, 125, 125, 125) : new Color32(57, 57, 57, 125));
+            mySlotObject.transform.Find("Image").GetComponent<Image>().sprite = inventory[i - 1] != null ? inventory[i - 1].data.icon : blankImage;
+        }
+        UpdateDisplayIcon();
+    }
+
+    public void UpdateDisplayIcon()
+    {
+        InventoryItem curItem = inventory[curSlot - 1];
+        if (curItem == null)
+        {
+            displayIcon.transform.Find("Display").GetComponent<TextMeshProUGUI>().text = "";
+            displayIcon.transform.Find("Item Count").GetComponent<TextMeshProUGUI>().text = "";
+        }
+        else
+        {
+            displayIcon.transform.Find("Display").GetComponent<TextMeshProUGUI>().text = ""+curItem.data.displayName;
+            displayIcon.transform.Find("Item Count").GetComponent<TextMeshProUGUI>().text = ""+curItem.stackSize;
         }
     }
 }
