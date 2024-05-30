@@ -44,21 +44,10 @@ public class LobbyAuth : MonoBehaviour
     CountdownTimer heartbeatTimer = new CountdownTimer(v_lobbyHeartbeatInterval);
     CountdownTimer pollForUpdatesTimer = new CountdownTimer(v_lobbyPollInterval);
 
-    async void Start(){
+    void Start(){
         Instance = this;
         DontDestroyOnLoad(this);
 
-        await Authenticate();
-
-        heartbeatTimer.OnTimerStop += async () => {
-            await HandleHeartbeatAsync();
-            heartbeatTimer.Start();
-        };
-
-        pollForUpdatesTimer.OnTimerStop += async () => {
-            await HandlePollForUpdateAsync();
-            pollForUpdatesTimer.Start();
-        };
     }
 
     async Task Authenticate(){
@@ -97,7 +86,6 @@ public class LobbyAuth : MonoBehaviour
 
     public async Task JoinRelay2(string relayJoinCode){
         try{
-            pollForUpdatesTimer.Start();
             JoinAllocation joinAllocation = await JoinRelay(relayJoinCode);
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(new RelayServerData(joinAllocation, connectionType));
             NetworkManager.Singleton.StartClient();
@@ -110,9 +98,6 @@ public class LobbyAuth : MonoBehaviour
         try{
             Allocation allocation = await AllocateRelay();
             string relayJoinCode = await GetRelayJoinCode(allocation);
-
-            heartbeatTimer.Start();
-            pollForUpdatesTimer.Start();
 
             Lobby newLobby =await LobbyService.Instance.UpdateLobbyAsync(lobby.Id, new UpdateLobbyOptions {
                 Data = new Dictionary<string, DataObject> {
