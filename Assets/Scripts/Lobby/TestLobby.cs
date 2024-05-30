@@ -10,15 +10,15 @@ using Unity.Services.Authentication;
 public class TestLobby : MonoBehaviour
 {   
     private Lobby hostLobby;
-    private Lobby joinnedLobby;
+    public Lobby joinnedLobby;
     public string PlayerId { get; private set; }
     public string PlayerName { get; private set; }
 
     const float v_lobbyHeartbeatInterval = 20f;
 
     const float v_lobbyPollInterval = 65f;
-    CountdownTimer heartbeatTimer = new CountdownTimer(v_lobbyHeartbeatInterval);
-    CountdownTimer pollForUpdatesTimer = new CountdownTimer(v_lobbyPollInterval);
+    public CountdownTimer heartbeatTimer = new CountdownTimer(v_lobbyHeartbeatInterval);
+    public CountdownTimer pollForUpdatesTimer = new CountdownTimer(v_lobbyPollInterval);
 
     private async void Start(){
         await Authenticate();
@@ -68,12 +68,13 @@ public class TestLobby : MonoBehaviour
                 Player = GetPlayer(),
                 Data = new Dictionary<string, DataObject>{
                     {"GameMode", new DataObject(DataObject.VisibilityOptions.Public, "CaptureTheFlag")},
-                    {"Map", new DataObject(DataObject.VisibilityOptions.Public, "de_dust2")}
+                    {"Map", new DataObject(DataObject.VisibilityOptions.Public, "de_dust2")},
+                    {"RelayJoinCode", new DataObject(DataObject.VisibilityOptions.Member, "0")}
                 }
             };
 
             Lobby lobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, options);
-
+            Debug.Log("Make lobby with code: " + lobby.LobbyCode);
             hostLobby = lobby;
             joinnedLobby = hostLobby;
         }catch (LobbyServiceException e){
@@ -105,14 +106,14 @@ public class TestLobby : MonoBehaviour
         return new List<Lobby>();
     }
 
-    private void ListPlayers(Lobby lobby){
+    public void ListPlayers(Lobby lobby){
         Debug.Log("Players in lobby " + lobby.Name);
 
         foreach(Player player in lobby.Players){
             Debug.Log(player.Data["PlayerName"].Value);
         }
     }
-    private async void JoinLobby(string lobbyCode){
+    public async Task JoinLobby(string lobbyCode){
         try{
             JoinLobbyByCodeOptions joinLobbyByCodeOptions = new JoinLobbyByCodeOptions{
                 Player = GetPlayer()
@@ -120,6 +121,7 @@ public class TestLobby : MonoBehaviour
             Lobby lobby = await Lobbies.Instance.JoinLobbyByCodeAsync(lobbyCode, joinLobbyByCodeOptions);
             joinnedLobby = lobby;
         } catch(LobbyServiceException e){
+            joinnedLobby = null;
             Debug.LogError("Failed to join lobby " + e.Message);
         }
     }
@@ -169,7 +171,7 @@ public class TestLobby : MonoBehaviour
         }
     }
 
-    private async void UpdatePlayerName(string newName){
+    public async Task UpdatePlayerName(string newName){
         try{
             await LobbyService.Instance.UpdatePlayerAsync(joinnedLobby.Id, AuthenticationService.Instance.PlayerId, new UpdatePlayerOptions{
                 Data = new Dictionary<string, PlayerDataObject>{
@@ -190,10 +192,17 @@ public class TestLobby : MonoBehaviour
         }
     }
 
-    async Task HandlePollForUpdateAsync(){
+    public async Task HandlePollForUpdateAsync(){
         try{
             Lobby lobby = await LobbyService.Instance.GetLobbyAsync(joinnedLobby.Id);
             joinnedLobby = lobby;
+
+            if(joinnedLobby.Data["RelayJoinCode"].Value != "0"){
+                if (PlayerId == joinnedLobby.HostId) return;
+                await LobbyAuth.Instance.JoinRelay2(joinnedLobby.Data["RelayJoinCode"].Value);
+
+                joinnedLobby = null;
+            }
             Debug.Log("Polled for update on lobby " + lobby.Name);
         } catch (LobbyServiceException e){
             Debug.LogError("Failed to poll for updates on lobby: " + e.Message);

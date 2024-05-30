@@ -135,6 +135,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f731c6ecb22ded348bdd111d3211e3fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lobbyNameText: {fileID: 4668144368901057879}
+  maxPlayersText: {fileID: 8131441235685496449}
+  joinLobbyButton: {fileID: 5129481231989385212}
 --- !u!1 &6955137328292934710
 GameObject:
   m_ObjectHideFlags: 0

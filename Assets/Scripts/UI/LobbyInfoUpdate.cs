@@ -1,23 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class LobbyInfoUpdate : MonoBehaviour
 {
-    private TextMeshProUGUI lobbyNameText;
-    private TextMeshProUGUI maxPlayersText;
+    [SerializeField] private TextMeshProUGUI lobbyNameText;
+    [SerializeField] private TextMeshProUGUI maxPlayersText;
+    [SerializeField] private Button joinLobbyButton;
+    private string lobbyCode;
 
-    public void Awake(){
-        Transform child0 = transform.GetChild(0);
-        Debug.Log(child0.name);
-        TextMeshProUGUI childt0 = child0.GetComponent<TextMeshProUGUI>();
-        Debug.Log(childt0);
-        lobbyNameText = transform.GetChild(0).GetComponent<TextMeshProUGUI>();
-        maxPlayersText = transform.GetChild(1).GetComponent<TextMeshProUGUI>();
+    void Awake(){
+        joinLobbyButton.onClick.AddListener(JoinLobby);
     }
-    public void SetLobbyInfo(string lobbyName, int maxPlayers, int currentPlayers){
+
+    async void JoinLobby(){
+        await LobbyManagerUI.Instance.JoinLobby(lobbyCode);
+    }
+
+    public void SetLobbyInfo(string lobbyName, int maxPlayers, int currentPlayers, string lobbyCode){
         lobbyNameText.text = lobbyName;
         maxPlayersText.text = currentPlayers + "/" + maxPlayers;
+        this.lobbyCode = lobbyCode;        
     }
 }

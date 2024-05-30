@@ -106,33 +106,21 @@ public class LobbyAuth : MonoBehaviour
         }
     }
 
-    public async Task CreateLobby(){
+    public async Task CreateLobbyRelay(Lobby lobby){
         try{
             Allocation allocation = await AllocateRelay();
             string relayJoinCode = await GetRelayJoinCode(allocation);
 
-            CreateLobbyOptions options = new CreateLobbyOptions{
-                IsPrivate = false
-            };
-
-            currentLobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, options);
-            Debug.Log("Created Lobby: " + currentLobby.Name + " with code " + currentLobby.LobbyCode);
-
-            //heartbeat
             heartbeatTimer.Start();
             pollForUpdatesTimer.Start();
 
-            await LobbyService.Instance.UpdateLobbyAsync(currentLobby.Id, new UpdateLobbyOptions {
+            Lobby newLobby =await LobbyService.Instance.UpdateLobbyAsync(lobby.Id, new UpdateLobbyOptions {
                 Data = new Dictionary<string, DataObject> {
                     {v_keyJoinCode, new DataObject(DataObject.VisibilityOptions.Member, relayJoinCode)}
                 }
             });
-
             NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(new RelayServerData(allocation, connectionType));
-
             NetworkManager.Singleton.StartHost();
-
-
         } catch (LobbyServiceException e){
             Debug.LogError("Failed to create lobby: " + e.Message);
         }
