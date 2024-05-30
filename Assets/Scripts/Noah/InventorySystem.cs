@@ -26,6 +26,7 @@ public class InventorySystem : MonoBehaviour
 
     public Dictionary<InventoryItemData, InventoryItem> item_dict;
     public InventoryItem[] inventory;
+    public RectTransform canvas;
 
     private int curSlot = 1;
     private bool inventoryIsDisplayed = false;
@@ -37,19 +38,38 @@ public class InventorySystem : MonoBehaviour
         if (inventoryIsDisplayed && !hotbarChild.activeInHierarchy) 
         {
             hotbarChild.SetActive(true);
-            RadialMouseLogic();
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
             UpdateHotbar();
         }
         else if (!inventoryIsDisplayed && hotbarChild.activeInHierarchy)
         {
             hotbarChild.SetActive(false);
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+        if (inventoryIsDisplayed)
+        {
+            RadialMouseLogic();
         }
     }
 
     private void RadialMouseLogic()
     {
+        Debug.Log(canvas.rect.width / 2);
         Vector2 mousePos = getMouseCoords.ReadValue<Vector2>();
-        Debug.Log(Mathf.Atan2(-mousePos.y, mousePos.x));
+        float mouseAngle = fixAngleVal(Mathf.Atan2(mousePos.y-Screen.height/2, mousePos.x-Screen.width/2) * Mathf.Rad2Deg);
+        Debug.Log(mouseAngle + " " + (int)((mouseAngle + (90f - mouseAngle)) / 60f));
+        ChangeSlot((int)((mouseAngle+(90-mouseAngle) / 60)));
+    }
+
+    private float fixAngleVal(float angle)
+    {
+        if (angle < 0)
+        {
+            return 360 + angle;
+        }
+        return angle;
     }
 
     private void Awake()
@@ -57,8 +77,10 @@ public class InventorySystem : MonoBehaviour
         inventory = new InventoryItem[6];
         item_dict = new Dictionary<InventoryItemData, InventoryItem>();
         numKeys.Enable();
+        getMouseCoords.Enable();
         displayRadialMenu.Enable();
         numKeys.performed += ChangeSlot;
+        canvas = GetComponent<RectTransform>();
         UpdateHotbar();
     }
 
@@ -66,6 +88,7 @@ public class InventorySystem : MonoBehaviour
     {
         numKeys.Disable();
         displayRadialMenu.Disable();
+        getMouseCoords.Disable();
     }
 
     public InventoryItem Get(InventoryItemData referenceData) { 
@@ -81,7 +104,6 @@ public class InventorySystem : MonoBehaviour
         if (item_dict.TryGetValue(referenceData, out InventoryItem value))
         {
             value.AddToStack();
-            Debug.Log("added to stack");
         }
         else
         {
@@ -157,8 +179,17 @@ public class InventorySystem : MonoBehaviour
         {
             return;
         }
-        int pastSlot = curSlot;
         curSlot = int.Parse(ctx.control.name);
+        UpdateHotbar();
+    }
+
+    public void ChangeSlot(int newSlot)
+    {
+        if (!inventoryIsDisplayed)
+        {
+            return;
+        }
+        curSlot = newSlot;
         UpdateHotbar();
     }
 
