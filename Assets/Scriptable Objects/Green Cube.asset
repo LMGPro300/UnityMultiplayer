@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Green Cube
   m_EditorClassIdentifier: 
   id: 0
-  displayName: Gray
+  displayName: Green Cube
   icon: {fileID: 21300000, guid: 610b76fa9bc764a449ecabb3b33362db, type: 3}
   prefab: {fileID: 5787373178358721160, guid: 9f6ad84f301eca14a9c3c7e7601f0a3c, type: 3}
   displayPrefab: {fileID: 5787373178358721160, guid: 0fcf2be59bfb3c1418b1f65a601da990, type: 3}

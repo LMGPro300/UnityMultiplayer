@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7bc46021ae383348bce277e8221c88d, type: 3}
   m_Name: Purple Cube
   m_EditorClassIdentifier: 
-  id: 0
-  displayName: Gray
+  id: Purple Cube
+  displayName: Purple Cube
   icon: {fileID: 21300000, guid: cf381add3f8ca654caa72776bc0a7a93, type: 3}
   prefab: {fileID: 5787373178358721160, guid: 96a506e248332e04b911de28f58e2f2b, type: 3}
   displayPrefab: {fileID: 5787373178358721160, guid: 54dfd0a57c8143e4dab143124dd1756c, type: 3}

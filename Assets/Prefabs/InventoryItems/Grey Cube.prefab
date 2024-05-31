@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 1015974589614366221}
   - component: {fileID: 6035889355617224480}
   - component: {fileID: 8376849215360813705}
+  - component: {fileID: 2313933953349730864}
   m_Layer: 0
   m_Name: Grey Cube
   m_TagString: item
@@ -148,5 +149,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   referenceItem: {fileID: 11400000, guid: 8cb92809e18462c4780f1e75ed54470c, type: 2}
   pickupBufferSeconds: 2
-  noCollidePlayer: []
   canPickUp: 0
+--- !u!135 &2313933953349730864
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5787373178358721160}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 2
+  m_Center: {x: 0, y: 0, z: 0}

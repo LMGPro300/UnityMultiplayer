@@ -25,13 +25,12 @@ public class InventorySystem : MonoBehaviour
     public GameObject displayIcon;
     [SerializeField]
     public Sprite blankImage;
-
-    [SerializeField] PickUpAnimation pickUpAnimation;
-    
+    [SerializeField] 
+    PickUpAnimation pickUpAnimation;
+    [SerializeField]
+    public InventoryItem[] inventory;
 
     public Dictionary<InventoryItemData, InventoryItem> item_dict;
-    public InventoryItem[] inventory;
-    public RectTransform canvas;
 
     private int curSlot = 1;
     private bool inventoryIsDisplayed = false;
@@ -40,14 +39,13 @@ public class InventorySystem : MonoBehaviour
     {
         inventoryIsDisplayed = displayRadialMenu.inProgress;
         //if displaying radial inventory
-        if (inventoryIsDisplayed && !hotbarChild.activeInHierarchy) 
+        if (inventoryIsDisplayed && !hotbarChild.activeSelf) 
         {
             hotbarChild.SetActive(true);
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            UpdateHotbar();
         }
-        else if (!inventoryIsDisplayed && hotbarChild.activeInHierarchy)
+        else if (!inventoryIsDisplayed && hotbarChild.activeSelf)
         {
             hotbarChild.SetActive(false);
             Cursor.lockState = CursorLockMode.Locked;
@@ -63,7 +61,10 @@ public class InventorySystem : MonoBehaviour
     {
         Vector2 mousePos = getMouseCoords.ReadValue<Vector2>();
         float mouseAngle = fixAngleVal((Mathf.Atan2(-(mousePos.y - Screen.height / 2), mousePos.x - Screen.width / 2) * Mathf.Rad2Deg) - 270 + 360) % 360;
-        ChangeSlot((int)((mouseAngle) / 60f) + 1);
+        if ((int)((mouseAngle) / 60f) + 1 != curSlot)
+        {
+            ChangeSlot((int)((mouseAngle) / 60f) + 1);
+        }
     }
 
     private float fixAngleVal(float angle)
@@ -77,13 +78,12 @@ public class InventorySystem : MonoBehaviour
 
     private void Awake()
     {
-        inventory = new InventoryItem[6];
+        inventory = new InventoryItem[10];
         item_dict = new Dictionary<InventoryItemData, InventoryItem>();
         numKeys.Enable();
         getMouseCoords.Enable();
         displayRadialMenu.Enable();
         numKeys.performed += ChangeSlot;
-        canvas = GetComponent<RectTransform>();
         UpdateHotbar();
     }
 
@@ -178,7 +178,7 @@ public class InventorySystem : MonoBehaviour
 
     public void ChangeSlot(InputAction.CallbackContext ctx)
     {
-        if (!inventoryIsDisplayed)
+        if (!hotbarChild.activeSelf)
         {
             return;
         }
@@ -188,7 +188,7 @@ public class InventorySystem : MonoBehaviour
 
     public void ChangeSlot(int newSlot)
     {
-        if (!inventoryIsDisplayed)
+        if (!hotbarChild.activeSelf)
         {
             return;
         }

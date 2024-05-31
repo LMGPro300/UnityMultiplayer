@@ -10,6 +10,11 @@ public class PickUpAnimation : MonoBehaviour
 
     public GameObject previousDisplayItem;
 
+    public void Awake()
+    {
+        previousDisplayItem = null;
+    }
+
     public void changeSlot(GameObject prefab){
         //if switching to empty hotbar slot
         if (prefab == null)
