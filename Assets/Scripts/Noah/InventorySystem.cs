@@ -30,7 +30,7 @@ public class InventorySystem : MonoBehaviour
     [SerializeField]
     public InventoryItem[] inventory;
 
-    public Dictionary<InventoryItemData, InventoryItem> item_dict;
+    public Dictionary<InventoryItemData, List<InventoryItem>> item_dict;
 
     private int curSlot = 1;
     private bool inventoryIsDisplayed = false;
@@ -79,7 +79,7 @@ public class InventorySystem : MonoBehaviour
     private void Awake()
     {
         inventory = new InventoryItem[10];
-        item_dict = new Dictionary<InventoryItemData, InventoryItem>();
+        item_dict = new Dictionary<InventoryItemData, List<InventoryItem>>();
         numKeys.Enable();
         getMouseCoords.Enable();
         displayRadialMenu.Enable();
@@ -94,8 +94,8 @@ public class InventorySystem : MonoBehaviour
         getMouseCoords.Disable();
     }
 
-    public InventoryItem Get(InventoryItemData referenceData) { 
-        if (item_dict.TryGetValue(referenceData, out InventoryItem value))
+    public List<InventoryItem> Get(InventoryItemData referenceData) { 
+        if (item_dict.TryGetValue(referenceData, out List<InventoryItem> value))
         {
             return value;
         }
@@ -104,18 +104,34 @@ public class InventorySystem : MonoBehaviour
 
     public void Add(InventoryItemData referenceData)
     {
-        if (item_dict.TryGetValue(referenceData, out InventoryItem value))
+        if (item_dict.TryGetValue(referenceData, out List<InventoryItem> value))
         {
-            value.AddToStack();
+            value[value.Count-1].AddToStack();
+            if (value[value.Count - 1].stackSize > referenceData.maxStackSize)
+            {
+                value[value.Count - 1].RemoveFromStack();
+
+                InventoryItem newItem = new InventoryItem(referenceData);
+                addToBestSlot(newItem);
+                item_dict[referenceData].Add(newItem);
+            }
         }
         else
         {
             InventoryItem newItem = new InventoryItem(referenceData);
             addToBestSlot(newItem);
-            item_dict.Add(referenceData, newItem);
+            item_dict[referenceData] = new List<InventoryItem>(value);
         }
         UpdateHotbar();
     }
+
+    public void addToBestStack(List<InventoryItem> listOfPlayerStacks)
+    {
+        for (int i = 0; i < listOfPlayerStacks.Count; i++)
+        {
+            if 
+        }
+    } 
 
     public void addToBestSlot(InventoryItem itemToAdd)
     {
@@ -127,12 +143,15 @@ public class InventorySystem : MonoBehaviour
 
     public void Remove(InventoryItemData referenceData)
     {
-        if (item_dict.TryGetValue(referenceData, out InventoryItem value))
+        if (item_dict.TryGetValue(referenceData, out List<InventoryItem> value))
         {
-            value.RemoveFromStack();
-            if (value.stackSize == 0)
+            value[value.Count-1].RemoveFromStack();
+            if (value[value.Count - 1].stackSize == 0)
             {
-                removeItemFromSlot(value);
+                removeItemFromSlot(value[value.Count - 1]);
+                item_dict[referenceData].Remove();
+
+                //THIS CODE IS BAD CHANGE
                 item_dict.Remove(referenceData);
             }
         }
