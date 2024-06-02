@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e76c580ebd96c6743b49f0da9fd8bf7a, type: 3}
+  m_Name: Blue Cube
+  m_EditorClassIdentifier: 
+  price: 10
+  icon: {fileID: 21300000, guid: 8624e786d536f39479ec368e281f75e7, type: 3}
+  shopItemName: Blue Cube
+  quantity: 89
+  inventory_item: {fileID: 11400000, guid: 014f40127213ba149877d0f5b3698c66, type: 2}

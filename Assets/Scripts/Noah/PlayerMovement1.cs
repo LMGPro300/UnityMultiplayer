@@ -7,6 +7,7 @@ using System;
 using JetBrains.Annotations;
 using System.Linq;
 using TMPro;
+using Unity.VisualScripting;
 
 public class PlayerMovement1 : MonoBehaviour
 {
@@ -32,7 +33,6 @@ public class PlayerMovement1 : MonoBehaviour
     [SerializeField]
     public GameObject pickUpItemText;
 
-    private dropItem dropItemReference;
     bool isGrounded = true;
     Rigidbody rb;
     Vector2 strafeInput;
@@ -52,10 +52,9 @@ public class PlayerMovement1 : MonoBehaviour
         jump.performed += playerJump;
         drop.performed += playerDropItem;
         rb = GetComponent<Rigidbody>();
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        //Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.visible = false;
         myInventory = inventory.GetComponent<InventorySystem>();
-        dropItemReference = GetComponent<dropItem>();
         lastItemTouched = new List<GameObject>();
     }
 
@@ -97,7 +96,14 @@ public class PlayerMovement1 : MonoBehaviour
         {
             if (!lastItemTouched.Contains(other.gameObject))
             {
-                pickUpItemText.GetComponent<TextMeshProUGUI>().text = "Press E to pickup";
+                if (myInventory.canAddItem(other.gameObject.GetComponent<ItemObject>().referenceItem))
+                {
+                    pickUpItemText.GetComponent<TextMeshProUGUI>().text = "Press E to pickup";
+                }
+                else
+                {
+                    pickUpItemText.GetComponent<TextMeshProUGUI>().text = "Inventory full :(";
+                }
                 lastItemTouched.Add(other.gameObject);
             }
         }
@@ -111,8 +117,8 @@ public class PlayerMovement1 : MonoBehaviour
         {
             myInventory.PickUpItem(lastItemTouched[0].GetComponent<ItemObject>().referenceItem, lastItemTouched[0]);
             lastItemTouched.Remove(lastItemTouched[0]);
+            pickUpItemText.GetComponent<TextMeshProUGUI>().text = "";
         }
-        pickUpItemText.GetComponent<TextMeshProUGUI>().text = "";
     }
 
 
