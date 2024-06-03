@@ -20,6 +20,6 @@ public class WeaponFire : MonoBehaviour
 
     public void mouseClicked(InputAction.CallbackContext ctx)
     {
-        Debug.Log("How will we finish this assignment in time");
+        //Debug.Log("How will we finish this assignment in time");
     }
 }

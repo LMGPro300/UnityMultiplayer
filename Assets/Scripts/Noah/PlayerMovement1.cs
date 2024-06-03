@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEditor;
+using System;
+using JetBrains.Annotations;
+using System.Linq;
+using TMPro;
+using Unity.VisualScripting;
 
 public class PlayerMovement1 : MonoBehaviour
 {
@@ -15,14 +20,19 @@ public class PlayerMovement1 : MonoBehaviour
     public InputAction jump;
     [SerializeField]
     public InputAction drop;
+    [SerializeField] 
+    public InputAction pickUp;
     [SerializeField]
     public float playerSpeed = 20f, mouseSens = 0f;
     [SerializeField]
     public Camera playerCam;
     [SerializeField]
     public GameObject inventory;
+    [SerializeField]
+    public GameObject radialInventory;
+    [SerializeField]
+    public GameObject pickUpItemText;
 
-    private dropItem dropItemReference;
     bool isGrounded = true;
     Rigidbody rb;
     Vector2 strafeInput;
@@ -30,6 +40,7 @@ public class PlayerMovement1 : MonoBehaviour
     Vector3 playerVelocity;
     float camAngle;
     InventorySystem myInventory;
+    List<GameObject> lastItemTouched;
 
     void Start()
     {
@@ -37,13 +48,14 @@ public class PlayerMovement1 : MonoBehaviour
         looking.Enable();
         jump.Enable();
         drop.Enable();
+        pickUp.Enable();
         jump.performed += playerJump;
         drop.performed += playerDropItem;
         rb = GetComponent<Rigidbody>();
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        //Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.visible = false;
         myInventory = inventory.GetComponent<InventorySystem>();
-        dropItemReference = GetComponent<dropItem>();
+        lastItemTouched = new List<GameObject>();
     }
 
     // Update is called once per frame
@@ -54,6 +66,7 @@ public class PlayerMovement1 : MonoBehaviour
         playerVelocity = new Vector3(strafeInput.x, 0f, strafeInput.y);
         playerVelocity = transform.TransformDirection(playerVelocity);
         moveCamera();
+        pickUpLastItem();
     }
 
     void moveCamera()
@@ -75,12 +88,45 @@ public class PlayerMovement1 : MonoBehaviour
         if (collision.collider.tag == "ground") {
             isGrounded = true;
         }
+    }
 
-        if (collision.collider.tag == "item") {
-            if (collision.collider.GetComponent<ItemObject>().canPickUp)
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "item")
+        {
+            if (!lastItemTouched.Contains(other.gameObject))
             {
-                myInventory.PickUpItem(collision.collider.GetComponent<ItemObject>().referenceItem, collision.collider.gameObject);
+                if (myInventory.canAddItem(other.gameObject.GetComponent<ItemObject>().referenceItem))
+                {
+                    pickUpItemText.GetComponent<TextMeshProUGUI>().text = "Press E to pickup";
+                }
+                else
+                {
+                    pickUpItemText.GetComponent<TextMeshProUGUI>().text = "Inventory full :(";
+                }
+                lastItemTouched.Add(other.gameObject);
             }
+        }
+    }
+
+    public void pickUpLastItem()
+    {
+        if (lastItemTouched.Count == 0 || pickUp.ReadValue<float>() != 1f) return;
+
+        if (lastItemTouched[0].GetComponent<ItemObject>().canPickUp)
+        {
+            myInventory.PickUpItem(lastItemTouched[0].GetComponent<ItemObject>().referenceItem, lastItemTouched[0]);
+            lastItemTouched.Remove(lastItemTouched[0]);
+            pickUpItemText.GetComponent<TextMeshProUGUI>().text = "";
+        }
+    }
+
+
+    public void OnTriggerExit(Collider other)
+    {
+        pickUpItemText.GetComponent<TextMeshProUGUI>().text = "";
+        if (other.gameObject.tag == "item") { 
+            lastItemTouched.Remove(other.gameObject);
         }
     }
 
@@ -103,6 +149,7 @@ public class PlayerMovement1 : MonoBehaviour
         movement.Disable();
         looking.Disable();
         jump.Disable();
+        drop.Disable();
         drop.Disable();
     }
 }

@@ -9,13 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7bc46021ae383348bce277e8221c88d, type: 3}
+  m_Script: {fileID: 11500000, guid: e76c580ebd96c6743b49f0da9fd8bf7a, type: 3}
   m_Name: Blue Cube
   m_EditorClassIdentifier: 
-  id: 0
-  displayName: Gray
+  price: 10
   icon: {fileID: 21300000, guid: 8624e786d536f39479ec368e281f75e7, type: 3}
-  prefab: {fileID: 5787373178358721160, guid: 32fb66c662fd9444c968c8d52c607bd7, type: 3}
-  displayPrefab: {fileID: 5787373178358721160, guid: 76789c0989b26e841a6b4b68a4d91749, type: 3}
-  isWeapon: 0
-  weapon: {fileID: 0}
+  shopItemName: Blue Cube
+  quantity: 89
+  inventory_item: {fileID: 11400000, guid: 014f40127213ba149877d0f5b3698c66, type: 2}

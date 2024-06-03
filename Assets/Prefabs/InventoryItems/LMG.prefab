@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 2902172190643286646}
   - component: {fileID: 5978542995951673572}
   - component: {fileID: -6738446405898530459}
+  - component: {fileID: -3648360888735453120}
   m_Layer: 0
   m_Name: LMG
   m_TagString: item
@@ -123,7 +124,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   referenceItem: {fileID: 11400000, guid: d5b26204922a12048aaa30894c75ee0a, type: 2}
   pickupBufferSeconds: 2
-  noCollidePlayer: []
   canPickUp: 0
 --- !u!114 &2902172190643286646
 MonoBehaviour:
@@ -202,3 +202,24 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!135 &-3648360888735453120
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6434806948864910684}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 2
+  m_Center: {x: 0, y: 0, z: 0}

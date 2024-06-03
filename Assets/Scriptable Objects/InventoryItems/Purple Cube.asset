@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c7bc46021ae383348bce277e8221c88d, type: 3}
-  m_Name: Red Cube
+  m_Name: Purple Cube
   m_EditorClassIdentifier: 
-  id: 0
-  displayName: Gray
-  icon: {fileID: 21300000, guid: d4d410a6427ce9f48898dd4a287af5e0, type: 3}
-  prefab: {fileID: 5787373178358721160, guid: 725741d04d40ec043b71bf586725addf, type: 3}
-  displayPrefab: {fileID: 5787373178358721160, guid: 1f6bcf20a5193874cab3ef733b9e57fe, type: 3}
+  id: Purple Cube
+  displayName: Purple Cube
+  icon: {fileID: 21300000, guid: cf381add3f8ca654caa72776bc0a7a93, type: 3}
+  prefab: {fileID: 5787373178358721160, guid: 96a506e248332e04b911de28f58e2f2b, type: 3}
+  displayPrefab: {fileID: 5787373178358721160, guid: 54dfd0a57c8143e4dab143124dd1756c, type: 3}
   isWeapon: 0
   weapon: {fileID: 0}

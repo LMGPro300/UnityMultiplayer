@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using TMPro;
 using Unity.PlasticSCM.Editor.WebApi;
 using Unity.VisualScripting;
 using UnityEditor;
@@ -20,12 +22,16 @@ public class InventorySystem : MonoBehaviour
     public InputAction displayRadialMenu;
     [SerializeField]
     public InputAction getMouseCoords;
-
-    [SerializeField] PickUpAnimation pickUpAnimation;
-    
-
-    public Dictionary<InventoryItemData, InventoryItem> item_dict;
+    [SerializeField]
+    public GameObject displayIcon;
+    [SerializeField]
+    public Sprite blankImage;
+    [SerializeField] 
+    PickUpAnimation pickUpAnimation;
+    [SerializeField]
     public InventoryItem[] inventory;
+
+    public Dictionary<InventoryItemData, List<InventoryItem>> item_dict;
 
     private int curSlot = 1;
     private bool inventoryIsDisplayed = false;
@@ -33,22 +39,50 @@ public class InventorySystem : MonoBehaviour
     private void Update()
     {
         inventoryIsDisplayed = displayRadialMenu.inProgress;
-        if (inventoryIsDisplayed && !hotbarChild.activeInHierarchy) 
+        //if displaying radial inventory
+        if (inventoryIsDisplayed && !hotbarChild.activeSelf) 
         {
             hotbarChild.SetActive(true);
-            UpdateHotbar();
+            //Cursor.lockState = CursorLockMode.None;
+            //Cursor.visible = true;
         }
-        else if (!inventoryIsDisplayed && hotbarChild.activeInHierarchy)
+        else if (!inventoryIsDisplayed && hotbarChild.activeSelf)
         {
             hotbarChild.SetActive(false);
+            //Cursor.lockState = CursorLockMode.Locked;
+            //Cursor.visible = false;
         }
+        if (inventoryIsDisplayed)
+        {
+            RadialMouseLogic();
+        }
+    }
+
+    private void RadialMouseLogic()
+    {
+        Vector2 mousePos = getMouseCoords.ReadValue<Vector2>();
+        float mouseAngle = fixAngleVal((Mathf.Atan2(-(mousePos.y - Screen.height / 2), mousePos.x - Screen.width / 2) * Mathf.Rad2Deg) - 270 + 360) % 360;
+        if ((int)((mouseAngle) / 60f) + 1 != curSlot)
+        {
+            ChangeSlot((int)((mouseAngle) / 60f) + 1);
+        }
+    }
+
+    private float fixAngleVal(float angle)
+    {
+        if (angle < 0)
+        {
+            return 360 + angle;
+        }
+        return angle;
     }
 
     private void Awake()
     {
         inventory = new InventoryItem[6];
-        item_dict = new Dictionary<InventoryItemData, InventoryItem>();
+        item_dict = new Dictionary<InventoryItemData, List<InventoryItem>>();
         numKeys.Enable();
+        getMouseCoords.Enable();
         displayRadialMenu.Enable();
         numKeys.performed += ChangeSlot;
         UpdateHotbar();
@@ -58,10 +92,11 @@ public class InventorySystem : MonoBehaviour
     {
         numKeys.Disable();
         displayRadialMenu.Disable();
+        getMouseCoords.Disable();
     }
 
-    public InventoryItem Get(InventoryItemData referenceData) { 
-        if (item_dict.TryGetValue(referenceData, out InventoryItem value))
+    public List<InventoryItem> Get(InventoryItemData referenceData) { 
+        if (item_dict.TryGetValue(referenceData, out List<InventoryItem> value))
         {
             return value;
         }
@@ -70,19 +105,44 @@ public class InventorySystem : MonoBehaviour
 
     public void Add(InventoryItemData referenceData)
     {
-        if (item_dict.TryGetValue(referenceData, out InventoryItem value))
+        if (item_dict.TryGetValue(referenceData, out List<InventoryItem> value))
         {
-            value.AddToStack();
-            Debug.Log("added to stack");
+            //find index in value list that we can add an item too
+            int bestIndex = addToBestStack(value, referenceData.maxStackSize);
+
+            //if there's a stack of items we can add to
+            if (bestIndex != -1)
+            {
+                item_dict[referenceData][bestIndex].AddToStack();
+            }
+            //otherwise create a new stack
+            else
+            {
+                InventoryItem newItem = new InventoryItem(referenceData);
+                addToBestSlot(newItem);
+                item_dict[referenceData].Add(newItem);
+            }
         }
         else
         {
             InventoryItem newItem = new InventoryItem(referenceData);
             addToBestSlot(newItem);
-            item_dict.Add(referenceData, newItem);
+            item_dict[referenceData] = new List<InventoryItem> { newItem };
         }
         UpdateHotbar();
     }
+
+    public int addToBestStack(List<InventoryItem> listOfPlayerStacks, int maxStackSize)
+    {
+        for (int i = 0; i < listOfPlayerStacks.Count; i++)
+        {
+            if (listOfPlayerStacks[i].stackSize+1 <= maxStackSize)
+            {
+                return i;
+            }
+        }
+        return -1;
+    } 
 
     public void addToBestSlot(InventoryItem itemToAdd)
     {
@@ -94,13 +154,14 @@ public class InventorySystem : MonoBehaviour
 
     public void Remove(InventoryItemData referenceData)
     {
-        if (item_dict.TryGetValue(referenceData, out InventoryItem value))
+        InventoryItem memoryAdressToRemovedItem = inventory[curSlot - 1];
+        if (item_dict.TryGetValue(referenceData, out List<InventoryItem> value))
         {
-            value.RemoveFromStack();
-            if (value.stackSize == 0)
+            memoryAdressToRemovedItem.RemoveFromStack();
+            if (memoryAdressToRemovedItem.stackSize == 0)
             {
-                removeItemFromSlot(value);
-                item_dict.Remove(referenceData);
+                removeItemFromSlot(memoryAdressToRemovedItem);
+                item_dict[referenceData].Remove(memoryAdressToRemovedItem);
             }
         }
         UpdateHotbar();
@@ -125,38 +186,43 @@ public class InventorySystem : MonoBehaviour
         InventoryItemData referenceData = inventory[curSlot-1].data;
         GameObject itemToSpawn = itemToDrop.data.prefab;
 
-        if (itemToDrop == null)
-        {
-            return;
-        }
-
         GameObject droppedItem = Instantiate(itemToSpawn);
         droppedItem.transform.position = playerTransform.position + (cameraTransform.forward * 2f);
         droppedItem.GetComponent<Rigidbody>().AddForce((Vector3.up * 4f) + (cameraTransform.forward * 4f), ForceMode.Impulse);
         Remove(referenceData);
-        UpdateHotbar();
     }
 
     public void PickUpItem(InventoryItemData referenceData, GameObject go)
     {
-        Add(referenceData);
-        Destroy(go);
+        if (canAddItem(referenceData))
+        {
+            Add(referenceData);
+            Destroy(go);
+        }
     }
 
     public void ChangeSlot(InputAction.CallbackContext ctx)
     {
-        if (!inventoryIsDisplayed)
+        if (!hotbarChild.activeSelf)
         {
             return;
         }
-        int pastSlot = curSlot;
         curSlot = int.Parse(ctx.control.name);
+        UpdateHotbar();
+    }
+
+    public void ChangeSlot(int newSlot)
+    {
+        if (!hotbarChild.activeSelf)
+        {
+            return;
+        }
+        curSlot = newSlot;
         UpdateHotbar();
     }
 
     public void UpdateHotbar()
     {
-        //pass in a display item only if selecting an item already
         if (inventory[curSlot - 1] != null)
         {
             pickUpAnimation.changeSlot(inventory[curSlot - 1].data.displayPrefab);
@@ -169,8 +235,40 @@ public class InventorySystem : MonoBehaviour
         for (int i = 1; i <= 6; i++)
         {
             GameObject mySlotObject = hotbarChild.transform.Find("Section " + i).gameObject;
-            mySlotObject.GetComponent<Image>().color = (i != curSlot ? Color.white : Color.green);
-            mySlotObject.transform.Find("Image").GetComponent<Image>().sprite = inventory[i - 1] != null ? inventory[i - 1].data.icon : null;
+            mySlotObject.GetComponent<Image>().color = (i != curSlot ? new Color32(125, 125, 125, 125) : new Color32(57, 57, 57, 125));
+            mySlotObject.transform.Find("Image").GetComponent<Image>().sprite = inventory[i - 1] != null ? inventory[i - 1].data.icon : blankImage;
         }
+        UpdateDisplayIcon();
+    }
+
+    public void UpdateDisplayIcon()
+    {
+        InventoryItem curItem = inventory[curSlot - 1];
+        if (curItem == null)
+        {
+            displayIcon.transform.Find("Display").GetComponent<TextMeshProUGUI>().text = "";
+            displayIcon.transform.Find("Item Count").GetComponent<TextMeshProUGUI>().text = "";
+        }
+        else
+        {
+            displayIcon.transform.Find("Display").GetComponent<TextMeshProUGUI>().text = ""+curItem.data.displayName;
+            displayIcon.transform.Find("Item Count").GetComponent<TextMeshProUGUI>().text = ""+curItem.stackSize;
+        }
+    }
+
+    public bool canAddItem(InventoryItemData itemToCheck)
+    {
+        if (inventory.Contains(null))
+        {
+            return true;
+        }
+        for (int i = 0; i < 6; i++)
+        {
+            if (inventory[i].data == itemToCheck && inventory[i].stackSize+1 <= itemToCheck.maxStackSize)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

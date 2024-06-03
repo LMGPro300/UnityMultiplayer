@@ -1,5 +1,4 @@
 using System;
-using System.Security.Cryptography;
 
 [Serializable]
 public class InventoryItem
