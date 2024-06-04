@@ -37,6 +37,7 @@ public class PlayerPrediction : NetworkBehaviour
 
 
     public void Awake(){
+        Debug.Log("a timer was activated");
         networkTimer = new NetworkTimer(v_serverTickRate);
         clientStateBuffer = new CircularBuffer<StatePayload>(v_bufferSize);
         clientInputBuffer = new CircularBuffer<InputPayload>(v_bufferSize);
@@ -68,6 +69,7 @@ public class PlayerPrediction : NetworkBehaviour
         */
 
         while (networkTimer.ShouldTick()){
+            Debug.Log("everything got ticked");
             HandleClientTick();
             HandleServerTick();
         }
@@ -126,22 +128,6 @@ public class PlayerPrediction : NetworkBehaviour
         if (!IsOwner) return;
         this.lastServerState2 = this.lastServerState;
         this.lastServerState = statePayload; 
-    }
-
-    public StatePayload SimulateMovement(InputPayload inputPayload){
-        Physics.simulationMode = SimulationMode.Script;
-
-        playerMovement.Move(inputPayload.inputVector, inputPayload.jumpInput);
-
-        Physics.Simulate(Time.fixedDeltaTime);
-        Physics.simulationMode = SimulationMode.FixedUpdate;
-
-        return new StatePayload(){
-            tick = inputPayload.tick,
-            position = transform.position,
-            rotation = transform.rotation,
-            velocity = rb.velocity
-        };
     }
 
     public void HandleClientTick(){

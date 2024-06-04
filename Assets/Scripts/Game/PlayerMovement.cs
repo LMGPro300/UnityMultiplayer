@@ -6,20 +6,24 @@ using Unity.Netcode;
 public class PlayerMovement : NetworkBehaviour//MonoBehaviour
 {
     [SerializeField] private Rigidbody rb;
-    [SerializeField] private float maxAccelAir, jumpSpeed, accelGround, friction, maxSpeed, airControl, gravity, accelAir;
+    [SerializeField] private float maxAccelAir, jumpSpeed, accelGround, friction, maxSpeed, airControl, gravity, accelAir, frameRate;
     [SerializeField] private PlayerCollision playerCollision;
     public Vector3 wishDirection;
     private float jumpInput;
+    [SerializeField] private float networkDeltaTime;
+
+
 
     public override void OnNetworkSpawn(){
         base.OnNetworkSpawn();
         if (!IsOwner) return; 
         transform.position = new Vector3(0f, 10f, 0f);
+        networkDeltaTime = 1f/frameRate;
         //transform.rotation = Quaternion.Euler(-90f, 0f, 0f) * transform.rotation;
     }
     private void Gravity(){
         if(playerCollision.GetIsGrounded() == false){
-            rb.velocity += new Vector3(0,-gravity*Time.deltaTime,0);
+            rb.velocity += new Vector3(0,-gravity*networkDeltaTime,0);
         }
     }
 
@@ -27,7 +31,7 @@ public class PlayerMovement : NetworkBehaviour//MonoBehaviour
         float speed = finalVelo.magnitude;
         float initY = finalVelo.y;
         if (speed != 0){
-            float drop = speed * friction * Time.deltaTime;
+            float drop = speed * friction * networkDeltaTime;
             finalVelo *= Mathf.Max(speed - drop, 0) / speed; 
         }
         finalVelo.y = initY;
@@ -40,7 +44,7 @@ public class PlayerMovement : NetworkBehaviour//MonoBehaviour
         Vector3 finalVelo = Friction(rb.velocity);
         float projVel = Vector3.Dot(finalVelo, wishDir);
         float addSpeed = maxSpeed - projVel;
-        float accelVel = acceleration * Time.deltaTime; 
+        float accelVel = acceleration * networkDeltaTime; 
         if (accelVel > addSpeed)
             accelVel = addSpeed;
         return finalVelo +  wishDir * accelVel;
@@ -56,7 +60,7 @@ public class PlayerMovement : NetworkBehaviour//MonoBehaviour
            // return Accelerate(wishDir, acceleration, airControl, maxSpeed);
         //}
         
-        float accelVel = acceleration *  airControl * Time.deltaTime; //* airControl 
+        float accelVel = acceleration *  airControl * networkDeltaTime; //* airControl 
         if (accelVel > addSpeed)
 
             accelVel = maxAccel- projVel;
@@ -96,7 +100,7 @@ public class PlayerMovement : NetworkBehaviour//MonoBehaviour
 
     public void Jump(float jumpInput){
         if (jumpInput == 1 && playerCollision.GetIsGrounded()){
-            Debug.Log((jumpSpeed * Time.deltaTime) + " jump speed at one point");
+            Debug.Log((jumpSpeed * networkDeltaTime) + " jump speed at one point");
             rb.velocity = new Vector3 (rb.velocity.x, 0f, rb.velocity.z);
             rb.AddForce(Vector3.up * jumpSpeed, ForceMode.Impulse);
             playerCollision.DidJump();

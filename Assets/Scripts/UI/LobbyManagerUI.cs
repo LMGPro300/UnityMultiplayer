@@ -33,6 +33,7 @@ public class LobbyManagerUI : MonoBehaviour
     [SerializeField] private GameObject kickButtonPrefab;
     [Header("Text")]
     [SerializeField] private TextMeshProUGUI lobbyNameText;
+    [SerializeField] private TextMeshProUGUI lobbyCodeText;
     [Header("Constants")]
     [SerializeField] private int lobbySpacing;
     
@@ -73,8 +74,10 @@ public class LobbyManagerUI : MonoBehaviour
         lobbyPanel.SetActive(true);
         Debug.Log("got max players " + lobbyMaxPlayers);
         lobbyNameText.text = lobbyName;
+        
         await testLobby.CreateLobby(lobbyName, lobbyMaxPlayers);
         testLobby.pollForUpdatesTimer.Start();
+        lobbyCodeText.text = "Lobby Code: " + testLobby.joinnedLobby.LobbyCode;
         //
     }
 
@@ -93,7 +96,8 @@ public class LobbyManagerUI : MonoBehaviour
         lobbyPanel.SetActive(true);
         startGameButton.gameObject.SetActive(false);
         await testLobby.JoinLobby(lobbyCode);
-        lobbyNameText.text = testLobby.name;
+        lobbyNameText.text = testLobby.joinnedLobby.Name;
+        lobbyCodeText.text = "Lobby Code: " + testLobby.joinnedLobby.LobbyCode;
 
         if (testLobby.joinnedLobby == null){
             lobbyListPanel.SetActive(true);
@@ -106,7 +110,8 @@ public class LobbyManagerUI : MonoBehaviour
         lobbyPanel.SetActive(true);
         startGameButton.gameObject.SetActive(false);
         await testLobby.JoinLobbyById(lobbyId);
-        lobbyNameText.text = testLobby.name;
+        lobbyNameText.text = testLobby.joinnedLobby.Name;
+        lobbyCodeText.text = "Lobby Code: " + testLobby.joinnedLobby.LobbyCode;
 
         if (testLobby.joinnedLobby == null){
             lobbyListPanel.SetActive(true);
