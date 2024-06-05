@@ -11,6 +11,7 @@ public class Zombie : MonoBehaviour
 
     NavMeshAgent enemyAgent;
     bool isAttackingPlayer = false;
+    bool isInRange = false;
     CountdownTimer timer;
 
     // Start is called before the first frame update
@@ -24,30 +25,44 @@ public class Zombie : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        enemyAgent.destination = new Vector3(player.position.x, transform.position.y, player.position.z);
-        if (isAttackingPlayer)
+        if (isInRange && !isAttackingPlayer) {
+            enemyAgent.destination = player.position;
+        }
+        else if (isAttackingPlayer)
         {
             timer.Tick(Time.deltaTime);
         }
     }
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log(other.gameObject.tag);
+        if (other.gameObject.tag == "tag")
+        {
+            isInRange = true;
+            enemyAgent.SetDestination(player.position);
+        }
         if (!isAttackingPlayer && other.gameObject.tag == "Player")
         {
-            DealPlayerDamage(10);
-            isAttackingPlayer = true;
+            DealPlayerDamage(10f);
+            isAttackingPlayer=true;
             timer.SetNewTime(Random.Range(enemyData.minDamageWaitCooldown, enemyData.maxDamageWaitCooldown));
             timer.Start();
+            enemyAgent.SetDestination(enemyAgent.gameObject.transform.position);
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        Debug.Log("the player is no longer being attacked");
+        if (other.gameObject.tag == "tag" && isInRange)
+        {
+            isInRange = false;
+            enemyAgent.SetDestination(enemyAgent.gameObject.transform.position);
+            return;
+        }
         if (isAttackingPlayer && other.gameObject.tag == "Player")
         {
             isAttackingPlayer = false;
-            timer.Stop();
+            enemyAgent.SetDestination(enemyAgent.gameObject.transform.position);
         }
     }
 
