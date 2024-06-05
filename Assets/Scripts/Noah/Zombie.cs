@@ -17,33 +17,34 @@ public class Zombie : MonoBehaviour
     void Start()
     {
         enemyAgent = GetComponent<NavMeshAgent>();
+        timer = new CountdownTimer(1f);
+        timer.OnTimerStop += () => { DealPlayerDamage(enemyData.damagePerHit); };
     }
 
     // Update is called once per frame
     void Update()
     {
-        enemyAgent.destination = player.position;
+        enemyAgent.destination = new Vector3(player.position.x, transform.position.y, player.position.z);
         if (isAttackingPlayer)
         {
             timer.Tick(Time.deltaTime);
         }
     }
-
     private void OnTriggerEnter(Collider other)
     {
-        if (!isAttackingPlayer && other.gameObject.tag == "player")
+        if (!isAttackingPlayer && other.gameObject.tag == "Player")
         {
-            Debug.Log("started colliding with player");
+            DealPlayerDamage(10);
             isAttackingPlayer = true;
-            timer = new CountdownTimer(Random.Range(enemyData.minDamageWaitCooldown, enemyData.maxDamageWaitCooldown));
-            timer.OnTimerStop += () => { DealPlayerDamage(enemyData.damagePerHit); };
+            timer.SetNewTime(Random.Range(enemyData.minDamageWaitCooldown, enemyData.maxDamageWaitCooldown));
             timer.Start();
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (isAttackingPlayer && other.gameObject.tag == "player")
+        Debug.Log("the player is no longer being attacked");
+        if (isAttackingPlayer && other.gameObject.tag == "Player")
         {
             isAttackingPlayer = false;
             timer.Stop();
@@ -53,5 +54,7 @@ public class Zombie : MonoBehaviour
     private void DealPlayerDamage(float damage)
     {
         health.TakeDamage(damage);
+        timer.SetNewTime(Random.Range(enemyData.minDamageWaitCooldown, enemyData.maxDamageWaitCooldown));
+        timer.Start();
     }
 }

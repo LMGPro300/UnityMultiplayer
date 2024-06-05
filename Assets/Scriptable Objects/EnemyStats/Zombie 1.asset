@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Zombie 1
   m_EditorClassIdentifier: 
   zombieAnimationLogic: {fileID: 0}
-  damagePerHit: 0
+  damagePerHit: 5
   minDamageWaitCooldown: 0.1
   maxDamageWaitCooldown: 0.9

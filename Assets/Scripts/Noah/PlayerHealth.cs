@@ -11,6 +11,7 @@ public class PlayerHealth : MonoBehaviour
     public void TakeDamage(float damageToTake)
     {
         playerHealth -= damageToTake;
+        healthText.text = playerHealth.ToString();
     }
 
     public void GainHealth(float healthToGain)

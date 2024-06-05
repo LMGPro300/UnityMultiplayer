@@ -44,4 +44,10 @@ public class CountdownTimer
         return finished;
     }
     
+    public void SetNewTime(float newTime)
+    {
+        this.seconds = newTime;
+        this.finished = true;
+        this.timeLeft = 0f;
+    }
 }
