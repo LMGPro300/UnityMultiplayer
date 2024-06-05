@@ -609,7 +609,6 @@ MonoBehaviour:
   player: {fileID: 1830334698}
   enemyData: {fileID: 11400000, guid: 727176734aa539f49969ce85374b963b, type: 2}
   health: {fileID: 1830334703}
-  playerSafeRange: {fileID: 1830334702}
 --- !u!195 &132043562
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -620,7 +619,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 5
+  m_Speed: 2
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 200
@@ -4664,8 +4663,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 11.39268
-  m_Center: {x: 0, y: 5.35479, z: 0}
+  m_Radius: 30.17416
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &884645400
 GameObject:
   m_ObjectHideFlags: 0
@@ -4681,7 +4680,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &884645401
 Transform:
   m_ObjectHideFlags: 0
@@ -6207,7 +6206,6 @@ MonoBehaviour:
   player: {fileID: 1830334698}
   enemyData: {fileID: 11400000, guid: 727176734aa539f49969ce85374b963b, type: 2}
   health: {fileID: 1830334703}
-  playerSafeRange: {fileID: 0}
 --- !u!195 &1410994659
 NavMeshAgent:
   m_ObjectHideFlags: 0
