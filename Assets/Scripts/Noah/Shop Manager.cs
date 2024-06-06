@@ -11,7 +11,6 @@ public class ShopManager : MonoBehaviour
     public int playerCredits = 100;
     public TextMeshProUGUI playerBalanceText;
     public TextMeshProUGUI shopErrorText;
-    public InputAction openShop;
     public GameObject shopUI;
     public int errorPopupTime = 2;
 
@@ -20,22 +19,15 @@ public class ShopManager : MonoBehaviour
     public void Awake()
     {
         playerBalanceText.text = "Current Balance: " + playerCredits;
-        openShop.Enable();
-        openShop.performed += displayShop;
         timer = new CountdownTimer(errorPopupTime);
         timer.OnTimerStop += RemoveErrorMessage;
     }
 
-    public void OnDisable()
-    {
-        openShop.performed -= displayShop;
-        openShop.Disable();
-    }
-
-    public void displayShop(InputAction.CallbackContext ctx)
+    public void displayShop()
     {
         shopUI.SetActive(!shopUI.activeSelf);
     }
+
     void Update()
     {
         timer.Tick(Time.deltaTime);

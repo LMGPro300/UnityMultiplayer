@@ -12,6 +12,7 @@ TagManager:
   - attack hitbox
   - enemy stop zone
   - enemy agro zone
+  - shop
   layers:
   - Default
   - TransparentFX
