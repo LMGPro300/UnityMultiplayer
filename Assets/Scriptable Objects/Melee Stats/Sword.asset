@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65e34e22db0c9994c9cd455c2a932c85, type: 3}
   m_Name: Sword
   m_EditorClassIdentifier: 
-  damage: 0
-  cooldown: 0
+  damage: 25
+  cooldown: 3

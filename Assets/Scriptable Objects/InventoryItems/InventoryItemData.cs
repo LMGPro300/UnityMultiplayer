@@ -15,4 +15,5 @@ public class InventoryItemData : ScriptableObject
     public bool isGun;
     public bool isMelee;
     public GunData weapon = null;
+    public MeleeData melee = null;
 }
