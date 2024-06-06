@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 using TMPro;
 
 public class ShopManager : MonoBehaviour
-{
+{ 
     public InventorySystem inventory;
     public int playerCredits = 100;
     public TextMeshProUGUI playerBalanceText;
@@ -41,30 +41,23 @@ public class ShopManager : MonoBehaviour
         timer.Tick(Time.deltaTime);
     }
 
-    public void itemClicked(ShopItem clickedObject)
+    public void itemClicked(ShopItemData clickedObject)
     {
-        if (clickedObject.quantity <= 0)
-        {
-            timer.Start();
-            shopErrorText.text = "The item is sold out";
-        }
-        else if (!inventory.canAddItem(clickedObject.data.inventory_item))
+        if (!inventory.canAddItem(clickedObject.inventory_item))
         {
             timer.Start();
             shopErrorText.text = "Your inventory is full";
         }
-        else if (playerCredits - clickedObject.data.price < 0)
+        else if (playerCredits - clickedObject.price < 0)
         {
             timer.Start();
             shopErrorText.text = "You don't have enough credits";
         }
         else
         {
-            playerCredits -= clickedObject.data.price;
+            playerCredits -= clickedObject.price;
             playerBalanceText.text = "Current Balance: " + playerCredits;
-
-            clickedObject.RemoveFromStack();
-            inventory.Add(clickedObject.data.inventory_item);
+            inventory.Add(clickedObject.inventory_item);
         }
     }
 

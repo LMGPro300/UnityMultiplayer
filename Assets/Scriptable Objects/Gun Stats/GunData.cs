@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "weapon")]
-public class WeaponData : ScriptableObject
+public class GunData : ScriptableObject
 {
     public int AmmoCapacity = 10;
     public int WeaponCapacity = 10;

@@ -8,6 +8,8 @@ TagManager:
   - ground
   - item
   - tag
+  - melee hitbox
+  - enemy
   layers:
   - Default
   - TransparentFX

@@ -52,8 +52,8 @@ public class PlayerMovement1 : MonoBehaviour
         jump.performed += playerJump;
         drop.performed += playerDropItem;
         rb = GetComponent<Rigidbody>();
-        //cursor.lockstate = cursorlockmode.locked;
-        //cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         myInventory = inventory.GetComponent<InventorySystem>();
         lastItemTouched = new List<GameObject>();
     }
