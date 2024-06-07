@@ -15,49 +15,79 @@ public class SyncWithWorldSpace: NetworkBehaviour
         Instance = this;
     }
 
-    private int PrefabToIndex(GameObject prefab){
+    public int PrefabToIndex(GameObject prefab){
         return prefabNetworkList._prefabNetworkList.IndexOf(prefab);
     }
     
-    private GameObject IndexToPrefab(int index){
+    public GameObject IndexToPrefab(int index){
         return prefabNetworkList._prefabNetworkList[index];
     }
     
     public void DestoryOnServer(GameObject obj){
-        DestoryOnServerServerRpc(obj.GetComponent<NetworkObject>());
+        if (obj == null) return;
+        NetworkObject nObj = obj.GetComponent<NetworkObject>();
+        if (nObj == null || !nObj.IsSpawned) return;
+        DestoryOnServerServerRpc(nObj);
     }
 
     [ServerRpc(RequireOwnership = false)]
     private void DestoryOnServerServerRpc(NetworkObjectReference networkObjectReference){
         networkObjectReference.TryGet(out NetworkObject obj);
-        GameObject actualObj = obj.transform.gameObject;
+        if (obj == null) return;
         Debug.Log("GOT GONED LLL");
-        Destroy(actualObj);
+        obj.Despawn(true);
+    }
+
+    public void InstantiateOnServer(GameObject prefab, Vector3 position, Quaternion rotation, Vector3 force){
+        int index = PrefabToIndex(prefab);
+        //GameObject spawnedObject = Instantiate(prefab);
+        //NetworkObject spawnedNetwork = spawnedObject.GetComponent<NetworkObject>();
+        //spawnedNetwork.Spawn();
+        if (IsServer) { SpawnByServer(index, position, rotation, force); }
+        else { SpawnServerRpc(index, position, rotation, force); }
     }
 
     public void InstantiateOnServer(GameObject prefab, Vector3 position, Quaternion rotation){
+        int index = PrefabToIndex(prefab);
+        Vector3 force = Vector3.zero;
+        //GameObject spawnedObject = Instantiate(prefab);
+        //NetworkObject spawnedNetwork = spawnedObject.GetComponent<NetworkObject>();
+        //spawnedNetwork.Spawn();
+        if (IsServer) { SpawnByServer(index, position, rotation, force); }
+        else { SpawnServerRpc(index, position, rotation, force); }
+    }
+
+/*
+    public void InstantiateOnServer(GameObject prefab){
+        Vector3 position = new Vector3(0f, 0f, 0f);
+        Quaternion rotation = new Quaternion(0f, 0f, 0f, 1);
         int index = PrefabToIndex(prefab);
         //GameObject spawnedObject = Instantiate(prefab);
         if (IsServer) { SpawnByServer(index, position, rotation); }
         else { SpawnServerRpc(index, position, rotation); }
     }
+*/
 
     [ServerRpc(RequireOwnership = false)]
-    private void SpawnServerRpc(int index, Vector3 position, Quaternion rotation){
+    private void SpawnServerRpc(int index, Vector3 position, Quaternion rotation, Vector3 force){
         Debug.Log("through rpc");
-        SpawnByServer(index, position, rotation);
+        SpawnByServer(index, position, rotation, force);
     }
 
-    public void SpawnByServer(int index, Vector3 position, Quaternion rotation){
+    public void SpawnByServer(int index, Vector3 position, Quaternion rotation, Vector3 force){
         Debug.Log("Getting spawned");
         GameObject prefab = IndexToPrefab(index);
-        GameObject spawnedObject = Instantiate(prefab);
+        GameObject spawnedObject = Instantiate(prefab, position, rotation);  
+        Rigidbody rb = spawnedObject.GetComponent<Rigidbody>();
+        rb.AddForce(force, ForceMode.Impulse);
         NetworkObject instanceNetworkObject = spawnedObject.GetComponent<NetworkObject>();
         instanceNetworkObject.Spawn();
-        //GameObject spawnedObject = Instantiate(prefab, position, rotation).GetComponent<NetworkObject>().Spawn();
         lastSpawnedGameObject = spawnedObject;
-        Debug.Log("before");
         SpawnByServerClientRpc(instanceNetworkObject);
+        //GameObject spawnedObject = Instantiate(prefab, position, rotation).GetComponent<NetworkObject>().Spawn();
+        
+        Debug.Log("before");
+        
     }
     
     [ClientRpc]

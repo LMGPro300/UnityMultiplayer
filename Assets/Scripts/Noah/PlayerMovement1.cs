@@ -141,7 +141,7 @@ public class PlayerMovement1 : MonoBehaviour
 
     public void playerDropItem(InputAction.CallbackContext ctx)
     {
-        myInventory.DropItem(transform, playerCam.transform);
+        myInventory.DropItem();
     }
 
     private void OnDisable()

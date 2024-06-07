@@ -8,7 +8,7 @@ using UnityEngine;
 public class ExampleWorldSpawner : MonoBehaviour
 {
     [SerializeField] GameObject prefab; //prefab MUST HAVE NETWORK OBJECT COMPONENT
-    CountdownTimer spawnTimer = new CountdownTimer(1f);
+    CountdownTimer spawnTimer = new CountdownTimer(10f);
 
 
     public void Start(){

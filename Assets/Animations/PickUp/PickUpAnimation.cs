@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class PickUpAnimation : MonoBehaviour
+public class PickUpAnimation : NetworkBehaviour
 {
-    [SerializeField] private Animator animator;
+    [SerializeField] private Animator armAnimator;
+    [SerializeField] private Animator charAnimator;
     [SerializeField] private Transform itemLocation;
     //[SerializeField] private GameObject noItem;
 
@@ -33,7 +35,16 @@ public class PickUpAnimation : MonoBehaviour
         }
         //create and render new item, remembering to store it as a previous display item
         GameObject droppedItem = Instantiate(prefab, itemLocation);
-        animator.Play("Armature|PickUp");
+        armAnimator.Play(null);
+        armAnimator.Play("Armature|PickUp");
+        //charAnimator.Play(null);
+        //charAnimator.Play(null);
+        
+        charAnimator.Play("Default|HoldItem");
+        //charAnimator.Play(null);
+        
+        //.transform.position = itemLocation.position;
+        //droppedItem.transform.rotation = itemLocation.rotation;
         previousDisplayItem = droppedItem;
     }
 

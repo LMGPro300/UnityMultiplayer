@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 
+
 public class PlayerCamera : NetworkBehaviour//MonoBehaviour
 {
     [SerializeField] private Camera _camera;
@@ -12,8 +13,11 @@ public class PlayerCamera : NetworkBehaviour//MonoBehaviour
     [SerializeField] private float multiplier;
     [SerializeField] private float smooth;
     [SerializeField] private Transform armsModel;
-    [SerializeField] private Transform other;
+    [SerializeField] private Transform sway;
     [SerializeField] private Transform head;
+    [SerializeField] private Canvas canvas;
+    [SerializeField] private MeshRenderer[] hiddenObjects;
+    [SerializeField] private MeshRenderer[] showObjects;
     
 
 
@@ -26,6 +30,14 @@ public class PlayerCamera : NetworkBehaviour//MonoBehaviour
         base.OnNetworkSpawn();
         if (!IsOwner) return; 
         _camera.enabled = true;
+        canvas.enabled = true;
+        foreach (MeshRenderer part in hiddenObjects){
+            part.enabled = false;
+        }
+        foreach (MeshRenderer part in showObjects){
+            part.enabled = true;
+        }
+
         //transform.rotation = Quaternion.Euler(-90f, 0f, 0f) * transform.rotation;
     }
 
@@ -41,7 +53,7 @@ public class PlayerCamera : NetworkBehaviour//MonoBehaviour
         Quaternion rotationY = Quaternion.AngleAxis(mouseInput.x * multiplier, Vector3.up);
 
         Quaternion targetRotation = rotationX * rotationY;
-        other.localRotation = Quaternion.Slerp(other.localRotation, targetRotation, smooth * Time.deltaTime);
+        sway.localRotation = Quaternion.Slerp(sway.localRotation, targetRotation, smooth * Time.deltaTime);
         //targetRotation = Mathf.Clamp(targetRotation.ang, -45, 45);
         //head.rotation = new Quaternion(cam.rotation.x, head.rotation.y, head.rotation.z, 1);
         float camAngle2 = Mathf.Clamp(camAngle, -45, 45);

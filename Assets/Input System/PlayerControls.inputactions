@@ -34,7 +34,7 @@
                 },
                 {
                     "name": "PICKUP",
-                    "type": "Button",
+                    "type": "PassThrough",
                     "id": "4a55d355-fcca-4dbd-83cc-9d8e9475bc8e",
                     "expectedControlType": "Button",
                     "processors": "",
@@ -49,6 +49,33 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "INVENTORY",
+                    "type": "PassThrough",
+                    "id": "b546152e-e4d4-4a7f-a039-c7bdae1a5540",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "DROP",
+                    "type": "PassThrough",
+                    "id": "c2701fd9-e178-418f-9aa3-bc154440438f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SHOOT",
+                    "type": "PassThrough",
+                    "id": "37a5c73f-923e-4b94-b792-fe60d9729c5d",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -148,6 +175,39 @@
                     "processors": "",
                     "groups": "",
                     "action": "TELEPORT",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "86fe4c22-ec7e-4979-b1e1-7e11b5f2b005",
+                    "path": "<Keyboard>/t",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "INVENTORY",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6074db99-4dc1-4f98-a855-e204c5407c72",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DROP",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "053a9c22-8848-4369-b938-4371cfb552a3",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SHOOT",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

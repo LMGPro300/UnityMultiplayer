@@ -17,6 +17,7 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 512923e60a15f9a4a9d8b3b8e8a78b43, type: 3}
   prefab: {fileID: 5787373178358721160, guid: b908f64d03778b24cbddb65ebe33c2e4, type: 3}
   displayPrefab: {fileID: 5787373178358721160, guid: dd9c6b81e969cd540bc6cbb0ca0ae00e, type: 3}
+  globalPrefab: {fileID: 5787373178358721160, guid: 0be53f65c89fedd478204c6c86019b92, type: 3}
   maxStackSize: 2
   isWeapon: 0
   weapon: {fileID: 0}

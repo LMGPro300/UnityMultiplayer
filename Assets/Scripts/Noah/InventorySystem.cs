@@ -31,6 +31,11 @@ public class InventorySystem : MonoBehaviour
     [SerializeField]
     public InventoryItem[] inventory;
 
+    [SerializeField] Transform playerTransform;
+    [SerializeField] Transform playerCamera;
+    [SerializeField] PlayerCollision playerCollision;
+    [SerializeField] ItemSync itemSync;
+
     public Dictionary<InventoryItemData, List<InventoryItem>> item_dict;
 
     private int curSlot = 1;
@@ -38,23 +43,26 @@ public class InventorySystem : MonoBehaviour
 
     private void Update()
     {
-        inventoryIsDisplayed = displayRadialMenu.inProgress;
+        if (inventoryIsDisplayed)
+        {
+            RadialMouseLogic();
+        }
+    }
+
+    public void RecieveInventoryInput(float inventoryInput){
+        inventoryIsDisplayed = inventoryInput == 1f ? true : false;
         //if displaying radial inventory
         if (inventoryIsDisplayed && !hotbarChild.activeSelf) 
         {
             hotbarChild.SetActive(true);
-            //Cursor.lockState = CursorLockMode.None;
-            //Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
         else if (!inventoryIsDisplayed && hotbarChild.activeSelf)
         {
             hotbarChild.SetActive(false);
-            //Cursor.lockState = CursorLockMode.Locked;
-            //Cursor.visible = false;
-        }
-        if (inventoryIsDisplayed)
-        {
-            RadialMouseLogic();
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
     }
 
@@ -175,7 +183,13 @@ public class InventorySystem : MonoBehaviour
         }
     }
 
-    public void DropItem(Transform playerTransform, Transform cameraTransform)
+    public void RecieveDropInput(float dropInput){
+        if (dropInput == 1f){
+            DropItem();
+        }
+    }
+
+    public void DropItem()
     {
         if (inventory[curSlot-1] == null)
         {
@@ -186,18 +200,24 @@ public class InventorySystem : MonoBehaviour
         InventoryItemData referenceData = inventory[curSlot-1].data;
         GameObject itemToSpawn = itemToDrop.data.prefab;
 
-        GameObject droppedItem = Instantiate(itemToSpawn);
-        droppedItem.transform.position = playerTransform.position + (cameraTransform.forward * 2f);
-        droppedItem.GetComponent<Rigidbody>().AddForce((Vector3.up * 4f) + (cameraTransform.forward * 4f), ForceMode.Impulse);
+        //GameObject droppedItem = Instantiate(itemToSpawn);
+        SyncWithWorldSpace.Instance.InstantiateOnServer(itemToSpawn, (playerTransform.position + (playerCamera.forward * 2f)), new Quaternion(0f, 0f, 0f, 1), (Vector3.up * 4f) + (playerCamera.forward * 4f));
+        //droppedItem.transform.position = playerTransform.position + (playerCamera.forward * 2f);
         Remove(referenceData);
     }
 
-    public void PickUpItem(InventoryItemData referenceData, GameObject go)
-    {
+    public void RecievePickUpInput(float pickUpInput){
+        if (pickUpInput == 1f && !playerCollision.LastItemTouchedIsEmpty()){
+            playerCollision.PickUpLastItemTouched();
+        }
+    }
+
+    public void PickUpItem(InventoryItemData referenceData, GameObject go){
+        if (go == null) return;
         if (canAddItem(referenceData))
         {
             Add(referenceData);
-            Destroy(go);
+            SyncWithWorldSpace.Instance.DestoryOnServer(go);
         }
     }
 
@@ -226,10 +246,12 @@ public class InventorySystem : MonoBehaviour
         if (inventory[curSlot - 1] != null)
         {
             pickUpAnimation.changeSlot(inventory[curSlot - 1].data.displayPrefab);
+            itemSync.GetNewObject(inventory[curSlot - 1].data.globalPrefab);
         }
         else
         {
             pickUpAnimation.changeSlot(null);
+            itemSync.Clear();
         }
         if (!hotbarChild.activeSelf) { return; }
         for (int i = 1; i <= 6; i++)

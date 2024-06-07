@@ -11,6 +11,7 @@ public class InventoryItemData : ScriptableObject
     public Sprite icon;
     public GameObject prefab;
     public GameObject displayPrefab;
+    public GameObject globalPrefab;
     public int maxStackSize = 1;
     public bool isWeapon;
     public WeaponData weapon = null;

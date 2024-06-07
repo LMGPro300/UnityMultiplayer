@@ -13,7 +13,7 @@ public class ItemObject : MonoBehaviour
     public float pickupBufferSeconds = 2f;
 
     public bool canPickUp = false;
-    CountdownTimer pickupCooldown;
+    public CountdownTimer pickupCooldown;
 
     public void Awake()
     {

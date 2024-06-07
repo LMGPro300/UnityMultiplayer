@@ -56,7 +56,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""PICKUP"",
-                    ""type"": ""Button"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""4a55d355-fcca-4dbd-83cc-9d8e9475bc8e"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
@@ -71,6 +71,33 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""INVENTORY"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""b546152e-e4d4-4a7f-a039-c7bdae1a5540"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DROP"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""c2701fd9-e178-418f-9aa3-bc154440438f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SHOOT"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""37a5c73f-923e-4b94-b792-fe60d9729c5d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -172,6 +199,39 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""TELEPORT"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""86fe4c22-ec7e-4979-b1e1-7e11b5f2b005"",
+                    ""path"": ""<Keyboard>/t"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""INVENTORY"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6074db99-4dc1-4f98-a855-e204c5407c72"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DROP"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""053a9c22-8848-4369-b938-4371cfb552a3"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SHOOT"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -185,6 +245,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Keyboard_JUMP = m_Keyboard.FindAction("JUMP", throwIfNotFound: true);
         m_Keyboard_PICKUP = m_Keyboard.FindAction("PICKUP", throwIfNotFound: true);
         m_Keyboard_TELEPORT = m_Keyboard.FindAction("TELEPORT", throwIfNotFound: true);
+        m_Keyboard_INVENTORY = m_Keyboard.FindAction("INVENTORY", throwIfNotFound: true);
+        m_Keyboard_DROP = m_Keyboard.FindAction("DROP", throwIfNotFound: true);
+        m_Keyboard_SHOOT = m_Keyboard.FindAction("SHOOT", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -251,6 +314,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Keyboard_JUMP;
     private readonly InputAction m_Keyboard_PICKUP;
     private readonly InputAction m_Keyboard_TELEPORT;
+    private readonly InputAction m_Keyboard_INVENTORY;
+    private readonly InputAction m_Keyboard_DROP;
+    private readonly InputAction m_Keyboard_SHOOT;
     public struct KeyboardActions
     {
         private @PlayerControls m_Wrapper;
@@ -260,6 +326,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @JUMP => m_Wrapper.m_Keyboard_JUMP;
         public InputAction @PICKUP => m_Wrapper.m_Keyboard_PICKUP;
         public InputAction @TELEPORT => m_Wrapper.m_Keyboard_TELEPORT;
+        public InputAction @INVENTORY => m_Wrapper.m_Keyboard_INVENTORY;
+        public InputAction @DROP => m_Wrapper.m_Keyboard_DROP;
+        public InputAction @SHOOT => m_Wrapper.m_Keyboard_SHOOT;
         public InputActionMap Get() { return m_Wrapper.m_Keyboard; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -284,6 +353,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @TELEPORT.started += instance.OnTELEPORT;
             @TELEPORT.performed += instance.OnTELEPORT;
             @TELEPORT.canceled += instance.OnTELEPORT;
+            @INVENTORY.started += instance.OnINVENTORY;
+            @INVENTORY.performed += instance.OnINVENTORY;
+            @INVENTORY.canceled += instance.OnINVENTORY;
+            @DROP.started += instance.OnDROP;
+            @DROP.performed += instance.OnDROP;
+            @DROP.canceled += instance.OnDROP;
+            @SHOOT.started += instance.OnSHOOT;
+            @SHOOT.performed += instance.OnSHOOT;
+            @SHOOT.canceled += instance.OnSHOOT;
         }
 
         private void UnregisterCallbacks(IKeyboardActions instance)
@@ -303,6 +381,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @TELEPORT.started -= instance.OnTELEPORT;
             @TELEPORT.performed -= instance.OnTELEPORT;
             @TELEPORT.canceled -= instance.OnTELEPORT;
+            @INVENTORY.started -= instance.OnINVENTORY;
+            @INVENTORY.performed -= instance.OnINVENTORY;
+            @INVENTORY.canceled -= instance.OnINVENTORY;
+            @DROP.started -= instance.OnDROP;
+            @DROP.performed -= instance.OnDROP;
+            @DROP.canceled -= instance.OnDROP;
+            @SHOOT.started -= instance.OnSHOOT;
+            @SHOOT.performed -= instance.OnSHOOT;
+            @SHOOT.canceled -= instance.OnSHOOT;
         }
 
         public void RemoveCallbacks(IKeyboardActions instance)
@@ -327,5 +414,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnJUMP(InputAction.CallbackContext context);
         void OnPICKUP(InputAction.CallbackContext context);
         void OnTELEPORT(InputAction.CallbackContext context);
+        void OnINVENTORY(InputAction.CallbackContext context);
+        void OnDROP(InputAction.CallbackContext context);
+        void OnSHOOT(InputAction.CallbackContext context);
     }
 }
