@@ -7,28 +7,32 @@ using UnityEngine.UI;
 
 public class ShopObject : MonoBehaviour, IPointerClickHandler
 {
-    public ShopItemData referenceData;
-    public ShopManager shopManager;
-
-    private ShopItem myItem;
+    [SerializeField]
+    private ShopItemData referenceData;
+    [SerializeField]
+    private ShopManager shopManager;
+    [SerializeField]
+    private TextMeshProUGUI itemNameText;
+    [SerializeField]
+    private TextMeshProUGUI itemPriceText;
+    [SerializeField]
+    private Image itemIconImage;
 
     public void Awake()
     {
-        myItem = new ShopItem(referenceData);
         UpdateShopItemUI();
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        shopManager.itemClicked(myItem);
+        shopManager.itemClicked(referenceData);
         UpdateShopItemUI();
     }
 
     public void UpdateShopItemUI()
     {
-        transform.Find("Item Name Text").GetComponent<TextMeshProUGUI>().text = myItem.data.shopItemName;
-        transform.Find("Item Price Text").GetComponent<TextMeshProUGUI>().text = myItem.data.price + " credits";
-        transform.Find("QuantityBackgroundImage").gameObject.transform.Find("Quantity Text").gameObject.GetComponent<TextMeshProUGUI>().text = myItem.quantity + "";
-        transform.Find("Icon Image").gameObject.GetComponent<Image>().sprite = myItem.data.icon;
+        itemNameText.text = referenceData.shopItemName;
+        itemPriceText.text = referenceData.price + " credits";
+        itemIconImage.sprite = referenceData.icon;
     }
 }

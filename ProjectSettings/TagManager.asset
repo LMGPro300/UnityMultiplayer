@@ -7,7 +7,12 @@ TagManager:
   - Funny Slope
   - ground
   - item
-  - tag
+  - melee hitbox
+  - enemy
+  - attack hitbox
+  - enemy stop zone
+  - enemy agro zone
+  - shop
   layers:
   - Default
   - TransparentFX
@@ -17,7 +22,7 @@ TagManager:
   - UI
   - player
   - item
-  - 
+  - enemy
   - 
   - 
   - 

@@ -21,6 +21,11 @@ public class CountdownTimer
         this.finished = false;
     }
 
+    public void Stop()
+    {
+        this.finished = true;
+    }
+
     public void Tick(float deltaTime){
         if (finished) return;
         if (timeLeft > 0){
@@ -39,4 +44,10 @@ public class CountdownTimer
         return finished;
     }
     
+    public void SetNewTime(float newTime)
+    {
+        this.seconds = newTime;
+        this.finished = true;
+        this.timeLeft = 0f;
+    }
 }

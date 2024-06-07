@@ -6,12 +6,11 @@ using UnityEngine.InputSystem;
 using TMPro;
 
 public class ShopManager : MonoBehaviour
-{
+{ 
     public InventorySystem inventory;
     public int playerCredits = 100;
     public TextMeshProUGUI playerBalanceText;
     public TextMeshProUGUI shopErrorText;
-    public InputAction openShop;
     public GameObject shopUI;
     public int errorPopupTime = 2;
 
@@ -20,51 +19,37 @@ public class ShopManager : MonoBehaviour
     public void Awake()
     {
         playerBalanceText.text = "Current Balance: " + playerCredits;
-        openShop.Enable();
-        openShop.performed += displayShop;
         timer = new CountdownTimer(errorPopupTime);
         timer.OnTimerStop += RemoveErrorMessage;
     }
 
-    public void OnDisable()
-    {
-        openShop.performed -= displayShop;
-        openShop.Disable();
-    }
-
-    public void displayShop(InputAction.CallbackContext ctx)
+    public void displayShop()
     {
         shopUI.SetActive(!shopUI.activeSelf);
     }
+
     void Update()
     {
         timer.Tick(Time.deltaTime);
     }
 
-    public void itemClicked(ShopItem clickedObject)
+    public void itemClicked(ShopItemData clickedObject)
     {
-        if (clickedObject.quantity <= 0)
-        {
-            timer.Start();
-            shopErrorText.text = "The item is sold out";
-        }
-        else if (!inventory.canAddItem(clickedObject.data.inventory_item))
+        if (!inventory.canAddItem(clickedObject.inventory_item))
         {
             timer.Start();
             shopErrorText.text = "Your inventory is full";
         }
-        else if (playerCredits - clickedObject.data.price < 0)
+        else if (playerCredits - clickedObject.price < 0)
         {
             timer.Start();
             shopErrorText.text = "You don't have enough credits";
         }
         else
         {
-            playerCredits -= clickedObject.data.price;
+            playerCredits -= clickedObject.price;
             playerBalanceText.text = "Current Balance: " + playerCredits;
-
-            clickedObject.RemoveFromStack();
-            inventory.Add(clickedObject.data.inventory_item);
+            inventory.Add(clickedObject.inventory_item);
         }
     }
 
