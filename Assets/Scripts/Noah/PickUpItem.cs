@@ -12,7 +12,7 @@ public class PickUpItem : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI pickUpItemText;
     [SerializeField]
-    public InputAction pickUp;
+    private InputAction pickUp;
 
     private List<GameObject> lastItemTouched;
 
