@@ -8,7 +8,7 @@ using TMPro;
 public class ShopManager : MonoBehaviour
 { 
     public InventorySystem inventory;
-    public int playerCredits = 100;
+    public float playerCredits = 100;
     public TextMeshProUGUI playerBalanceText;
     public TextMeshProUGUI shopErrorText;
     public GameObject shopUI;
