@@ -18,4 +18,5 @@ public class InventoryItemData : ScriptableObject
     public GunScriptableObject weapon = null;
     public MeleeData melee = null;
     public string animation = "Armature|PickUp";
+    public float sellPrice = 10f;
 }
