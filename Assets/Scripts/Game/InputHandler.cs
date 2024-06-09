@@ -11,6 +11,7 @@ public class InputHandler : NetworkBehaviour//MonoBehaviour
     [SerializeField] PlayerShoot playerShoot;
     [SerializeField] PlayerPickUp playerPickUp;
     [SerializeField] InventorySystem inventorySystem;
+    [SerializeField] PickUpItem pickUpItem;
     //[SerializeField] PlayerPrediction clientPrediction;
 
     private PlayerControls PlayerControlsActionMap;
@@ -23,6 +24,7 @@ public class InputHandler : NetworkBehaviour//MonoBehaviour
     private float pickUpInput;
     private float inventoryInput;
     private float dropInput;
+    private float reloadInput;
     //private float teleportInput;
 
     void Awake()
@@ -36,6 +38,7 @@ public class InputHandler : NetworkBehaviour//MonoBehaviour
         keyboardMovement.INVENTORY.performed += ctx => inventoryInput = ctx.ReadValue<float>();
         keyboardMovement.DROP.performed += ctx => dropInput = ctx.ReadValue<float>();
         keyboardMovement.SHOOT.performed += ctx => shootInput = ctx.ReadValue<float>();
+        keyboardMovement.RELOAD.performed += ctx => reloadInput = ctx.ReadValue<float>();
         //keyboardMovement.TELEPORT.performed += ctx => teleportInput = ctx.ReadValue<float>();
 
         //keyboardMovement.Primary.performed += ctx => shootInput = ctx.ReadValue<float>();
@@ -43,18 +46,15 @@ public class InputHandler : NetworkBehaviour//MonoBehaviour
     private void OnEnable(){
         keyboardMovement.Enable();
     }
-    private void OnDisable()
-    {
+    private void OnDisable(){
         keyboardMovement.Disable();
     }
-    void Start()
-    {
+    void Start(){
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
-    void Update()
-    { 
+    void Update(){ 
         if (!IsOwner) return;
         if (inventoryInput == 0f){
             playerCamera.RecieveInput(mouseInput);
@@ -62,10 +62,11 @@ public class InputHandler : NetworkBehaviour//MonoBehaviour
         playerMovement.RecieveKeyboardInput(keyboardInput);
         playerMovement.RecieveJumpInput(jumpInput);
         playerShoot.RecieveShootInput(shootInput);
+        playerShoot.RecieveReloadInput(reloadInput);
         playerPickUp.RecievePickUpInput(pickUpInput);
         inventorySystem.RecieveInventoryInput(inventoryInput);
         inventorySystem.RecieveDropInput(dropInput);
-        inventorySystem.RecievePickUpInput(pickUpInput);
+        pickUpItem.RecievePickUpInput(pickUpInput);
         //clientPrediction.RecieveTeleportInput(teleportInput);
         //teleportInput = 0f;
         //playerShoot.RecieveShootInput(shootInput);      

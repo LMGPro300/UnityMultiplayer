@@ -8,6 +8,7 @@ public class PickUpAnimation : NetworkBehaviour
     [SerializeField] private Animator armAnimator;
     [SerializeField] private Animator charAnimator;
     [SerializeField] private Transform itemLocation;
+    [SerializeField] private PlayerShoot playerShoot;
     //[SerializeField] private GameObject noItem;
 
     public GameObject previousDisplayItem;
@@ -17,7 +18,7 @@ public class PickUpAnimation : NetworkBehaviour
         previousDisplayItem = null;
     }
 
-    public void changeSlot(GameObject prefab){
+    public void changeSlot(GameObject prefab, string _animation){
         //if switching to empty hotbar slot
         if (prefab == null)
         {
@@ -35,12 +36,16 @@ public class PickUpAnimation : NetworkBehaviour
         }
         //create and render new item, remembering to store it as a previous display item
         GameObject droppedItem = Instantiate(prefab, itemLocation);
-        armAnimator.Play(null);
-        armAnimator.Play("Armature|PickUp");
+        Animator itemAnimator =  droppedItem.GetComponent<Animator>();
+        if (itemAnimator != null){
+            playerShoot.GetItemAnimator(itemAnimator);
+        }
+        //armAnimator.Play(null);
+        //armAnimator.Play(animation);
         //charAnimator.Play(null);
         //charAnimator.Play(null);
         
-        charAnimator.Play("Default|HoldItem");
+        charAnimator.Play(_animation);
         //charAnimator.Play(null);
         
         //.transform.position = itemLocation.position;

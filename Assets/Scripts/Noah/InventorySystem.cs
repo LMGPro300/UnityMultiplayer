@@ -33,7 +33,7 @@ public class InventorySystem : MonoBehaviour
 
     [SerializeField] Transform playerTransform;
     [SerializeField] Transform playerCamera;
-    [SerializeField] PlayerCollision playerCollision;
+    [SerializeField] PlayerShoot playerShoot;
     [SerializeField] ItemSync itemSync;
 
     public Dictionary<InventoryItemData, List<InventoryItem>> item_dict;
@@ -78,15 +78,13 @@ public class InventorySystem : MonoBehaviour
 
     private float fixAngleVal(float angle)
     {
-        if (angle < 0)
-        {
+        if (angle < 0){
             return 360 + angle;
         }
         return angle;
     }
 
-    private void Awake()
-    {
+    private void Awake(){
         inventory = new InventoryItem[6];
         item_dict = new Dictionary<InventoryItemData, List<InventoryItem>>();
         numKeys.Enable();
@@ -206,12 +204,6 @@ public class InventorySystem : MonoBehaviour
         Remove(referenceData);
     }
 
-    public void RecievePickUpInput(float pickUpInput){
-        if (pickUpInput == 1f && !playerCollision.LastItemTouchedIsEmpty()){
-            playerCollision.PickUpLastItemTouched();
-        }
-    }
-
     public void PickUpItem(InventoryItemData referenceData, GameObject go){
         if (go == null) return;
         if (canAddItem(referenceData))
@@ -241,21 +233,20 @@ public class InventorySystem : MonoBehaviour
         UpdateHotbar();
     }
 
-    public void UpdateHotbar()
-    {
-        if (inventory[curSlot - 1] != null)
-        {
-            pickUpAnimation.changeSlot(inventory[curSlot - 1].data.displayPrefab);
+    public void UpdateHotbar(){
+        if (inventory[curSlot - 1] != null){
+            pickUpAnimation.changeSlot(inventory[curSlot - 1].data.displayPrefab, inventory[curSlot - 1].data.animation);
             itemSync.GetNewObject(inventory[curSlot - 1].data.globalPrefab);
+            playerShoot.ChangeSlot(inventory[curSlot - 1].data.weapon);
         }
-        else
-        {
-            pickUpAnimation.changeSlot(null);
+        else{
+            Debug.Log(playerShoot); 
+            playerShoot.ChangeSlot(null);
+            pickUpAnimation.changeSlot(null, null);
             itemSync.Clear();
         }
         if (!hotbarChild.activeSelf) { return; }
-        for (int i = 1; i <= 6; i++)
-        {
+        for (int i = 1; i <= 6; i++){
             GameObject mySlotObject = hotbarChild.transform.Find("Section " + i).gameObject;
             mySlotObject.GetComponent<Image>().color = (i != curSlot ? new Color32(125, 125, 125, 125) : new Color32(57, 57, 57, 125));
             mySlotObject.transform.Find("Image").GetComponent<Image>().sprite = inventory[i - 1] != null ? inventory[i - 1].data.icon : blankImage;

@@ -6,7 +6,7 @@ using UnityEngine;
 public class ZombieAttack : MonoBehaviour
 {
     [SerializeField]
-    public EnemyData enemyData;
+    public EnemyScriptableObject enemyData;
     [SerializeField]
     public PlayerHealth playerHealth;
     CountdownTimer timer;

@@ -5,71 +5,68 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PickUpItem : MonoBehaviour
-{
-    [SerializeField]
-    private InventorySystem myInventory;
-    [SerializeField]
-    private TextMeshProUGUI pickUpItemText;
-    [SerializeField]
-    public InputAction pickUp;
-
+public class PickUpItem : MonoBehaviour{
+    [SerializeField] private InventorySystem inventorySystem;
+    [SerializeField] private TextMeshProUGUI pickUpText;
     private List<GameObject> lastItemTouched;
 
-    public void OnEnable()
-    {
+    public void Awake(){
         lastItemTouched = new List<GameObject>();
-        pickUp.Enable();
     }
 
-    public void OnDisable()
-    {
-        pickUp.Disable();
-    }
-
-    public void Update()
-    {
-        pickUpLastItem();
-    }
-
-    public void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.tag == "item")
-        {
-            if (!lastItemTouched.Contains(other.gameObject))
-            {
-                if (myInventory.canAddItem(other.gameObject.GetComponent<ItemObject>().referenceItem))
-                {
-                    pickUpItemText.text = "Press E to pickup";
+    public void OnTriggerEnter(Collider other){
+        if (other.gameObject.tag == "item"){
+            ActualParent actualObject = other.gameObject.GetComponent<ActualParent>();
+            GameObject realObject = other.gameObject;
+            if (actualObject != null){
+                realObject = actualObject.actualParent;
+            }
+            if (!lastItemTouched.Contains(realObject)){
+                if (inventorySystem.canAddItem(realObject.GetComponent<ItemObject>().referenceItem)){
+                    pickUpText.text = "Press E to pickup";
                 }
-                else
-                {
-                    pickUpItemText.text = "Inventory full :(";
+                else{
+                    pickUpText.text = "Inventory full :(";
                 }
-                lastItemTouched.Add(other.gameObject);
+                lastItemTouched.Add(realObject);
             }
         }
     }
 
-    public void pickUpLastItem()
-    {
-        if (lastItemTouched.Count == 0 || pickUp.ReadValue<float>() != 1f) return;
-
-        if (lastItemTouched[0].GetComponent<ItemObject>().canPickUp)
-        {
-            myInventory.PickUpItem(lastItemTouched[0].GetComponent<ItemObject>().referenceItem, lastItemTouched[0]);
-            lastItemTouched.Remove(lastItemTouched[0]);
-            pickUpItemText.text = "";
+    public void OnTriggerExit(Collider other){
+        if (other.gameObject.tag == "item"){
+            ActualParent actualObject = other.gameObject.GetComponent<ActualParent>();
+            GameObject realObject = other.gameObject;
+            if (actualObject != null){
+                realObject = actualObject.actualParent;
+            }
+            pickUpText.text = "";
+            lastItemTouched.Remove(realObject);
         }
     }
 
+    public void RecievePickUpInput(float pickUpInput) {
+        if (lastItemTouched.Count == 0 || pickUpInput != 1f) return;
+        
 
-    public void OnTriggerExit(Collider other)
-    {
-        pickUpItemText.GetComponent<TextMeshProUGUI>().text = "";
-        if (other.gameObject.tag == "item")
-        {
-            lastItemTouched.Remove(other.gameObject);
+        GameObject lastItem = lastItemTouched[0];
+        if (lastItem == null){
+            lastItemTouched.Remove(lastItem);
+            pickUpText.text = "";  
+            return;
         }
+
+        ItemObject lastItemObject = lastItem.GetComponent<ItemObject>();
+
+        if (!lastItemObject.canPickUp) return;
+        lastItemTouched.Remove(lastItem);
+        inventorySystem.PickUpItem(lastItemObject.referenceItem, lastItem);
+        
+        pickUpText.text = "";
+        lastItemObject.canPickUp = false;
+        lastItemObject.pickupCooldown.Start();
     }
+
+
+   
 }

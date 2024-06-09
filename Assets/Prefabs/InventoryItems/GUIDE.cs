@@ -22,4 +22,6 @@ Arm Cube (in hand)
 
 Literally nothing needed
 
+MAKE SURE TO ADD TO ITEM OBJECT SCRIPT
+
 */

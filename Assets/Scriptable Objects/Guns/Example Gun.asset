@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: Example Gun
   m_EditorClassIdentifier: 
   magSize: 12
+  currentMagSize: 11
   damage: 25
-  firerate: 0.5
-  force: 400
+  firerate: 0.125
+  reloadTime: 3.33
+  force: 100
   EntityComponents:
     Data:
     - name: Head
@@ -24,3 +26,9 @@ MonoBehaviour:
       value: 0.75
     - name: Legs
       value: 0.5
+  shootingAnimation: Armature|ScarShoot
+  reloadAnimation: Armature|ScarReload
+  gunReloadAnimation: Armature_ScarReload
+  equipAnimation: Armature|ScarEquip
+  gunEquipAnimation: Armature_ScarEquip
+  ammoType: 1

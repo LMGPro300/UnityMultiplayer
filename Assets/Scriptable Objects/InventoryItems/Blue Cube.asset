@@ -19,5 +19,8 @@ MonoBehaviour:
   displayPrefab: {fileID: 5787373178358721160, guid: 76789c0989b26e841a6b4b68a4d91749, type: 3}
   globalPrefab: {fileID: 5787373178358721160, guid: 6b02714a1a189a64d81701296b8479da, type: 3}
   maxStackSize: 1
-  isWeapon: 0
+  isGun: 0
+  isMelee: 0
   weapon: {fileID: 0}
+  melee: {fileID: 0}
+  animation: Default|HoldItem

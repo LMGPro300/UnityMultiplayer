@@ -98,6 +98,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RELOAD"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""26c2f175-d751-4b50-9253-f18057f8d88c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -232,6 +241,17 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""SHOOT"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c44d82b7-513f-48ae-90ed-6aa8b91723e2"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RELOAD"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -248,6 +268,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Keyboard_INVENTORY = m_Keyboard.FindAction("INVENTORY", throwIfNotFound: true);
         m_Keyboard_DROP = m_Keyboard.FindAction("DROP", throwIfNotFound: true);
         m_Keyboard_SHOOT = m_Keyboard.FindAction("SHOOT", throwIfNotFound: true);
+        m_Keyboard_RELOAD = m_Keyboard.FindAction("RELOAD", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -317,6 +338,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Keyboard_INVENTORY;
     private readonly InputAction m_Keyboard_DROP;
     private readonly InputAction m_Keyboard_SHOOT;
+    private readonly InputAction m_Keyboard_RELOAD;
     public struct KeyboardActions
     {
         private @PlayerControls m_Wrapper;
@@ -329,6 +351,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @INVENTORY => m_Wrapper.m_Keyboard_INVENTORY;
         public InputAction @DROP => m_Wrapper.m_Keyboard_DROP;
         public InputAction @SHOOT => m_Wrapper.m_Keyboard_SHOOT;
+        public InputAction @RELOAD => m_Wrapper.m_Keyboard_RELOAD;
         public InputActionMap Get() { return m_Wrapper.m_Keyboard; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -362,6 +385,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @SHOOT.started += instance.OnSHOOT;
             @SHOOT.performed += instance.OnSHOOT;
             @SHOOT.canceled += instance.OnSHOOT;
+            @RELOAD.started += instance.OnRELOAD;
+            @RELOAD.performed += instance.OnRELOAD;
+            @RELOAD.canceled += instance.OnRELOAD;
         }
 
         private void UnregisterCallbacks(IKeyboardActions instance)
@@ -390,6 +416,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @SHOOT.started -= instance.OnSHOOT;
             @SHOOT.performed -= instance.OnSHOOT;
             @SHOOT.canceled -= instance.OnSHOOT;
+            @RELOAD.started -= instance.OnRELOAD;
+            @RELOAD.performed -= instance.OnRELOAD;
+            @RELOAD.canceled -= instance.OnRELOAD;
         }
 
         public void RemoveCallbacks(IKeyboardActions instance)
@@ -417,5 +446,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnINVENTORY(InputAction.CallbackContext context);
         void OnDROP(InputAction.CallbackContext context);
         void OnSHOOT(InputAction.CallbackContext context);
+        void OnRELOAD(InputAction.CallbackContext context);
     }
 }

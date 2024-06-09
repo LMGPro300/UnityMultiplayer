@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class Enemy : MonoBehaviour
 {
     public Transform player;
-    public EnemyData enemyData;
+    public EnemyScriptableObject enemyData;
     public PlayerHealth health;
     public float currentHealth;
 

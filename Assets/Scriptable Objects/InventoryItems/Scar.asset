@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7bc46021ae383348bce277e8221c88d, type: 3}
+  m_Name: Scar
+  m_EditorClassIdentifier: 
+  id: Scar
+  displayName: Scar
+  icon: {fileID: 21300000, guid: 35a3d25b4e272ce42b892b7981771f7c, type: 3}
+  prefab: {fileID: 7956575565189725420, guid: 59df0ca94d557bb45b069b1dfa2517e6, type: 3}
+  displayPrefab: {fileID: 7395493603845556867, guid: 1c848f9169666414ebd6dfd7af76a5c5, type: 3}
+  globalPrefab: {fileID: 7956575565189725420, guid: f80f92321b4bb874ca641ffda810283f, type: 3}
+  maxStackSize: 1
+  isGun: 1
+  isMelee: 0
+  weapon: {fileID: 11400000, guid: 1bacf2a39ace6674a999b9738b55c13a, type: 2}
+  melee: {fileID: 0}
+  animation: Default|PickUpScar

@@ -5,5 +5,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Enemy", menuName = "ScriptableObjects/New Enemy")]
 public class EnemyScriptableObject : ScriptableObject
 {
-    public int health = 100;
+    //public Animator zombieAnimationLogic;
+    public float damagePerHit;
+    public float minDamageWaitCooldown = 0.1f;
+    public float maxDamageWaitCooldown = 0.9f;
+    public float health = 100f;
 }

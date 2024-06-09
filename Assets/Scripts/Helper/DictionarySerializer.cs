@@ -11,11 +11,16 @@ public class DictionarySerializer
     private Dictionary<string, float> myDict = new Dictionary<string, float>();
 
     public Dictionary<string, float> GetDictionary(){
+        if (myDict.Count != 0){
+            return myDict;    
+        }
         foreach (NewDictItem item in Data){
             myDict.Add(item.name, item.value);
         }
         return myDict;
     }
+
+    
 }
 
 [Serializable]

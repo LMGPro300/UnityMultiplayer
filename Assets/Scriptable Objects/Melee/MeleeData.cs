@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "melee data")]
+[CreateAssetMenu(fileName = "New Melee", menuName = "ScriptableObjects/New Melee")]
 public class MeleeData : ScriptableObject
 {
     public float damage;

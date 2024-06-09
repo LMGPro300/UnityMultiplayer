@@ -81,7 +81,7 @@ public class ItemSync : NetworkBehaviour{
         GameObject other = relocator.GetOtherLocation();
         FollowNetworkTransform followNetworkTransform = targetItemObject.GetComponent<FollowNetworkTransform>();
         if (senderId == clientId){
-            targetItemObject.GetComponent<MeshRenderer>().enabled = false;
+            targetItemObject.transform.gameObject.SetActive(false);
         }
         followNetworkTransform.SetTargetTransform(other.transform);
         lastSpawnedItem.Add(targetItemObject.transform.gameObject);

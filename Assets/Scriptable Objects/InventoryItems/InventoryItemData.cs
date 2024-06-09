@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "item data")]
+[CreateAssetMenu(fileName = "New Item", menuName = "Items/New Item")]
 public class InventoryItemData : ScriptableObject
 {
     public string id;
@@ -15,6 +15,7 @@ public class InventoryItemData : ScriptableObject
     public int maxStackSize = 1;
     public bool isGun;
     public bool isMelee;
-    public GunData weapon = null;
+    public GunScriptableObject weapon = null;
     public MeleeData melee = null;
+    public string animation = "Armature|PickUp";
 }

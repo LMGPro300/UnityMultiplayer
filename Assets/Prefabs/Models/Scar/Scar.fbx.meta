@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: e2a93237aa8c9f242a0924f9f58c0b8f
+guid: 9ed9825694903af4bafed740fb892427
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -14,7 +14,7 @@ ModelImporter:
     bakeSimulation: 0
     resampleCurves: 1
     optimizeGameObjects: 0
-    removeConstantScaleCurves: 0
+    removeConstantScaleCurves: 1
     motionNodeName: 
     rigImportErrors: 
     rigImportWarnings: 
@@ -33,11 +33,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Default|Idle
-      takeName: Default|Idle
-      internalID: -8733235949063756966
+      name: Armature|PickUp
+      takeName: Armature|PickUp
+      internalID: 3515170952244877179
       firstFrame: 0
-      lastFrame: 5
+      lastFrame: 13
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -62,11 +62,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Default|Jump
-      takeName: Default|Jump
-      internalID: -3667926291955087191
+      name: Armature|ScarEquip
+      takeName: Armature|ScarEquip
+      internalID: 6367516075893449426
       firstFrame: 0
-      lastFrame: 10
+      lastFrame: 65
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -91,11 +91,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Default|Land
-      takeName: Default|Land
-      internalID: -5871224060554995965
+      name: Armature|ScarReload
+      takeName: Armature|ScarReload
+      internalID: 9003209619262245544
       firstFrame: 0
-      lastFrame: 10
+      lastFrame: 100
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -120,11 +120,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Default|T-Pose
-      takeName: Default|T-Pose
-      internalID: 5362597960892413422
+      name: Armature|ScarShoot
+      takeName: Armature|ScarShoot
+      internalID: -1281039173793313390
       firstFrame: 0
-      lastFrame: 5
+      lastFrame: 6
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -132,35 +132,6 @@ ModelImporter:
       loop: 0
       hasAdditiveReferencePose: 0
       loopTime: 0
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
-    - serializedVersion: 16
-      name: Default|Walk
-      takeName: Default|Walk
-      internalID: 3684230786785257449
-      firstFrame: 0
-      lastFrame: 40
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
