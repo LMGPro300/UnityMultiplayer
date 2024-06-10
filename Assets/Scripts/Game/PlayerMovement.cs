@@ -27,16 +27,18 @@ public class PlayerMovement : NetworkBehaviour//MonoBehaviour
         networkDeltaTime = 1f/frameRate;
         playerPrediction.SetNewThresHold(100000f);
 
+        SceneManager.sceneLoaded += loadComplete;
+
         //NetworkSceneManager.OnLoadCompleteDelegateHandler += () => {OnLoadComplete();};
 
         //playerPrediction.enabled = true;
         //transform.rotation = Quaternion.Euler(-90f, 0f, 0f) * transform.rotation;
     }
 
-    public void OnLoadComplete(ulong clientId, string sceneName, LoadSceneMode loadSceneMode){
+    public void loadComplete(Scene scene, LoadSceneMode mode){
         transform.position = SpawnPoints.Instance.RandomSpawnPoint();
-        playerPrediction.SetNewThresHold(10f);
     }
+    
     private void Gravity(){
         if(playerCollision.GetIsGrounded() == false){
             rb.velocity += new Vector3(0,-gravity*networkDeltaTime,0);
