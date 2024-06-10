@@ -8,6 +8,7 @@ public class PlayerMovement : NetworkBehaviour//MonoBehaviour
     [SerializeField] private Rigidbody rb;
     [SerializeField] private float maxAccelAir, jumpSpeed, accelGround, friction, maxSpeed, airControl, gravity, accelAir, frameRate;
     [SerializeField] private PlayerCollision playerCollision;
+    [SerializeField] private PlayerPrediction playerPrediction;
     public Vector3 wishDirection;
     private float jumpInput;
     [SerializeField] private float networkDeltaTime;
@@ -19,7 +20,14 @@ public class PlayerMovement : NetworkBehaviour//MonoBehaviour
         if (!IsOwner) return; 
         transform.position = new Vector3(0f, 10f, 0f);
         networkDeltaTime = 1f/frameRate;
+        playerPrediction.SetNewThresHold(100000f);
+        transform.position = SpawnPoints.Instance.RandomSpawnPoint();
+        //playerPrediction.enabled = true;
         //transform.rotation = Quaternion.Euler(-90f, 0f, 0f) * transform.rotation;
+    }
+
+    public void Awake(){
+        playerPrediction.SetNewThresHold(10f);
     }
     private void Gravity(){
         if(playerCollision.GetIsGrounded() == false){

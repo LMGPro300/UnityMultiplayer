@@ -2,6 +2,7 @@
 Normal Cube (rendered when dropped)
 
 Item Object
+Item OwnerShip
 NetworkObject
 NetworkTransform
 
@@ -21,7 +22,6 @@ ADD TO GLOBAL PREFAB NETWORK LIST
 Arm Cube (in hand)
 
 Literally nothing needed
-
 MAKE SURE TO ADD TO ITEM OBJECT SCRIPT
 
 */

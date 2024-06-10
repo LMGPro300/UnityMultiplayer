@@ -76,6 +76,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9ed9825694903af4bafed740fb892427, type: 3}
       insertIndex: -1
       addedObject: {fileID: 254311465765191396}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 9ed9825694903af4bafed740fb892427, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3783343638103043355}
     - targetCorrespondingSourceObject: {fileID: 7367194415431678416, guid: 9ed9825694903af4bafed740fb892427, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4304064494288593448}
@@ -167,7 +170,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1091917562
+  GlobalObjectIdHash: 1317639635
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -220,3 +223,15 @@ MonoBehaviour:
   referenceItem: {fileID: 11400000, guid: 89bf74ceca6bc9a42b93f44538105849, type: 2}
   pickupBufferSeconds: 2
   canPickUp: 0
+--- !u!114 &3783343638103043355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7956575565189725420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0ef84ed4a442914d9336203b0af2a33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

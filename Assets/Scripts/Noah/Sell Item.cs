@@ -2,25 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SellItem : MonoBehaviour
-{
-    // reference to access player credits
-    [SerializeField]
-    private ShopManager shopManager;
-
-    private void OnTriggerEnter(Collider other)
-    {
-        //make sure we're actually colliding with an item
-        if (other.gameObject.tag == "item")
-        {
-            //get the item's scriptable object
+public class SellItem : MonoBehaviour{
+    private void OnTriggerEnter(Collider other){
+        if (other.gameObject.tag == "item"){
             ItemObject droppedItem = other.gameObject.GetComponent<ItemObject>();
-            InventoryItemData myData = droppedItem.referenceItem;
-
-            //add on to the player's balance and destroy dropped item
-            shopManager.playerCredits += myData.sellPrice;
-            shopManager.playerBalanceText.text = "Current Balance: " + shopManager.playerCredits;
-
+            ItemOwnerShip itemOwner = other.gameObject.GetComponent<ItemOwnerShip>();
+            if (itemOwner != null){
+                ShopManager shopManager = itemOwner.Owner();
+                InventoryItemData myData = droppedItem.referenceItem;
+                shopManager.playerCredits += myData.sellPrice;
+                shopManager.UpdateBalance();
+            }
             Destroy(other.gameObject);
         }
     }

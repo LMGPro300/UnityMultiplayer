@@ -4,9 +4,7 @@ using System.Collections.Specialized;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Item", menuName = "Items/New Item")]
-public class InventoryItemData : ScriptableObject
-{
-    public string id;
+public class InventoryItemData : ScriptableObject{
     public string displayName;
     public Sprite icon;
     public GameObject prefab;
@@ -16,7 +14,15 @@ public class InventoryItemData : ScriptableObject
     public bool isGun;
     public bool isMelee;
     public GunScriptableObject weapon = null;
+    //public GunScriptableObjectWrapper realWeapon;
     public MeleeData melee = null;
     public string animation = "Armature|PickUp";
     public float sellPrice = 10f;
+    public ShopManager lastOwner;
+
+    public void Awake(){
+        //if (weapon != null){
+            //realWeapon = new GunScriptableObjectWrapper(weapon);
+        //}
+    }
 }

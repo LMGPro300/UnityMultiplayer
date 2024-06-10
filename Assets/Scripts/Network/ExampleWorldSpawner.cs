@@ -25,7 +25,7 @@ public class ExampleWorldSpawner : MonoBehaviour
 
 
     public void SpawnIn(){
-        SyncWithWorldSpace.Instance.InstantiateOnServer(prefab, new Vector3(0,0,0), new Quaternion(0f,0f,0f,1)); //spawn the prefab
+        SyncWithWorldSpace.Instance.InstantiateOnServer(prefab, transform.position, new Quaternion(0f,0f,0f,1)); //spawn the prefab
     }
 
 }

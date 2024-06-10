@@ -12,6 +12,7 @@ public class InputHandler : NetworkBehaviour//MonoBehaviour
     [SerializeField] PlayerPickUp playerPickUp;
     [SerializeField] InventorySystem inventorySystem;
     [SerializeField] PickUpItem pickUpItem;
+    [SerializeField] ShopManager shopManager;
     //[SerializeField] PlayerPrediction clientPrediction;
 
     private PlayerControls PlayerControlsActionMap;
@@ -25,6 +26,7 @@ public class InputHandler : NetworkBehaviour//MonoBehaviour
     private float inventoryInput;
     private float dropInput;
     private float reloadInput;
+    private float shopInput;
     //private float teleportInput;
 
     void Awake()
@@ -39,6 +41,7 @@ public class InputHandler : NetworkBehaviour//MonoBehaviour
         keyboardMovement.DROP.performed += ctx => dropInput = ctx.ReadValue<float>();
         keyboardMovement.SHOOT.performed += ctx => shootInput = ctx.ReadValue<float>();
         keyboardMovement.RELOAD.performed += ctx => reloadInput = ctx.ReadValue<float>();
+        keyboardMovement.SHOP.performed += ctx => shopInput = ctx.ReadValue<float>();
         //keyboardMovement.TELEPORT.performed += ctx => teleportInput = ctx.ReadValue<float>();
 
         //keyboardMovement.Primary.performed += ctx => shootInput = ctx.ReadValue<float>();
@@ -56,7 +59,8 @@ public class InputHandler : NetworkBehaviour//MonoBehaviour
 
     void Update(){ 
         if (!IsOwner) return;
-        if (inventoryInput == 0f){
+        Debug.Log(!shopManager.shopActive + " shop input");
+        if (inventoryInput == 0f && !shopManager.shopActive){
             playerCamera.RecieveInput(mouseInput);
         }
         playerMovement.RecieveKeyboardInput(keyboardInput);
@@ -67,6 +71,9 @@ public class InputHandler : NetworkBehaviour//MonoBehaviour
         inventorySystem.RecieveInventoryInput(inventoryInput);
         inventorySystem.RecieveDropInput(dropInput);
         pickUpItem.RecievePickUpInput(pickUpInput);
+        shopManager.RecieveShopInput(shopInput);
+        shopInput = 0f;
+        
         //clientPrediction.RecieveTeleportInput(teleportInput);
         //teleportInput = 0f;
         //playerShoot.RecieveShootInput(shootInput);      

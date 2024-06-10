@@ -107,6 +107,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SHOP"",
+                    ""type"": ""Button"",
+                    ""id"": ""2b614995-5200-4141-9284-2c6292221f00"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -252,6 +261,17 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""RELOAD"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f960c2aa-a2a7-4c59-af6d-c7de4396ec12"",
+                    ""path"": ""<Keyboard>/g"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SHOP"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -269,6 +289,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Keyboard_DROP = m_Keyboard.FindAction("DROP", throwIfNotFound: true);
         m_Keyboard_SHOOT = m_Keyboard.FindAction("SHOOT", throwIfNotFound: true);
         m_Keyboard_RELOAD = m_Keyboard.FindAction("RELOAD", throwIfNotFound: true);
+        m_Keyboard_SHOP = m_Keyboard.FindAction("SHOP", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -339,6 +360,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Keyboard_DROP;
     private readonly InputAction m_Keyboard_SHOOT;
     private readonly InputAction m_Keyboard_RELOAD;
+    private readonly InputAction m_Keyboard_SHOP;
     public struct KeyboardActions
     {
         private @PlayerControls m_Wrapper;
@@ -352,6 +374,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @DROP => m_Wrapper.m_Keyboard_DROP;
         public InputAction @SHOOT => m_Wrapper.m_Keyboard_SHOOT;
         public InputAction @RELOAD => m_Wrapper.m_Keyboard_RELOAD;
+        public InputAction @SHOP => m_Wrapper.m_Keyboard_SHOP;
         public InputActionMap Get() { return m_Wrapper.m_Keyboard; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -388,6 +411,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @RELOAD.started += instance.OnRELOAD;
             @RELOAD.performed += instance.OnRELOAD;
             @RELOAD.canceled += instance.OnRELOAD;
+            @SHOP.started += instance.OnSHOP;
+            @SHOP.performed += instance.OnSHOP;
+            @SHOP.canceled += instance.OnSHOP;
         }
 
         private void UnregisterCallbacks(IKeyboardActions instance)
@@ -419,6 +445,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @RELOAD.started -= instance.OnRELOAD;
             @RELOAD.performed -= instance.OnRELOAD;
             @RELOAD.canceled -= instance.OnRELOAD;
+            @SHOP.started -= instance.OnSHOP;
+            @SHOP.performed -= instance.OnSHOP;
+            @SHOP.canceled -= instance.OnSHOP;
         }
 
         public void RemoveCallbacks(IKeyboardActions instance)
@@ -447,5 +476,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnDROP(InputAction.CallbackContext context);
         void OnSHOOT(InputAction.CallbackContext context);
         void OnRELOAD(InputAction.CallbackContext context);
+        void OnSHOP(InputAction.CallbackContext context);
     }
 }

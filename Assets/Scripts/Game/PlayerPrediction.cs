@@ -225,6 +225,11 @@ public class PlayerPrediction : NetworkBehaviour
         };
     }
 
+
+    public void SetNewThresHold(float thres){
+        reconcilThreshold = thres;
+    }
+
     /*
     public void RecieveTeleportInput(float teleportInput){
         this.teleportInput = teleportInput; 
