@@ -26,7 +26,7 @@ public class PlayerMovement : NetworkBehaviour//MonoBehaviour
         transform.position = new Vector3(0f, 10f, 0f);
         networkDeltaTime = 1f/frameRate;
         playerPrediction.SetNewThresHold(100000f);
-
+        Debug.Log("it's spawning");
         SceneManager.sceneLoaded += loadComplete;
 
         //NetworkSceneManager.OnLoadCompleteDelegateHandler += () => {OnLoadComplete();};
@@ -36,6 +36,7 @@ public class PlayerMovement : NetworkBehaviour//MonoBehaviour
     }
 
     public void loadComplete(Scene scene, LoadSceneMode mode){
+        Debug.Log("changed");
         transform.position = SpawnPoints.Instance.RandomSpawnPoint();
     }
     
