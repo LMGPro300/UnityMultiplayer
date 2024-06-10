@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : NetworkBehaviour//MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class PlayerMovement : NetworkBehaviour//MonoBehaviour
     [SerializeField] private float maxAccelAir, jumpSpeed, accelGround, friction, maxSpeed, airControl, gravity, accelAir, frameRate;
     [SerializeField] private PlayerCollision playerCollision;
     [SerializeField] private PlayerPrediction playerPrediction;
+    [SerializeField] private InventorySystem inventorySystem;
+    [SerializeField] private Canvas playerUI;
     public Vector3 wishDirection;
     private float jumpInput;
     [SerializeField] private float networkDeltaTime;
@@ -18,15 +21,20 @@ public class PlayerMovement : NetworkBehaviour//MonoBehaviour
     public override void OnNetworkSpawn(){
         base.OnNetworkSpawn();
         if (!IsOwner) return; 
+        inventorySystem.enabled = true;
+        playerUI.enabled = true;
         transform.position = new Vector3(0f, 10f, 0f);
         networkDeltaTime = 1f/frameRate;
         playerPrediction.SetNewThresHold(100000f);
-        transform.position = SpawnPoints.Instance.RandomSpawnPoint();
+
+        //NetworkSceneManager.OnLoadCompleteDelegateHandler += () => {OnLoadComplete();};
+
         //playerPrediction.enabled = true;
         //transform.rotation = Quaternion.Euler(-90f, 0f, 0f) * transform.rotation;
     }
 
-    public void Awake(){
+    public void OnLoadComplete(ulong clientId, string sceneName, LoadSceneMode loadSceneMode){
+        transform.position = SpawnPoints.Instance.RandomSpawnPoint();
         playerPrediction.SetNewThresHold(10f);
     }
     private void Gravity(){

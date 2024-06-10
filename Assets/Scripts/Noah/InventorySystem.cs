@@ -10,9 +10,10 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.UI;
+using Unity.Netcode;
 
 [Serializable]
-public class InventorySystem : MonoBehaviour
+public class InventorySystem : NetworkBehaviour
 {
     [SerializeField]
     public GameObject hotbarChild;
@@ -41,12 +42,11 @@ public class InventorySystem : MonoBehaviour
     private int curSlot = 1;
     private bool inventoryIsDisplayed = false;
 
-    private void Update()
-    {
-        if (inventoryIsDisplayed)
-        {
+    private void Update(){
+        if (inventoryIsDisplayed){
             RadialMouseLogic();
         }
+        Debug.Log(" ran by the owner possibly");
     }
 
     public void RecieveInventoryInput(float inventoryInput){
@@ -58,8 +58,7 @@ public class InventorySystem : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
-        else if (!inventoryIsDisplayed && hotbarChild.activeSelf)
-        {
+        else if (!inventoryIsDisplayed && hotbarChild.activeSelf){
             hotbarChild.SetActive(false);
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;

@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class PlayerShoot : MonoBehaviour{
+public class PlayerShoot : NetworkBehaviour{
     [SerializeField] private Transform cam;
     [SerializeField] private ShootingController shootingController;
     [SerializeField] private Animator armAnimator;

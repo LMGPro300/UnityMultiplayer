@@ -15,7 +15,6 @@ public class PlayerCamera : NetworkBehaviour//MonoBehaviour
     [SerializeField] private Transform armsModel;
     [SerializeField] private Transform sway;
     [SerializeField] private Transform head;
-    [SerializeField] private Canvas canvas;
     [SerializeField] private MeshRenderer[] hiddenObjects;
     [SerializeField] private MeshRenderer[] showObjects;
     
@@ -30,7 +29,6 @@ public class PlayerCamera : NetworkBehaviour//MonoBehaviour
         base.OnNetworkSpawn();
         if (!IsOwner) return; 
         _camera.enabled = true;
-        canvas.enabled = true;
         foreach (MeshRenderer part in hiddenObjects){
             part.enabled = false;
         }
