@@ -23,7 +23,8 @@ public class PlayerMovement : NetworkBehaviour//MonoBehaviour
         if (!IsOwner) return; 
         inventorySystem.enabled = true;
         playerUI.enabled = true;
-        transform.position = new Vector3(0f, 10f, 0f);
+        //transform.position = new Vector3(0f, 10f, 0f);
+        Debug.Log("it worked SPANWI GBFY8fisadf");
         networkDeltaTime = 1f/frameRate;
         playerPrediction.SetNewThresHold(100000f);
 
@@ -112,7 +113,7 @@ public class PlayerMovement : NetworkBehaviour//MonoBehaviour
 
     void respawn(){
         if (transform.position.y < - 200){
-            transform.position = new Vector3(0, 5, 0);
+            transform.position = SpawnPoints.Instance.RandomSpawnPoint();
         }
     }
 

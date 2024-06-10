@@ -5651,7 +5651,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2626685512613005387, guid: 2d388877f617ab045a4197c538fc7c57, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3014127309006597932, guid: 2d388877f617ab045a4197c538fc7c57, type: 3}
       propertyPath: m_text
@@ -5667,7 +5667,7 @@ PrefabInstance:
       objectReference: {fileID: 4435462305847677923}
     - target: {fileID: 3459228814633305794, guid: 2d388877f617ab045a4197c538fc7c57, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3459228814633305794, guid: 2d388877f617ab045a4197c538fc7c57, type: 3}
       propertyPath: inventoryUI
@@ -5825,7 +5825,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 863128680588452266}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e2ae58c154fb5bf478424b073365e2e6, type: 3}
   m_Name: 

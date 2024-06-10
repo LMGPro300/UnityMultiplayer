@@ -21,8 +21,8 @@ public class InventoryItemData : ScriptableObject{
     public ShopManager lastOwner;
 
     public void Awake(){
-        //if (weapon != null){
-            //realWeapon = new GunScriptableObjectWrapper(weapon);
-        //}
+        if (weapon != null){
+            weapon = Instantiate(weapon);
+        }
     }
 }

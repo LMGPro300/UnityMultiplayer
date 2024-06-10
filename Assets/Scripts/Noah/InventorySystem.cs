@@ -84,7 +84,7 @@ public class InventorySystem : NetworkBehaviour
     }
 
     private void Awake(){
-        inventory = new InventoryItem[6];
+        inventory = new InventoryItem[6] {null, null, null, null, null, null};
         item_dict = new Dictionary<InventoryItemData, List<InventoryItem>>();
         numKeys.Enable();
         getMouseCoords.Enable();
@@ -233,7 +233,8 @@ public class InventorySystem : NetworkBehaviour
     }
 
     public void UpdateHotbar(){
-        if (inventory[curSlot - 1] != null){
+        Debug.Log(curSlot - 1);
+        if (inventory[curSlot - 1] != null && inventory[curSlot - 1].data != null){
             pickUpAnimation.changeSlot(inventory[curSlot - 1].data.displayPrefab, inventory[curSlot - 1].data.animation);
             itemSync.GetNewObject(inventory[curSlot - 1].data.globalPrefab);
             playerShoot.ChangeSlot(inventory[curSlot - 1].data.weapon);
@@ -246,6 +247,9 @@ public class InventorySystem : NetworkBehaviour
         }
         if (!hotbarChild.activeSelf) { return; }
         for (int i = 1; i <= 6; i++){
+            if (inventory[i - 1] != null && inventory[i - 1].data == null){
+                inventory[i - 1] = null;
+            }
             GameObject mySlotObject = hotbarChild.transform.Find("Section " + i).gameObject;
             mySlotObject.GetComponent<Image>().color = (i != curSlot ? new Color32(125, 125, 125, 125) : new Color32(57, 57, 57, 125));
             mySlotObject.transform.Find("Image").GetComponent<Image>().sprite = inventory[i - 1] != null ? inventory[i - 1].data.icon : blankImage;
