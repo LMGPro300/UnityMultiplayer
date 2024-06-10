@@ -6,9 +6,8 @@ public class SellItem : MonoBehaviour{
     private void OnTriggerEnter(Collider other){
         if (other.gameObject.tag == "item"){
             ItemObject droppedItem = other.gameObject.GetComponent<ItemObject>();
-            ItemOwnerShip itemOwner = other.gameObject.GetComponent<ItemOwnerShip>();
-            if (itemOwner != null){
-                ShopManager shopManager = itemOwner.Owner();
+            ShopManager shopManager = droppedItem.changingData.pastOwner;
+            if (shopManager != null){
                 InventoryItemData myData = droppedItem.referenceItem;
                 shopManager.playerCredits += myData.sellPrice;
                 shopManager.UpdateBalance();

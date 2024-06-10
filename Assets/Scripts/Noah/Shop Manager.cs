@@ -79,7 +79,7 @@ public class ShopManager : MonoBehaviour
         else{
             playerCredits -= clickedObject.price;
             UpdateBalance();
-            inventory.Add(clickedObject.inventory_item);
+            inventory.Add(clickedObject.inventory_item, new DynamicItemData());
         }
     }
 

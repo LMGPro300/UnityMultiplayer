@@ -170,7 +170,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1317639635
+  GlobalObjectIdHash: 1046332836
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -222,6 +222,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   referenceItem: {fileID: 11400000, guid: 89bf74ceca6bc9a42b93f44538105849, type: 2}
   pickupBufferSeconds: 2
+  inventorySystem: {fileID: 0}
   canPickUp: 0
 --- !u!114 &3783343638103043355
 MonoBehaviour:

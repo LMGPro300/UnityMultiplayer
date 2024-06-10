@@ -30,6 +30,10 @@ public class InventorySystem : MonoBehaviour
     PickUpAnimation pickUpAnimation;
     [SerializeField]
     public InventoryItem[] inventory;
+    [SerializeField]
+    public ShootingController shootingController;
+    [SerializeField]
+    public ShopManager shopManager;
 
     [SerializeField] Transform playerTransform;
     [SerializeField] Transform playerCamera;
@@ -40,6 +44,8 @@ public class InventorySystem : MonoBehaviour
 
     private int curSlot = 1;
     private bool inventoryIsDisplayed = false;
+
+    private DynamicItemData lastEquippedItem = null;
 
     private void Update()
     {
@@ -109,8 +115,14 @@ public class InventorySystem : MonoBehaviour
         return null;
     }
 
-    public void Add(InventoryItemData referenceData)
+    public void Add(InventoryItemData referenceData, DynamicItemData myDynamicData)
     {
+        if (myDynamicData == null)
+        {
+            myDynamicData = new DynamicItemData();
+            Debug.Log("BRUH WHAT THE HECK");
+        }
+        myDynamicData.pastOwner = shopManager;
         if (item_dict.TryGetValue(referenceData, out List<InventoryItem> value))
         {
             //find index in value list that we can add an item too
@@ -124,16 +136,24 @@ public class InventorySystem : MonoBehaviour
             //otherwise create a new stack
             else
             {
-                InventoryItem newItem = new InventoryItem(referenceData);
+                InventoryItem newItem = new InventoryItem(referenceData, myDynamicData);
                 addToBestSlot(newItem);
                 item_dict[referenceData].Add(newItem);
+                if (referenceData.isGun)
+                {
+                    shootingController.ChangeMagSize(myDynamicData.ammo);
+                }
             }
         }
         else
         {
-            InventoryItem newItem = new InventoryItem(referenceData);
+            InventoryItem newItem = new InventoryItem(referenceData, myDynamicData);
             addToBestSlot(newItem);
             item_dict[referenceData] = new List<InventoryItem> { newItem };
+            if (referenceData.isGun)
+            {
+                shootingController.ChangeMagSize(myDynamicData.ammo);
+            }
         }
         UpdateHotbar();
     }
@@ -194,21 +214,40 @@ public class InventorySystem : MonoBehaviour
             return;
         }
 
+        //-------SET UP SPAWNED OBJECT
+
         InventoryItem itemToDrop = inventory[curSlot-1];
         InventoryItemData referenceData = inventory[curSlot-1].data;
-        GameObject itemToSpawn = itemToDrop.data.prefab;
+        GameObject itemToSpawn = referenceData.prefab;
 
-        //GameObject droppedItem = Instantiate(itemToSpawn);
+        //check if the dropped weapon has dynamic data
+        //a bit hacky, and we should have used inheritance, but we figured this was the best
+        //way for the time given
+
+        DynamicItemData myDynamicItemData = inventory[curSlot-1].changingData;
+
+
+        itemToSpawn.GetComponent<ItemObject>().changingData = myDynamicItemData;
+        Debug.Log(itemToSpawn.GetComponent<ItemObject>().changingData);
+
+        //lastEquippedItem = itemToDrop.changingData;
+
+        //-------SPAWN OBJECT
         SyncWithWorldSpace.Instance.InstantiateOnServer(itemToSpawn, (playerTransform.position + (playerCamera.forward * 2f)), new Quaternion(0f, 0f, 0f, 1), (Vector3.up * 4f) + (playerCamera.forward * 4f));
-        //droppedItem.transform.position = playerTransform.position + (playerCamera.forward * 2f);
+
         Remove(referenceData);
     }
 
-    public void PickUpItem(InventoryItemData referenceData, GameObject go){
+    public DynamicItemData GetDynamicData()
+    {
+        return lastEquippedItem;
+    }
+
+    public void PickUpItem(InventoryItemData referenceData, GameObject go, DynamicItemData myDynamicData){
         if (go == null) return;
         if (canAddItem(referenceData))
         {
-            Add(referenceData);
+            Add(referenceData, myDynamicData);
             SyncWithWorldSpace.Instance.DestoryOnServer(go);
         }
     }
@@ -251,6 +290,10 @@ public class InventorySystem : MonoBehaviour
             mySlotObject.GetComponent<Image>().color = (i != curSlot ? new Color32(125, 125, 125, 125) : new Color32(57, 57, 57, 125));
             mySlotObject.transform.Find("Image").GetComponent<Image>().sprite = inventory[i - 1] != null ? inventory[i - 1].data.icon : blankImage;
         }
+        if (inventory[curSlot-1].data.isGun)
+        {
+            shootingController.ChangeMagSize(inventory[curSlot - 1].changingData.ammo);
+        }
         UpdateDisplayIcon();
     }
 
@@ -271,6 +314,7 @@ public class InventorySystem : MonoBehaviour
 
     public bool canAddItem(InventoryItemData itemToCheck)
     {
+        Debug.Log("hello there " + inventory[0]);
         if (inventory.Contains(null))
         {
             return true;
@@ -283,5 +327,15 @@ public class InventorySystem : MonoBehaviour
             }
         }
         return false;
+    }
+
+    public void ShootGun()
+    {
+        inventory[curSlot-1].changingData.ammo -= 1;
+    }
+
+    public void ReloadGun(int newAmmoCount)
+    {
+        inventory[curSlot - 1].changingData.ammo = newAmmoCount;
     }
 }

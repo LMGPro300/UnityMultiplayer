@@ -9,6 +9,7 @@ public class ShootingController: MonoBehaviour
 {
     private GunScriptableObject gunScriptableObject;
     [SerializeField] private TextMeshProUGUI ammoText;
+    [SerializeField] private InventorySystem inventorySystem;
     //[SerializeField] private VisualEffect blood;
     //[SerializeField] private VisualEffect fount;
     //[SerializeField] private VisualEffect flashs;
@@ -68,7 +69,9 @@ public class ShootingController: MonoBehaviour
     public void ChangeGun(GunScriptableObject gunScriptableObject){
         currentGunObject = gunScriptableObject;
         magSize = gunScriptableObject.magSize;
-        currentMagSize = gunScriptableObject.currentMagSize;
+        //LOOK AT THIS LINE------------------------------------------
+        //currentMagSize = gunScriptableObject.currentMagSize;
+        //------------------------------------------------------------
         reloadTime = gunScriptableObject.reloadTime;
         //ammoCapacity = gunScriptableObject.ammoCapacity;
         damage = gunScriptableObject.damage;
@@ -83,12 +86,19 @@ public class ShootingController: MonoBehaviour
         UpdateAmmoText();
     }
 
+    public void ChangeMagSize(int newMagSize)
+    {
+        currentMagSize = newMagSize;
+        UpdateAmmoText();
+    }
+
     public void Update(){
         shootTimer.Tick(Time.deltaTime);
         reloadTimer.Tick(Time.deltaTime);
     }
     public void Shoot(Vector3 starting, Vector3 target){
         shootTimer.Start();
+        inventorySystem.ShootGun();
         currentMagSize -= 1;
         UpdateAmmoText();
 
@@ -200,6 +210,7 @@ public class ShootingController: MonoBehaviour
             reloadTimer.Start();
             int diff = magSize - currentMagSize;
             currentMagSize = diff > currentAmmoCount ? currentMagSize + currentAmmoCount : magSize;
+            inventorySystem.ReloadGun(currentMagSize);
             if(currentAmmoCount < diff){
                 DecreaseAmmoType(currentAmmoCount);
             } else {

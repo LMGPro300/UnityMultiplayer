@@ -60,13 +60,10 @@ public class PickUpItem : MonoBehaviour{
 
         if (!lastItemObject.canPickUp) return;
         lastItemTouched.Remove(lastItem);
-        inventorySystem.PickUpItem(lastItemObject.referenceItem, lastItem);
+        inventorySystem.PickUpItem(lastItemObject.referenceItem, lastItem, lastItemObject.changingData);
         
         pickUpText.text = "";
         lastItemObject.canPickUp = false;
         lastItemObject.pickupCooldown.Start();
     }
-
-
-   
 }
