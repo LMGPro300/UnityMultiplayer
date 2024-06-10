@@ -27,7 +27,7 @@ public class PlayerMovement : NetworkBehaviour//MonoBehaviour
         Debug.Log("it worked SPANWI GBFY8fisadf");
         networkDeltaTime = 1f/frameRate;
         playerPrediction.SetNewThresHold(100000f);
-
+        Debug.Log("it's spawning");
         SceneManager.sceneLoaded += loadComplete;
 
         //NetworkSceneManager.OnLoadCompleteDelegateHandler += () => {OnLoadComplete();};
@@ -37,6 +37,7 @@ public class PlayerMovement : NetworkBehaviour//MonoBehaviour
     }
 
     public void loadComplete(Scene scene, LoadSceneMode mode){
+        Debug.Log("changed");
         transform.position = SpawnPoints.Instance.RandomSpawnPoint();
     }
     

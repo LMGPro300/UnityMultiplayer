@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,16 +12,23 @@ public class MeleeManager : MonoBehaviour
     private InputAction playerClick;
     [SerializeField]
     private MeleeData meleeData;
+    [SerializeField]
+    private Transform playerTransform;
 
     CountdownTimer attackTimer;
 
     bool canAttackPlayer = false;
+
+    GameObject lastCollidedEnemy = null;
+    List<GameObject> pastObjects = new List<GameObject>();
 
     public void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "enemy")
         {
             canAttackPlayer = true;
+            lastCollidedEnemy = other.gameObject;
+            pastObjects.Add(other.gameObject);
         }
     }
 
@@ -29,6 +37,11 @@ public class MeleeManager : MonoBehaviour
         if (other.gameObject.tag == "enemy")
         {
             canAttackPlayer = false;
+            lastCollidedEnemy = null;
+            if (pastObjects.Contains(other.gameObject))
+            {
+                pastObjects.Remove(other.gameObject);
+            }
         }
     }
 
@@ -54,16 +67,26 @@ public class MeleeManager : MonoBehaviour
 
     public void Attack(InputAction.CallbackContext ctx)
     {
-        if (canAttackPlayer)
+        if (canAttackPlayer && attackTimer.IsFinished() && meleeData != null)
         {
-            if (attackTimer.IsFinished())
-            {
-                //apply damage
-                Debug.Log(meleeData.damage + " damage was done to the zombie");
-
-                attackTimer.SetNewTime(meleeData.cooldown);
-                attackTimer.Start();
+            foreach (GameObject go in pastObjects) {
+                Entity collidedEntity = go.GetComponent<Entity>();
+                if (collidedEntity.isAlive)
+                {
+                    collidedEntity.takeDamage(meleeData.damage);
+                    if (!collidedEntity.isAlive)
+                    {
+                        collidedEntity.DoRagdoll(playerTransform.forward * 2f, playerTransform.position);
+                    }
+                }
             }
+            attackTimer.SetNewTime(meleeData.cooldown);
+            attackTimer.Start();
         }
+    }
+
+    public void ChangeSlot(MeleeData newData)
+    {
+        meleeData = newData;
     }
 }

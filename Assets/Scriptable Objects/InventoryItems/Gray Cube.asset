@@ -19,9 +19,9 @@ MonoBehaviour:
   globalPrefab: {fileID: 5787373178358721160, guid: 0be53f65c89fedd478204c6c86019b92, type: 3}
   maxStackSize: 2
   isGun: 0
-  isMelee: 0
+  isMelee: 1
   weapon: {fileID: 0}
-  melee: {fileID: 0}
+  melee: {fileID: 11400000, guid: 79e5b6d8ea42a68408cbe9219d1d2ed9, type: 2}
   animation: Default|HoldItem
   sellPrice: 10
   lastOwner: {fileID: 0}
