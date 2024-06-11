@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7bc46021ae383348bce277e8221c88d, type: 3}
   m_Name: Scar
   m_EditorClassIdentifier: 
-  id: Scar
   displayName: Scar
   icon: {fileID: 21300000, guid: 35a3d25b4e272ce42b892b7981771f7c, type: 3}
   prefab: {fileID: 7956575565189725420, guid: 59df0ca94d557bb45b069b1dfa2517e6, type: 3}
@@ -24,3 +23,5 @@ MonoBehaviour:
   weapon: {fileID: 11400000, guid: 1bacf2a39ace6674a999b9738b55c13a, type: 2}
   melee: {fileID: 0}
   animation: Default|PickUpScar
+  sellPrice: 10
+  lastOwner: {fileID: 0}

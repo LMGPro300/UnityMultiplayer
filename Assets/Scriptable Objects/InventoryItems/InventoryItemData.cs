@@ -20,9 +20,11 @@ public class InventoryItemData : ScriptableObject{
     public float sellPrice = 10f;
     public ShopManager lastOwner;
 
-    public void Awake(){
+    public void MakeWeaponCopy(){
         if (weapon != null){
             weapon = Instantiate(weapon);
         }
     }
+
+    
 }

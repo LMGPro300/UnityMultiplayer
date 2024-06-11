@@ -243,7 +243,6 @@ public class InventorySystem : NetworkBehaviour
             
         }
         else{
-            Debug.Log(playerShoot); 
             playerShoot.ChangeSlot(null);
             playerMelee.ChangeSlot(null);
             pickUpAnimation.changeSlot(null, null);

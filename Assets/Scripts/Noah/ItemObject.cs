@@ -16,6 +16,7 @@ public class ItemObject : MonoBehaviour{
         pickupCooldown = new CountdownTimer(pickupBufferSeconds);
         pickupCooldown.Start();
         pickupCooldown.OnTimerStop += () => { canPickUp = true;};
+        //referenceItem.MakeWeaponCopy();
     }
 
     void Update(){
