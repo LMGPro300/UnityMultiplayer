@@ -4,11 +4,16 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour{
     public static PlayerManager Instance { get; private set; }
-    private List<Transform> playersTransform;
+    public List<Transform> playersTransform;
 
     void Awake(){
         Instance = this;
         playersTransform = new List<Transform>();
+    }
+
+    private void Update()
+    {
+        Debug.Log(playersTransform.Count + "NOAH");
     }
 
 

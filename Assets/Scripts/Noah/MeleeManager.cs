@@ -68,7 +68,6 @@ public class MeleeManager : MonoBehaviour
     {
         if (canAttackPlayer && coolDownDone && meleeData != null)
         {
-            Debug.Log("yo");
             Entity collidedEntity = pastObject.GetComponent<EntityComponent>().parentEntity;
             if (collidedEntity.isAlive)
             {
