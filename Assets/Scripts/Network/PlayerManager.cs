@@ -11,6 +11,11 @@ public class PlayerManager : MonoBehaviour{
         playersTransform = new List<Transform>();
     }
 
+    private void Update()
+    {
+        Debug.Log(playersTransform.Count + "NOAH");
+    }
+
 
     public void AddPlayer(Transform transform){
         if (HasPlayer(transform)){
