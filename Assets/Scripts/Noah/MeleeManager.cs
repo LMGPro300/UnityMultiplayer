@@ -34,14 +34,10 @@ public class MeleeManager : MonoBehaviour
 
     public void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag == "enemy")
+        if (other.gameObject.tag == "enemy" && other.gameObject == pastObject)
         {
             canAttackPlayer = false;
-            if (other.gameObject == pastObject)
-            {
-                pastObject = null;
-            }
-            attackTimer.Stop();
+            pastObject = null;
         }
     }
 
