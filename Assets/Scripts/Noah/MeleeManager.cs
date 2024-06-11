@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 public class MeleeManager : MonoBehaviour
 {
@@ -18,17 +19,16 @@ public class MeleeManager : MonoBehaviour
     CountdownTimer attackTimer;
 
     bool canAttackPlayer = false;
+    bool coolDownDone = true;
 
-    GameObject lastCollidedEnemy = null;
-    List<GameObject> pastObjects = new List<GameObject>();
+    GameObject pastObject = null;
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "enemy")
+        if (other.gameObject.tag == "enemy" && pastObject == null)
         {
             canAttackPlayer = true;
-            lastCollidedEnemy = other.gameObject;
-            pastObjects.Add(other.gameObject);
+            pastObject = other.gameObject;
         }
     }
 
@@ -37,11 +37,11 @@ public class MeleeManager : MonoBehaviour
         if (other.gameObject.tag == "enemy")
         {
             canAttackPlayer = false;
-            lastCollidedEnemy = null;
-            if (pastObjects.Contains(other.gameObject))
+            if (other.gameObject == pastObject)
             {
-                pastObjects.Remove(other.gameObject);
+                pastObject = null;
             }
+            attackTimer.Stop();
         }
     }
 
@@ -50,11 +50,12 @@ public class MeleeManager : MonoBehaviour
         playerClick.Enable();
         playerClick.performed += Attack;
         attackTimer = new CountdownTimer(1f);
+        attackTimer.OnTimerStop += timerStuffs;
     }
 
     public void Update()
     {
-        if (canAttackPlayer)
+        if (canAttackPlayer && !coolDownDone)
         {
             attackTimer.Tick(Time.deltaTime);
         }
@@ -63,26 +64,34 @@ public class MeleeManager : MonoBehaviour
     public void OnDisable()
     {
         playerClick.Disable();
+        attackTimer.Stop();
+        playerClick.performed -= Attack;
     }
 
     public void Attack(InputAction.CallbackContext ctx)
     {
-        if (canAttackPlayer && attackTimer.IsFinished() && meleeData != null)
+        if (canAttackPlayer && coolDownDone && meleeData != null)
         {
-            foreach (GameObject go in pastObjects) {
-                Entity collidedEntity = go.GetComponent<Entity>();
-                if (collidedEntity.isAlive)
+            Debug.Log("yo");
+            Entity collidedEntity = pastObject.GetComponent<EntityComponent>().parentEntity;
+            if (collidedEntity.isAlive)
+            {
+                pastObject.GetComponent<EntityComponent>().IsShot(meleeData.damage);
+                if (!collidedEntity.isAlive)
                 {
-                    collidedEntity.takeDamage(meleeData.damage);
-                    if (!collidedEntity.isAlive)
-                    {
-                        collidedEntity.DoRagdoll(playerTransform.forward * 2f, playerTransform.position);
-                    }
+                    collidedEntity.DoRagdoll(playerTransform.forward * 2f, playerTransform.position);
+                    pastObject = null;
                 }
             }
             attackTimer.SetNewTime(meleeData.cooldown);
             attackTimer.Start();
+            coolDownDone = false;
         }
+    }
+    
+    public void timerStuffs()
+    {
+        coolDownDone = true;
     }
 
     public void ChangeSlot(MeleeData newData)

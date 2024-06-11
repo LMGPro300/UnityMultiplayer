@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Sword
   m_EditorClassIdentifier: 
   damage: 25
-  cooldown: 3
+  cooldown: 1

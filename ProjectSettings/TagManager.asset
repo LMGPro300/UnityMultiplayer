@@ -23,9 +23,9 @@ TagManager:
   - player
   - item
   - enemy
-  - 
-  - 
-  - 
+  - agro zone
+  - ground
+  - enemy cyllinder
   - 
   - 
   - 

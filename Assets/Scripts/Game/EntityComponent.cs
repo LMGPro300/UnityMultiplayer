@@ -6,7 +6,7 @@ using UnityEngine;
 public class EntityComponent : MonoBehaviour, IShootAble
 {
     // Start is called before the first frame update
-    [SerializeField] private Entity parentEntity;
+    [SerializeField] public Entity parentEntity;
     [SerializeField] private EntityComponentScriptableObject entityComponentScriptableObject;
 
 

@@ -6,6 +6,7 @@ public class Entity: MonoBehaviour{
 
     [SerializeField] private EnemyScriptableObject enemyScriptableObject;
     [SerializeField] private RagdollController ragdollController;
+    [SerializeField] private MeshCollider enemyMainHitbox;
     //[SerializeField] private AudioSource audioSource;
     //[SerializeField] private Animator shootingAnimation;
     //[SerializeField] private NormalEnemy enemyBehavior;
@@ -43,5 +44,6 @@ public class Entity: MonoBehaviour{
 
     public void DoRagdoll(Vector3 force, Vector3 hitLocation){
         ragdollController.TriggerRagdoll(force, hitLocation);
+        enemyMainHitbox.enabled = false;
     }
 }
