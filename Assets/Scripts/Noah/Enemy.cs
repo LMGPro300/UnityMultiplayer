@@ -26,10 +26,14 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if (isInRange && !isStopped && myPosition != null)
-        //{
-        //    enemyAgent.destination = myPosition.position;
-        //}
+        if (isInRange && !isStopped)
+        {
+            enemyAgent.destination = PlayerManager.Instance.playersTransform[0].position;
+        }
+        else
+        {
+            enemyAgent.destination = enemyAgent.gameObject.transform.position;
+        }
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -37,13 +41,11 @@ public class Enemy : MonoBehaviour
         if (other.gameObject.tag == "enemy agro zone")
         {
             isInRange = true;
-            enemyAgent.SetDestination(other.gameObject.transform.position);
-            myPosition = other.gameObject.transform;
+            myPosition = PlayerManager.Instance.playersTransform[0];
         }
         if (other.gameObject.tag == "enemy stop zone")
         {
             isStopped = true;
-            enemyAgent.SetDestination(enemyAgent.gameObject.transform.position);
             myPosition = enemyAgent.gameObject.transform;
         }
     }
@@ -54,15 +56,13 @@ public class Enemy : MonoBehaviour
         if (other.gameObject.tag == "enemy agro zone" && isInRange)
         {
             isInRange = false;
-            enemyAgent.SetDestination(enemyAgent.gameObject.transform.position);
             myPosition = enemyAgent.gameObject.transform;
             return;
         }
         if (other.gameObject.tag == "enemy stop zone")
         {
             isStopped = false;
-            enemyAgent.SetDestination(other.gameObject.transform.position);
-            myPosition = other.gameObject.transform;
+            myPosition = PlayerManager.Instance.playersTransform[0];
         }
     }
 
