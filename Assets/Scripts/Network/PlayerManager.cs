@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour{
     public static PlayerManager Instance { get; private set; }
-    private List<Transform> playersTransform;
+    public List<Transform> playersTransform;
 
     void Awake(){
         Instance = this;
@@ -13,7 +13,10 @@ public class PlayerManager : MonoBehaviour{
 
 
     public void AddPlayer(Transform transform){
-        playersTransform.Add(transform);
+        if (HasPlayer(transform)){
+            playersTransform.Add(transform);
+            Debug.Log(playersTransform);
+        }
     }
 
     public bool HasPlayer(Transform transform){

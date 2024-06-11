@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
 using TMPro;
+using Unity.Netcode;
 
-
-public class ShootingController: MonoBehaviour
+public class ShootingController: NetworkBehaviour
 {
     private GunScriptableObject gunScriptableObject;
     [SerializeField] private TextMeshProUGUI ammoText;
+    [SerializeField] private LayerMask ignoreLayer;
     //[SerializeField] private VisualEffect blood;
     //[SerializeField] private VisualEffect fount;
     //[SerializeField] private VisualEffect flashs;
@@ -93,15 +94,18 @@ public class ShootingController: MonoBehaviour
         UpdateAmmoText();
 
         RaycastHit hitInfo;
-        bool maybeHit = Physics.Raycast(starting, target, out hitInfo, 5000);
+        bool maybeHit = Physics.Raycast(starting, target, out hitInfo, 5000, ~ignoreLayer);
+        Debug.Log("lowkey I missed u you suck LMAOoo " + maybeHit);
 
         //showTracer(hitInfo);
         //showFlash();
         //audioSource.Play();
         
         if (maybeHit){ //int = range
+            Debug.Log(hitInfo.collider.name);
             IShootAble shootable = hitInfo.collider.GetComponent<IShootAble>();
             if (shootable == null){
+                Debug.Log("bruh I hit nothing :(");
                 return;
             }
             handleShot(shootable);

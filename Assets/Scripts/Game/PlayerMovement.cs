@@ -116,9 +116,7 @@ public class PlayerMovement : NetworkBehaviour//MonoBehaviour
     void respawn(){
         if (transform.position.y < - 200){
             transform.position = SpawnPoints.Instance.RandomSpawnPoint();
-            if (!PlayerManager.Instance.HasPlayer(transform)){
-                PlayerManager.Instance.AddPlayer(transform);
-            }
+            PlayerManager.Instance.AddPlayer(transform);
         }
     }
 

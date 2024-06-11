@@ -4,8 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using TMPro;
+using Unity.Netcode;
 
-public class ShopManager : MonoBehaviour
+public class ShopManager : NetworkBehaviour
 { 
     [SerializeField] private InventorySystem inventory;
     [SerializeField] public float playerCredits = 100;
