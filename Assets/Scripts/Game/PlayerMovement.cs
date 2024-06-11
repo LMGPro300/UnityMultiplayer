@@ -39,6 +39,7 @@ public class PlayerMovement : NetworkBehaviour//MonoBehaviour
     public void loadComplete(Scene scene, LoadSceneMode mode){
         Debug.Log("changed");
         transform.position = SpawnPoints.Instance.RandomSpawnPoint();
+        PlayerManager.Instance.AddPlayer(transform);
     }
     
     private void Gravity(){
@@ -115,6 +116,9 @@ public class PlayerMovement : NetworkBehaviour//MonoBehaviour
     void respawn(){
         if (transform.position.y < - 200){
             transform.position = SpawnPoints.Instance.RandomSpawnPoint();
+            if (!PlayerManager.Instance.HasPlayer(transform)){
+                PlayerManager.Instance.AddPlayer(transform);
+            }
         }
     }
 

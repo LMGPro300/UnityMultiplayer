@@ -458,6 +458,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ammoText: {fileID: 1135725411299473859}
+  hittingMask:
+    serializedVersion: 2
+    m_Bits: 2048
 --- !u!1 &518660213727960980
 GameObject:
   m_ObjectHideFlags: 0
