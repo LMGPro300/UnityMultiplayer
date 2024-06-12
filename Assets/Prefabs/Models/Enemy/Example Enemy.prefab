@@ -109,8 +109,8 @@ GameObject:
   m_Component:
   - component: {fileID: 653757023811518239}
   - component: {fileID: 292514836891305537}
-  - component: {fileID: 6851429946012472598}
   - component: {fileID: 859011226720556145}
+  - component: {fileID: 4329834387789046264}
   m_Layer: 12
   m_Name: Buffer Hitbox
   m_TagString: Untagged
@@ -157,19 +157,6 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &6851429946012472598
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7889443276577520410}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6926b99a09c467a42a0f0632ea517853, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemyData: {fileID: 11400000, guid: 727176734aa539f49969ce85374b963b, type: 2}
 --- !u!64 &859011226720556145
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -192,6 +179,19 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &4329834387789046264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7889443276577520410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6926b99a09c467a42a0f0632ea517853, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyData: {fileID: 11400000, guid: 727176734aa539f49969ce85374b963b, type: 2}
 --- !u!1001 &3525371043197306905
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -778,7 +778,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyScriptableObject: {fileID: 11400000, guid: 727176734aa539f49969ce85374b963b, type: 2}
   ragdollController: {fileID: 641717267895199609}
-  disabledHitboxesWhenRagdolling: []
+  disabledObjectsWhenRagdolling: []
   parent: {fileID: 0}
   despawnTimerSeconds: 5
   isAlive: 1

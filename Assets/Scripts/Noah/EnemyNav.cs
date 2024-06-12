@@ -6,20 +6,20 @@ using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
+    [SerializeField]
     public EnemyScriptableObject enemyData;
 
     private NavMeshAgent enemyAgent;
     private bool isStopped = false;
     private bool isInRange = false;
     private Transform targetedPlayer = null;
-
-    List<Transform> reachablePlayers;
+    private List<Transform> reachablePlayers;
 
     // Start is called before the first frame update
     void Start()
     {
         enemyAgent = GetComponent<NavMeshAgent>();
-        transform.localEulerAngles = new Vector3(0, 180, 0);
+        enemyAgent.speed = Random.Range(enemyData.minSpeed, enemyData.maxSpeed);
         reachablePlayers = new List<Transform>();
     }
 
