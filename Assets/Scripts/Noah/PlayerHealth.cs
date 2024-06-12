@@ -11,12 +11,14 @@ public class PlayerHealth : MonoBehaviour
     public void TakeDamage(float damageToTake)
     {
         playerHealth -= damageToTake;
-        healthText.text = playerHealth.ToString();
+        Debug.Log("PLAYER HEALTH IS NOW " + playerHealth);
+        //healthText.text = playerHealth.ToString();
     }
 
     public void GainHealth(float healthToGain)
     {
         playerHealth += healthToGain;
-        healthText.text = playerHealth.ToString();
+        Debug.Log("PLAYER HEALTH IS NOW " + playerHealth);
+        //healthText.text = playerHealth.ToString();
     }
 }

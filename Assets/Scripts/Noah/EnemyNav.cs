@@ -1,32 +1,34 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyNav : MonoBehaviour
+public class Enemy : MonoBehaviour
 {
     public EnemyScriptableObject enemyData;
 
-    private PlayerHealth playerHealth;
     private NavMeshAgent enemyAgent;
     private bool isStopped = false;
     private bool isInRange = false;
-    private Transform myPosition = null;
+    private Transform targetedPlayer = null;
+
+    List<Transform> reachablePlayers;
 
     // Start is called before the first frame update
     void Start()
     {
         enemyAgent = GetComponent<NavMeshAgent>();
         transform.localEulerAngles = new Vector3(0, 180, 0);
+        reachablePlayers = new List<Transform>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (isInRange && !isStopped)
+        if (isInRange && !isStopped && PlayerManager.Instance.playersTransform.Count > 0)
         {
-            enemyAgent.destination = PlayerManager.Instance.playersTransform[0].position;
-            Debug.Log("trying to move towards player");
+            enemyAgent.destination = targetedPlayer.position;
         }
         else
         {
@@ -39,12 +41,12 @@ public class EnemyNav : MonoBehaviour
         if (other.gameObject.tag == "enemy agro zone")
         {
             isInRange = true;
-            myPosition = PlayerManager.Instance.playersTransform[0];
+            reachablePlayers.Add(other.transform.parent);
+            targetedPlayer = targetNearestPlayer(gameObject.transform.parent);
         }
         if (other.gameObject.tag == "enemy stop zone")
         {
             isStopped = true;
-            myPosition = enemyAgent.gameObject.transform;
         }
     }
 
@@ -54,13 +56,31 @@ public class EnemyNav : MonoBehaviour
         if (other.gameObject.tag == "enemy agro zone" && isInRange)
         {
             isInRange = false;
-            myPosition = enemyAgent.gameObject.transform;
+            reachablePlayers.Remove(other.transform.parent);
+            if (reachablePlayers.Count > 0 )
+            {
+                targetedPlayer = targetNearestPlayer(gameObject.transform.parent);
+            }
             return;
         }
         if (other.gameObject.tag == "enemy stop zone")
         {
             isStopped = false;
-            myPosition = PlayerManager.Instance.playersTransform[0];
         }
+    }
+
+    public Transform targetNearestPlayer(Transform curPos)
+    {
+        float nearestDist = float.MaxValue;
+        Transform bestPlayer = null;
+        foreach (Transform playerPos in reachablePlayers)
+        {
+            if (Vector3.Distance(curPos.position, playerPos.position) < nearestDist)
+            {
+                nearestDist = Vector3.Distance(playerPos.position, curPos.position);
+                bestPlayer = playerPos;
+            }
+        }
+        return bestPlayer;
     }
 }

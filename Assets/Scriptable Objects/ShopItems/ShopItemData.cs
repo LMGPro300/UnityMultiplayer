@@ -11,4 +11,6 @@ public class ShopItemData : ScriptableObject
     public string shopItemName;
     public int quantity;
     public InventoryItemData inventory_item;
+    public bool isAmmo;
+    public AmmoData ammoData;
 }

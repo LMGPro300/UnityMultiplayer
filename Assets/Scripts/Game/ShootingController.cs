@@ -13,9 +13,9 @@ public class ShootingController: NetworkBehaviour
     //[SerializeField] private VisualEffect blood;
     //[SerializeField] private VisualEffect fount;
     //[SerializeField] private VisualEffect flashs;
-    private int smallAmmo = 0;
-    private int mediumAmmo = 30;
-    private int largeAmmo = 0;
+    public int smallAmmo = 0;
+    public int mediumAmmo = 30;
+    public int largeAmmo = 0;
    // [SerializeField] private Transform bulletSpawnPoint;
 
     //[SerializeField] private TrailRenderer bulletTrail;

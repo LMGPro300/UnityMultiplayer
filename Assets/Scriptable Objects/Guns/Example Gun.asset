@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Example Gun
   m_EditorClassIdentifier: 
   magSize: 12
-  currentMagSize: 11
+  currentMagSize: 9053
   damage: 25
   firerate: 0.125
   reloadTime: 3.33

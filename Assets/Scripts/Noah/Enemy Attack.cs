@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class ZombieAttack : MonoBehaviour
+public class EnemyAttack : MonoBehaviour
 {
     [SerializeField]
     public EnemyScriptableObject enemyData;
-    [SerializeField]
-    public PlayerHealth playerHealth;
     CountdownTimer timer;
+
+    private PlayerHealth healthToDamage;
 
     bool isAttackingPlayer = false;
 
@@ -26,10 +26,12 @@ public class ZombieAttack : MonoBehaviour
         timer = new CountdownTimer(1f);
         timer.OnTimerStop += () => { DealPlayerDamage(enemyData.damagePerHit); };
     }
+
     public void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if (other.gameObject.tag == "enemy stop zone")
         {
+            healthToDamage = other.transform.parent.gameObject.GetComponent<PlayerHealth>();
             isAttackingPlayer = true;
             timer.SetNewTime(Random.Range(enemyData.minDamageWaitCooldown, enemyData.maxDamageWaitCooldown));
             timer.Start();
@@ -38,7 +40,7 @@ public class ZombieAttack : MonoBehaviour
 
     public void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if (other.gameObject.tag == "enemy stop zone")
         {
             isAttackingPlayer = false;
             timer.Stop();
@@ -47,7 +49,7 @@ public class ZombieAttack : MonoBehaviour
 
     private void DealPlayerDamage(float damage)
     {
-        playerHealth.TakeDamage(damage);
+        healthToDamage.TakeDamage(damage);
         timer.SetNewTime(Random.Range(enemyData.minDamageWaitCooldown, enemyData.maxDamageWaitCooldown));
         timer.Start();
     }

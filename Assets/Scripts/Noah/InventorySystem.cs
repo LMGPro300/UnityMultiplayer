@@ -111,6 +111,10 @@ public class InventorySystem : NetworkBehaviour
 
     public void Add(InventoryItemData referenceData)
     {
+        if (referenceData == null)
+        {
+            return;
+        }
         if (item_dict.TryGetValue(referenceData, out List<InventoryItem> value))
         {
             //find index in value list that we can add an item too

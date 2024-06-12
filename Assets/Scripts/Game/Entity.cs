@@ -6,12 +6,15 @@ public class Entity: MonoBehaviour{
 
     [SerializeField] private EnemyScriptableObject enemyScriptableObject;
     [SerializeField] private RagdollController ragdollController;
-    [SerializeField] private MeshCollider enemyMainHitbox;
+    [SerializeField] private List<GameObject> disabledObjectsWhenRagdolling;
+    [SerializeField] private GameObject parent;
+    [SerializeField] private int despawnTimerSeconds = 5;
     //[SerializeField] private AudioSource audioSource;
     //[SerializeField] private Animator shootingAnimation;
     //[SerializeField] private NormalEnemy enemyBehavior;
     public bool isAlive;
     private float health;
+    private bool despawnTimerActive = false;
 
     public void Awake(){
         health = enemyScriptableObject.health;
@@ -19,7 +22,6 @@ public class Entity: MonoBehaviour{
     }
 
     public void Start(){
-        //shootingAnimation.Play("Walk");
     }
 
     public void takeDamage(float damage){
@@ -44,6 +46,10 @@ public class Entity: MonoBehaviour{
 
     public void DoRagdoll(Vector3 force, Vector3 hitLocation){
         ragdollController.TriggerRagdoll(force, hitLocation);
-        enemyMainHitbox.enabled = false;
+        gameObject.transform.parent = null;
+        foreach (GameObject go in disabledObjectsWhenRagdolling)
+        {
+            Destroy(go);
+        }
     }
 }
