@@ -192,6 +192,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyData: {fileID: 11400000, guid: 727176734aa539f49969ce85374b963b, type: 2}
+  caresAboutAgroZone: 0
 --- !u!1001 &3525371043197306905
 PrefabInstance:
   m_ObjectHideFlags: 0

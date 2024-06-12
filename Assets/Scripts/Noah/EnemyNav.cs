@@ -8,6 +8,8 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField]
     public EnemyScriptableObject enemyData;
+    [SerializeField]
+    public bool caresAboutAgroZone = true;
 
     private NavMeshAgent enemyAgent;
     private bool isStopped = false;
@@ -21,6 +23,7 @@ public class Enemy : MonoBehaviour
         enemyAgent = GetComponent<NavMeshAgent>();
         enemyAgent.speed = Random.Range(enemyData.minSpeed, enemyData.maxSpeed);
         reachablePlayers = new List<Transform>();
+        targetedPlayer = targetNearestPlayer(gameObject.transform.parent);
     }
 
     // Update is called once per frame
@@ -29,6 +32,10 @@ public class Enemy : MonoBehaviour
         if (isInRange && !isStopped && PlayerManager.Instance.playersTransform.Count > 0)
         {
             enemyAgent.destination = targetedPlayer.position;
+        }
+        else if (!isStopped && !caresAboutAgroZone)
+        {
+            enemyAgent.destination = targetNearestPlayer(gameObject.transform.parent).position;
         }
         else
         {
@@ -73,7 +80,7 @@ public class Enemy : MonoBehaviour
     {
         float nearestDist = float.MaxValue;
         Transform bestPlayer = null;
-        foreach (Transform playerPos in reachablePlayers)
+        foreach (Transform playerPos in PlayerManager.Instance.playersTransform)
         {
             if (Vector3.Distance(curPos.position, playerPos.position) < nearestDist)
             {
