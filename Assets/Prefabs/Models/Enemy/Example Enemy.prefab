@@ -778,7 +778,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyScriptableObject: {fileID: 11400000, guid: 727176734aa539f49969ce85374b963b, type: 2}
   ragdollController: {fileID: 641717267895199609}
-  disabledObjectsWhenRagdolling: []
+  disabledObjectsWhenRagdolling:
+  - {fileID: 6539722319330386136}
+  - {fileID: 7889443276577520410}
+  - {fileID: 2808600597293625710}
   parent: {fileID: 0}
   despawnTimerSeconds: 5
   isAlive: 1

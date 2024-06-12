@@ -3471,7 +3471,7 @@ SphereCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 1025
+    m_Bits: 0
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
@@ -4145,8 +4145,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.28, y: 1.1539652, z: 1.05}
-  m_Center: {x: 0, y: 0.42301738, z: 0.92999995}
+  m_Size: {x: 1.28, y: 1.1539652, z: 1.7854962}
+  m_Center: {x: 0, y: 0.42301738, z: 1.2977481}
 --- !u!114 &2527821686140117352
 MonoBehaviour:
   m_ObjectHideFlags: 0
