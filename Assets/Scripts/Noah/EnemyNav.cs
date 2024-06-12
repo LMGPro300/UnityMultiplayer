@@ -79,7 +79,7 @@ public class Enemy : MonoBehaviour
     public Transform targetNearestPlayer(Transform curPos)
     {
         float nearestDist = float.MaxValue;
-        Transform bestPlayer = null;
+        Transform bestPlayer = curPos;
         foreach (Transform playerPos in PlayerManager.Instance.playersTransform)
         {
             if (Vector3.Distance(curPos.position, playerPos.position) < nearestDist)
