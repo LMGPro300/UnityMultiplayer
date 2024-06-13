@@ -28,6 +28,7 @@ public class MeleeManager : MonoBehaviour
         if (other.gameObject.tag == "enemy")
         {
             Entity myEntity = other.gameObject.GetComponent<EntityComponent>().parentEntity;
+            Debug.Log(myEntity + " NOAH LEVY");
             if (myEntity != null && !availableEnemies.Contains(myEntity))
             {
                 canAttackPlayer = true;
