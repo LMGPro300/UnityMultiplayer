@@ -6,10 +6,11 @@ using Unity.Netcode;
 
 public class TestInputHandler : NetworkBehaviour//MonoBehaviour
 {
-    [SerializeField] PlayerCamera playerCamera;
+    //[SerializeField] PlayerCamera playerCamera;
     //[SerializeField] PlayerMovement playerMovement;
     //[SerializeField] PlayerShoot playerShoot;
     [SerializeField] TestMovement testMovement;
+    [SerializeField] TestCamera testCamera;
 
     private PlayerControls PlayerControlsActionMap;
     private PlayerControls.KeyboardActions keyboardMovement;
@@ -47,10 +48,11 @@ public class TestInputHandler : NetworkBehaviour//MonoBehaviour
     void Update()
     { 
         if (!IsOwner) return;
-        playerCamera.RecieveInput(mouseInput);
+        //playerCamera.RecieveInput(mouseInput);
         //playerMovement.RecieveKeyboardInput(keyboardInput);
         testMovement.RecieveKeyboardInput(keyboardInput);
         testMovement.RecieveTeleportInput(teleportInput);
+        testCamera.RecieveInput(mouseInput);
         teleportInput = 0f;
         //playerMovement.RecieveJumpInput(jumpInput);
         //playerShoot.RecieveShootInput(shootInput);      

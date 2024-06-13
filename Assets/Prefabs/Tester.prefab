@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 8673184250060431235}
   - component: {fileID: 2404521087398072599}
   - component: {fileID: 8705297863506502448}
-  - component: {fileID: 8941729184352456463}
+  - component: {fileID: 4996038650005388618}
   m_Layer: 0
   m_Name: Tester
   m_TagString: Untagged
@@ -238,7 +238,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2977244738
+  GlobalObjectIdHash: 533540417
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -259,6 +259,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 266418772430591744}
+  reconciliationCooldownTime: 1
   reconcilThreshold: 1
   serverCube: {fileID: 8482670987132248103}
   clientCube: {fileID: 5570637924086710421}
@@ -274,8 +275,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfd981fe92a76f5428db33ba2a59c70d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCamera: {fileID: 8941729184352456463}
+  playerCamera: {fileID: 0}
   testMovement: {fileID: 8673184250060431235}
+  testCamera: {fileID: 4996038650005388618}
 --- !u!114 &8705297863506502448
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -307,7 +309,7 @@ MonoBehaviour:
   Interpolate: 1
   SlerpPosition: 0
   authorityMode: 1
---- !u!114 &8941729184352456463
+--- !u!114 &4996038650005388618
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -316,7 +318,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5906022451638123846}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0132800dbb32fdc439c525c0b7c0d77f, type: 3}
+  m_Script: {fileID: 11500000, guid: 22a0c71c3f5cab942a6640bfc5274af2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _camera: {fileID: 8189854078273101735}
