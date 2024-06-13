@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/New Real.unity
     guid: 339e8dd5e420e944bb12d9deb829b7b8
+  - enabled: 1
+    path: Assets/Scenes/hehehaw.unity
+    guid: bba1331b6315b4a46a47cd28ac850c96
   m_configObjects: {}
