@@ -21,23 +21,30 @@ public class MeleeManager : MonoBehaviour
     bool canAttackPlayer = false;
     bool coolDownDone = true;
 
-    GameObject pastObject = null;
+    List<Entity> availableEnemies;
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "enemy" && pastObject == null)
+        if (other.gameObject.tag == "enemy")
         {
-            canAttackPlayer = true;
-            pastObject = other.gameObject;
+            Entity myEntity = other.gameObject.GetComponent<EntityComponent>().parentEntity;
+            if (myEntity != null && !availableEnemies.Contains(myEntity))
+            {
+                canAttackPlayer = true;
+                availableEnemies.Add(myEntity);
+            }
         }
     }
 
     public void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag == "enemy" && other.gameObject == pastObject)
+        if (other.gameObject.tag == "enemy" && availableEnemies.Contains(other.gameObject.GetComponent<EntityComponent>().parentEntity))
         {
-            canAttackPlayer = false;
-            pastObject = null;
+            availableEnemies.Remove(other.gameObject.GetComponent<EntityComponent>().parentEntity);
+            if (availableEnemies.Count == 0)
+            {
+                canAttackPlayer = false;
+            }
         }
     }
 
@@ -47,6 +54,7 @@ public class MeleeManager : MonoBehaviour
         playerClick.performed += Attack;
         attackTimer = new CountdownTimer(1f);
         attackTimer.OnTimerStop += timerStuffs;
+        availableEnemies = new List<Entity>();
     }
 
     public void Update()
@@ -68,14 +76,17 @@ public class MeleeManager : MonoBehaviour
     {
         if (canAttackPlayer && coolDownDone && meleeData != null)
         {
-            Entity collidedEntity = pastObject.GetComponent<EntityComponent>().parentEntity;
-            if (collidedEntity.isAlive)
+            for (int i = availableEnemies.Count-1; i >= 0; i--)
             {
-                pastObject.GetComponent<EntityComponent>().IsShot(meleeData.damage);
-                if (!collidedEntity.isAlive)
+                Entity obj = availableEnemies[i];
+                if (obj.isAlive)
                 {
-                    collidedEntity.DoRagdoll(playerTransform.forward * 2f, playerTransform.position);
-                    pastObject = null;
+                    obj.takeDamage(meleeData.damage);
+                    if (!obj.isAlive)
+                    {
+                        obj.DoRagdoll(playerTransform.forward * 2f, playerTransform.position);
+                        availableEnemies.Remove(obj);
+                    }
                 }
             }
             attackTimer.SetNewTime(meleeData.cooldown);

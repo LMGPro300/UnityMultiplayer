@@ -14,6 +14,7 @@ public class ShopManager : NetworkBehaviour
     [SerializeField] private TextMeshProUGUI shopErrorText;
     [SerializeField] private TextMeshProUGUI canOpenShop;
     [SerializeField] private GameObject shopUI;
+    [SerializeField] private ShootingController shootingController;
     private CountdownTimer timer = new CountdownTimer(2f);
     private bool canDisplayShop = false;
     public bool shopActive = false;
@@ -69,13 +70,32 @@ public class ShopManager : NetworkBehaviour
     }
 
     public void itemClicked(ShopItemData clickedObject){
-        if (!inventory.canAddItem(clickedObject.inventory_item)){
+        if (clickedObject.inventory_item != null && !inventory.canAddItem(clickedObject.inventory_item)){
             timer.Start();
             shopErrorText.text = "Your inventory is full";
         }
-        else if (playerCredits - clickedObject.price < 0){
+        else if (playerCredits - clickedObject.price < 0)
+        {
             timer.Start();
             shopErrorText.text = "You don't have enough credits";
+        }
+        else if (clickedObject.isAmmo)
+        {
+            AmmoData ammoData = clickedObject.ammoData;
+            if (ammoData.type == "small")
+            {
+                shootingController.smallAmmo += ammoData.packSize;
+            }
+            else if (ammoData.type == "medium")
+            {
+                shootingController.mediumAmmo += ammoData.packSize;
+            }
+            else
+            {
+                shootingController.largeAmmo += ammoData.packSize;
+            }
+            playerCredits -= clickedObject.price;
+            UpdateBalance();
         }
         else{
             playerCredits -= clickedObject.price;

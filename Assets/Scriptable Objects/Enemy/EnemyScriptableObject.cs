@@ -9,5 +9,7 @@ public class EnemyScriptableObject : ScriptableObject
     public float damagePerHit;
     public float minDamageWaitCooldown = 0.1f;
     public float maxDamageWaitCooldown = 0.9f;
+    public float minSpeed = 3.5f;
+    public float maxSpeed = 7f;
     public float health = 100f;
 }
