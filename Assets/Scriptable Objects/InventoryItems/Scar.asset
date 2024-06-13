@@ -20,6 +20,7 @@ MonoBehaviour:
   maxStackSize: 1
   isGun: 1
   isMelee: 0
+  refWeapon: {fileID: 11400000, guid: 1bacf2a39ace6674a999b9738b55c13a, type: 2}
   weapon: {fileID: 11400000, guid: 1bacf2a39ace6674a999b9738b55c13a, type: 2}
   melee: {fileID: 0}
   animation: Default|PickUpScar

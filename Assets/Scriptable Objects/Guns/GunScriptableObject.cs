@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
 
 [System.Serializable]
@@ -28,7 +29,30 @@ public class GunScriptableObject : ScriptableObject{
     public AmmoType ammoType;
 }
 
-/*
+
+public struct GunPayload : INetworkSerializable{
+    public int magSize;
+    public int currentMagSize;
+    public float damage;
+    public float firerate;
+    public float reloadTime;
+    public float force;
+    //public DictionarySerializer EntityComponents;
+    public AmmoType ammoType;
+
+    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter{
+        serializer.SerializeValue(ref magSize);
+        serializer.SerializeValue(ref currentMagSize);
+        serializer.SerializeValue(ref damage);
+        serializer.SerializeValue(ref firerate);
+        serializer.SerializeValue(ref reloadTime);
+        serializer.SerializeValue(ref force);
+        //serializer.SerializeValue(ref EntityComponents);
+        serializer.SerializeValue(ref ammoType);
+    }
+}
+
+
 [System.Serializable]
 public class GunScriptableObjectWrapper{
     [SerializeField] public GunScriptableObject original;
@@ -38,7 +62,7 @@ public class GunScriptableObjectWrapper{
     [SerializeField] public float firerate;
     [SerializeField] public float reloadTime;
     [SerializeField] public float force;
-    [SerializeField] public DictionarySerializer EntityComponents;
+    [SerializeField] public Dictionary<string, float> EntityComponents;
     [SerializeField] public string shootingAnimation;
     [SerializeField] public string reloadAnimation;
     [SerializeField] public string gunReloadAnimation;
@@ -48,13 +72,14 @@ public class GunScriptableObjectWrapper{
 
     public GunScriptableObjectWrapper(GunScriptableObject gunScriptableObject){
         original = gunScriptableObject;
+        Debug.Log(gunScriptableObject + " this gun");
         magSize = gunScriptableObject.magSize;
         currentMagSize = gunScriptableObject.currentMagSize;
         damage = gunScriptableObject.damage;
         firerate = gunScriptableObject.firerate;
         reloadTime = gunScriptableObject.reloadTime;
         force = gunScriptableObject.force;
-        EntityComponents = gunScriptableObject.EntityComponents;
+        EntityComponents = gunScriptableObject.EntityComponents.GetDictionary();
         shootingAnimation = gunScriptableObject.shootingAnimation;
         reloadAnimation = gunScriptableObject.reloadAnimation;
         gunReloadAnimation = gunScriptableObject.gunReloadAnimation;
@@ -62,6 +87,16 @@ public class GunScriptableObjectWrapper{
         gunEquipAnimation = gunScriptableObject.gunEquipAnimation;
         ammoType = gunScriptableObject.ammoType;
     }
+
+    public void SetNewData(GunPayload gunPayload){
+        this.magSize = gunPayload.magSize;
+        this.currentMagSize = gunPayload.currentMagSize;
+        this.damage = gunPayload.damage;
+        this.firerate = gunPayload.firerate;
+        this.reloadTime = gunPayload.reloadTime;
+        this.force = gunPayload.force;
+        this.ammoType = gunPayload.ammoType;
+    }
 }
-*/
+
 

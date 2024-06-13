@@ -3,11 +3,10 @@ using System;
 [Serializable]
 public class InventoryItem
 {
-    public InventoryItemData data;
+    public InventoryItemDataWrapper data;
     public int stackSize;
 
-    public InventoryItem(InventoryItemData source)
-    {
+    public InventoryItem(InventoryItemDataWrapper source){
         data = source;
         AddToStack();
     }

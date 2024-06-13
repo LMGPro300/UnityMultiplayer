@@ -32,6 +32,7 @@ public class InventorySystem : NetworkBehaviour
     [SerializeField]
     public InventoryItem[] inventory;
 
+    [SerializeField] NetworkObject playerNetworkObject;
     [SerializeField] Transform playerTransform;
     [SerializeField] Transform playerCamera;
     [SerializeField] PlayerShoot playerShoot;
@@ -101,39 +102,39 @@ public class InventorySystem : NetworkBehaviour
         getMouseCoords.Disable();
     }
 
-    public List<InventoryItem> Get(InventoryItemData referenceData) { 
-        if (item_dict.TryGetValue(referenceData, out List<InventoryItem> value))
+    public List<InventoryItem> Get(InventoryItemDataWrapper referenceData) { 
+        if (item_dict.TryGetValue(referenceData.original, out List<InventoryItem> value))
         {
             return value;
         }
         return null;
     }
 
-    public void Add(InventoryItemData referenceData)
-    {
-        if (item_dict.TryGetValue(referenceData, out List<InventoryItem> value))
+    public void Add(InventoryItemDataWrapper referenceData){
+        if (item_dict.TryGetValue(referenceData.original, out List<InventoryItem> value))
         {
+            Debug.Log("it exists somewhere");
             //find index in value list that we can add an item too
             int bestIndex = addToBestStack(value, referenceData.maxStackSize);
 
             //if there's a stack of items we can add to
             if (bestIndex != -1)
             {
-                item_dict[referenceData][bestIndex].AddToStack();
+                item_dict[referenceData.original][bestIndex].AddToStack();
             }
             //otherwise create a new stack
             else
             {
                 InventoryItem newItem = new InventoryItem(referenceData);
                 addToBestSlot(newItem);
-                item_dict[referenceData].Add(newItem);
+                item_dict[referenceData.original].Add(newItem);
             }
         }
         else
         {
             InventoryItem newItem = new InventoryItem(referenceData);
             addToBestSlot(newItem);
-            item_dict[referenceData] = new List<InventoryItem> { newItem };
+            item_dict[referenceData.original] = new List<InventoryItem> { newItem };
         }
         UpdateHotbar();
     }
@@ -158,16 +159,16 @@ public class InventorySystem : NetworkBehaviour
         }
     }
 
-    public void Remove(InventoryItemData referenceData)
+    public void Remove(InventoryItemDataWrapper referenceData)
     {
         InventoryItem memoryAdressToRemovedItem = inventory[curSlot - 1];
-        if (item_dict.TryGetValue(referenceData, out List<InventoryItem> value))
+        if (item_dict.TryGetValue(referenceData.original, out List<InventoryItem> value))
         {
             memoryAdressToRemovedItem.RemoveFromStack();
             if (memoryAdressToRemovedItem.stackSize == 0)
             {
                 removeItemFromSlot(memoryAdressToRemovedItem);
-                item_dict[referenceData].Remove(memoryAdressToRemovedItem);
+                item_dict[referenceData.original].Remove(memoryAdressToRemovedItem);
             }
         }
         UpdateHotbar();
@@ -193,18 +194,38 @@ public class InventorySystem : NetworkBehaviour
         {
             return;
         }
-
         InventoryItem itemToDrop = inventory[curSlot-1];
-        InventoryItemData referenceData = inventory[curSlot-1].data;
+        InventoryItemDataWrapper referenceData = inventory[curSlot-1].data;
         GameObject itemToSpawn = itemToDrop.data.prefab;
+        GunScriptableObjectWrapper refWeapon = referenceData.weapon;
+        GunPayload gunPayload = new GunPayload(){
+            magSize = 0,
+            currentMagSize = 0,
+            damage = 0,
+            firerate = 0,
+            reloadTime = 0,
+            force = 0,
+            ammoType = 0
+            };
 
-        //GameObject droppedItem = Instantiate(itemToSpawn);
-        SyncWithWorldSpace.Instance.InstantiateOnServer(itemToSpawn, (playerTransform.position + (playerCamera.forward * 2f)), new Quaternion(0f, 0f, 0f, 1), (Vector3.up * 4f) + (playerCamera.forward * 4f));
-        //droppedItem.transform.position = playerTransform.position + (playerCamera.forward * 2f);
+        if (refWeapon != null){
+            gunPayload = new GunPayload(){
+            magSize = refWeapon.magSize,
+            currentMagSize = refWeapon.currentMagSize,
+            damage = refWeapon.damage,
+            firerate = refWeapon.firerate,
+            reloadTime = refWeapon.reloadTime,
+            force = refWeapon.force,
+            ammoType = refWeapon.ammoType
+            };
+        }
+        SyncWithWorldSpace.Instance.InstantiateItemOnServer(playerNetworkObject, itemToSpawn, gunPayload, (playerTransform.position + (playerCamera.forward * 2f)), new Quaternion(0f, 0f, 0f, 1), (Vector3.up * 4f) + (playerCamera.forward * 4f));
+        
+
         Remove(referenceData);
     }
 
-    public void PickUpItem(InventoryItemData referenceData, GameObject go){
+    public void PickUpItem(InventoryItemDataWrapper referenceData, GameObject go){
         if (go == null) return;
         if (canAddItem(referenceData))
         {
@@ -234,9 +255,8 @@ public class InventorySystem : NetworkBehaviour
     }
 
     public void UpdateHotbar(){
-        Debug.Log(curSlot - 1);
         if (inventory[curSlot - 1] != null && inventory[curSlot - 1].data != null){
-            pickUpAnimation.changeSlot(inventory[curSlot - 1].data.displayPrefab, inventory[curSlot - 1].data.animation);
+            pickUpAnimation.changeSlot(inventory[curSlot - 1].data.displayPrefab, inventory[curSlot - 1].data.charAnimation, inventory[curSlot- 1].data.armAnimation);
             itemSync.GetNewObject(inventory[curSlot - 1].data.globalPrefab);
             playerShoot.ChangeSlot(inventory[curSlot - 1].data.weapon);
             playerMelee.ChangeSlot(inventory[curSlot - 1].data.melee);
@@ -245,11 +265,12 @@ public class InventorySystem : NetworkBehaviour
         else{
             playerShoot.ChangeSlot(null);
             playerMelee.ChangeSlot(null);
-            pickUpAnimation.changeSlot(null, null);
+            pickUpAnimation.changeSlot(null, null, null);
             itemSync.Clear();
         }
         if (!hotbarChild.activeSelf) { return; }
         for (int i = 1; i <= 6; i++){
+            
             if (inventory[i - 1] != null && inventory[i - 1].data == null){
                 inventory[i - 1] = null;
             }
@@ -283,11 +304,22 @@ public class InventorySystem : NetworkBehaviour
         }
         for (int i = 0; i < 6; i++)
         {
-            if (inventory[i].data == itemToCheck && inventory[i].stackSize+1 <= itemToCheck.maxStackSize)
+            if (inventory[i].data.displayName == itemToCheck.displayName && inventory[i].stackSize+1 <= itemToCheck.maxStackSize)
             {
                 return true;
             }
         }
         return false;
     }
+
+    public bool canAddItem(InventoryItemDataWrapper itemToCheck){
+        if (inventory.Contains(null)){
+            return true;
+        }
+        return false;
+
+    }
+
+
+    
 }

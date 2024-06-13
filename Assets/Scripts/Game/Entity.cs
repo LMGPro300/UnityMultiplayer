@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class Entity: MonoBehaviour{
 
@@ -12,6 +13,7 @@ public class Entity: MonoBehaviour{
     //[SerializeField] private NormalEnemy enemyBehavior;
     public bool isAlive;
     private float health;
+    public Action OnDeath = delegate { };
 
     public void Awake(){
         health = enemyScriptableObject.health;
@@ -27,7 +29,8 @@ public class Entity: MonoBehaviour{
         //StartCoroutine(PlaySounds());
         Debug.Log(damage + " taken damage");
         if (health <= 0){
-            isAlive = false;    
+            isAlive = false; 
+            OnDeath.Invoke();   
             //shootingAnimation.enabled = false;
             //enemyBehavior.enabled = false;
         }

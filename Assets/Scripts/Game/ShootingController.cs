@@ -21,7 +21,7 @@ public class ShootingController: NetworkBehaviour
     //[SerializeField] private TrailRenderer bulletTrail;
     private int currentAmmoCount;
     private AmmoType currentAmmoType;
-    private GunScriptableObject currentGunObject;
+    private GunScriptableObjectWrapper currentGunObject;
     //[SerializeField] private AudioSource audioSource;
 
     private int magSize;
@@ -66,7 +66,7 @@ public class ShootingController: NetworkBehaviour
         currentGunObject.currentMagSize = currentMagSize;
     }
     
-    public void ChangeGun(GunScriptableObject gunScriptableObject){
+    public void ChangeGun(GunScriptableObjectWrapper gunScriptableObject){
         currentGunObject = gunScriptableObject;
         magSize = gunScriptableObject.magSize;
         currentMagSize = gunScriptableObject.currentMagSize;
@@ -77,7 +77,7 @@ public class ShootingController: NetworkBehaviour
         force = gunScriptableObject.force;
         currentAmmoType = gunScriptableObject.ammoType;
         CorrectAmmoType(currentAmmoType);
-        entityComponents = gunScriptableObject.EntityComponents.GetDictionary();
+        entityComponents = gunScriptableObject.EntityComponents;
         shootTimer.SetNewTime(firerate);
         reloadTimer.SetNewTime(reloadTime);
         shootTimer.Start();
@@ -102,7 +102,6 @@ public class ShootingController: NetworkBehaviour
         //audioSource.Play();
         
         if (maybeHit){ //int = range
-            Debug.Log(hitInfo.collider.name);
             IShootAble shootable = hitInfo.collider.GetComponent<IShootAble>();
             if (shootable == null){
                 Debug.Log("bruh I hit nothing :(");

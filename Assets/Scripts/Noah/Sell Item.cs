@@ -5,15 +5,20 @@ using UnityEngine;
 public class SellItem : MonoBehaviour{
     private void OnTriggerEnter(Collider other){
         if (other.gameObject.tag == "item"){
-            ItemObject droppedItem = other.gameObject.GetComponent<ItemObject>();
-            ItemOwnerShip itemOwner = other.gameObject.GetComponent<ItemOwnerShip>();
-            if (itemOwner != null){
-                ShopManager shopManager = itemOwner.Owner();
-                InventoryItemData myData = droppedItem.referenceItem;
+            GameObject itemDrop = other.gameObject;
+            ActualParent itemParent = itemDrop.GetComponent<ActualParent>();
+            if (itemParent != null){
+                itemDrop = itemParent.actualParent;
+            }
+            ItemObject droppedItem = itemDrop.GetComponent<ItemObject>();
+            ShopManager shopManager = droppedItem.lastOwner;
+
+            if (shopManager != null){
+                InventoryItemDataWrapper myData = droppedItem.referenceItem;
                 shopManager.playerCredits += myData.sellPrice;
                 shopManager.UpdateBalance();
             }
-            Destroy(other.gameObject);
+            SyncWithWorldSpace.Instance.DestoryOnServer(itemDrop);
         }
     }
 }

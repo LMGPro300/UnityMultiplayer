@@ -79,15 +79,16 @@ public class SyncWithWorldSpace: NetworkBehaviour
         GameObject prefab = IndexToPrefab(index);
         GameObject spawnedObject = Instantiate(prefab, position, rotation);  
         Rigidbody rb = spawnedObject.GetComponent<Rigidbody>();
-        rb.AddForce(force, ForceMode.Impulse);
+        if (rb != null){
+            rb.AddForce(force, ForceMode.Impulse);
+        }
         NetworkObject instanceNetworkObject = spawnedObject.GetComponent<NetworkObject>();
         instanceNetworkObject.Spawn();
         lastSpawnedGameObject = spawnedObject;
         SpawnByServerClientRpc(instanceNetworkObject);
         //GameObject spawnedObject = Instantiate(prefab, position, rotation).GetComponent<NetworkObject>().Spawn();
         
-        Debug.Log("before");
-        
+        Debug.Log("before"); 
     }
     
     [ClientRpc]
@@ -95,5 +96,45 @@ public class SyncWithWorldSpace: NetworkBehaviour
         Debug.Log("Client has gotten var");
         networkObjectReference.TryGet(out NetworkObject targetObject);
         lastSpawnedGameObject = targetObject.transform.gameObject;
+    }
+    
+
+    public void InstantiateItemOnServer(NetworkObject playerReference, GameObject prefab, GunPayload gunPayload, Vector3 position, Quaternion rotation, Vector3 force){
+        int index = PrefabToIndex(prefab);
+        //GameObject spawnedObject = Instantiate(prefab);
+        //NetworkObject spawnedNetwork = spawnedObject.GetComponent<NetworkObject>();
+        //spawnedNetwork.Spawn();
+        if (IsServer) { SpawnItemByServer(playerReference, index, gunPayload, position, rotation, force); }
+        else { SpawnItemServerRpc(playerReference, index, gunPayload, position, rotation, force); }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SpawnItemServerRpc(NetworkObjectReference playerReference, int index, GunPayload gunPayload, Vector3 position, Quaternion rotation, Vector3 force){
+        SpawnItemByServer(playerReference, index, gunPayload, position, rotation, force);
+    }
+
+    public void SpawnItemByServer(NetworkObjectReference playerReference, int index, GunPayload gunPayload, Vector3 position, Quaternion rotation, Vector3 force){
+        playerReference.TryGet(out NetworkObject playerObj);
+        GameObject shopChild = playerObj.transform.Find("Enemy Stop Zone").gameObject;
+        Debug.Log(shopChild.name + " I got this child LOL");
+        ShopManager shopManager = shopChild.GetComponent<ShopManager>();
+        
+        
+        GameObject prefab = IndexToPrefab(index);
+        GameObject spawnedObject = Instantiate(prefab, position, rotation);  
+        Rigidbody rb = spawnedObject.GetComponent<Rigidbody>();
+        rb.AddForce(force, ForceMode.Impulse);
+        ItemObject itemObj = spawnedObject.GetComponent<ItemObject>();
+        if (gunPayload.magSize != 0){
+            itemObj.referenceItem.weapon.SetNewData(gunPayload);
+        }
+
+        itemObj.lastOwner = shopManager;
+
+        NetworkObject instanceNetworkObject = spawnedObject.GetComponent<NetworkObject>();
+        instanceNetworkObject.Spawn();
+
+        lastSpawnedGameObject = spawnedObject;
+        SpawnByServerClientRpc(instanceNetworkObject);
     }
 }

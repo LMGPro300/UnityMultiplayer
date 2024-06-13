@@ -149,7 +149,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38659efb261298244b559836de9077d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  referenceItem: {fileID: 11400000, guid: 014f40127213ba149877d0f5b3698c66, type: 2}
+  _treferenceItem: {fileID: 11400000, guid: 014f40127213ba149877d0f5b3698c66, type: 2}
+  referenceItem: {fileID: 0}
   pickupBufferSeconds: 2
   canPickUp: 0
 --- !u!114 &-1433221778254941610

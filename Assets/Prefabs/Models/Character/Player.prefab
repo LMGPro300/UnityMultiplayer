@@ -229,7 +229,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 286159363
+  GlobalObjectIdHash: 2593539049
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -5547,6 +5547,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 9075246117172875124, guid: e2a93237aa8c9f242a0924f9f58c0b8f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7546641218193432388}
+    - targetCorrespondingSourceObject: {fileID: 9075246117172875124, guid: e2a93237aa8c9f242a0924f9f58c0b8f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6004650812039086697}
     - targetCorrespondingSourceObject: {fileID: 8397101136853843500, guid: e2a93237aa8c9f242a0924f9f58c0b8f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7788191417136754807}
@@ -5809,6 +5812,36 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -8839368762345780380, guid: e2a93237aa8c9f242a0924f9f58c0b8f, type: 3}
+--- !u!114 &6004650812039086697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8935562253633185574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  UseQuaternionSynchronization: 0
+  UseQuaternionCompression: 0
+  UseHalfFloatPrecision: 0
+  InLocalSpace: 0
+  Interpolate: 1
+  SlerpPosition: 0
 --- !u!1001 &863128680588452266
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5865,6 +5898,10 @@ PrefabInstance:
       propertyPath: playerTransform
       value: 
       objectReference: {fileID: 2739172169692159761}
+    - target: {fileID: 3459228814633305794, guid: 2d388877f617ab045a4197c538fc7c57, type: 3}
+      propertyPath: playerNetworkObject
+      value: 
+      objectReference: {fileID: 3551724789880933380}
     - target: {fileID: 3459228814633305794, guid: 2d388877f617ab045a4197c538fc7c57, type: 3}
       propertyPath: displayRadialMenu.m_SingletonActionBindings.Array.size
       value: 0

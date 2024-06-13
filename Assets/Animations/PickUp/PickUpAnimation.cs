@@ -18,7 +18,7 @@ public class PickUpAnimation : NetworkBehaviour
         previousDisplayItem = null;
     }
 
-    public void changeSlot(GameObject prefab, string _animation){
+    public void changeSlot(GameObject prefab, string charAnimation, string armAnimation){
         //if switching to empty hotbar slot
         if (prefab == null)
         {
@@ -40,12 +40,12 @@ public class PickUpAnimation : NetworkBehaviour
         if (itemAnimator != null){
             playerShoot.GetItemAnimator(itemAnimator);
         }
-        //armAnimator.Play(null);
-        //armAnimator.Play(animation);
+        armAnimator.Play(null);
+        armAnimator.Play(armAnimation);
         //charAnimator.Play(null);
         //charAnimator.Play(null);
         
-        charAnimator.Play(_animation);
+        charAnimator.Play(charAnimation);
         //charAnimator.Play(null);
         
         //.transform.position = itemLocation.position;

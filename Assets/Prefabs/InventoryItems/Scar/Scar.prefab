@@ -170,7 +170,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1317639635
+  GlobalObjectIdHash: 1091917562
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -220,9 +220,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38659efb261298244b559836de9077d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  referenceItem: {fileID: 11400000, guid: 89bf74ceca6bc9a42b93f44538105849, type: 2}
+  _treferenceItem: {fileID: 11400000, guid: 89bf74ceca6bc9a42b93f44538105849, type: 2}
+  referenceItem:
+    original: {fileID: 0}
+    displayName: 
+    icon: {fileID: 0}
+    prefab: {fileID: 0}
+    displayPrefab: {fileID: 0}
+    globalPrefab: {fileID: 0}
+    maxStackSize: 0
+    isGun: 0
+    isMelee: 0
+    refWeapon: {fileID: 0}
+    weapon:
+      original: {fileID: 0}
+      magSize: 0
+      currentMagSize: 0
+      damage: 0
+      firerate: 0
+      reloadTime: 0
+      force: 0
+      shootingAnimation: 
+      reloadAnimation: 
+      gunReloadAnimation: 
+      equipAnimation: 
+      gunEquipAnimation: 
+      ammoType: 0
+    melee: {fileID: 0}
+    animation: 
+    sellPrice: 0
   pickupBufferSeconds: 2
   canPickUp: 0
+  lastOwner: {fileID: 0}
 --- !u!114 &3783343638103043355
 MonoBehaviour:
   m_ObjectHideFlags: 0

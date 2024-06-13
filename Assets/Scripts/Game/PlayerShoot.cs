@@ -37,7 +37,7 @@ public class PlayerShoot : NetworkBehaviour{
         }
     }
 
-    public void ChangeSlot(GunScriptableObject gunScriptableObject){
+    public void ChangeSlot(GunScriptableObjectWrapper gunScriptableObject){
         if (gunScriptableObject == null){
             isGun = false;
             return;

@@ -80,7 +80,7 @@ public class ShopManager : NetworkBehaviour
         else{
             playerCredits -= clickedObject.price;
             UpdateBalance();
-            inventory.Add(clickedObject.inventory_item);
+            inventory.Add(new InventoryItemDataWrapper(clickedObject.inventory_item));
         }
     }
 
