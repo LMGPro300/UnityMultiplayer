@@ -6566,6 +6566,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2739172169692159761}
     - target: {fileID: 3459228814633305794, guid: 2d388877f617ab045a4197c538fc7c57, type: 3}
+      propertyPath: playerNetworkObject
+      value: 
+      objectReference: {fileID: 3551724789880933380}
+    - target: {fileID: 3459228814633305794, guid: 2d388877f617ab045a4197c538fc7c57, type: 3}
       propertyPath: displayRadialMenu.m_SingletonActionBindings.Array.size
       value: 0
       objectReference: {fileID: 0}
