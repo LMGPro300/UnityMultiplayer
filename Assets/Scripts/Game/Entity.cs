@@ -7,8 +7,9 @@ public class Entity: MonoBehaviour{
 
     [SerializeField] private EnemyScriptableObject enemyScriptableObject;
     [SerializeField] private RagdollController ragdollController;
+    [SerializeField] private GameObject ragDollToKeep;
     [SerializeField] private List<GameObject> disabledObjectsWhenRagdolling;
-    [SerializeField] private GameObject parent;
+    [SerializeField] private List<Behaviour> disabledComponentsWhenRagdolling;
     [SerializeField] private int despawnTimerSeconds = 5;
     //[SerializeField] private AudioSource audioSource;
     //[SerializeField] private Animator shootingAnimation;
@@ -48,10 +49,14 @@ public class Entity: MonoBehaviour{
 
     public void DoRagdoll(Vector3 force, Vector3 hitLocation){
         ragdollController.TriggerRagdoll(force, hitLocation);
-        gameObject.transform.parent = null;
+        ragdollController.transform.SetParent(gameObject.transform);
         foreach (GameObject go in disabledObjectsWhenRagdolling)
         {
-            Destroy(go);
+            go.SetActive(false);
+        }
+        foreach(Behaviour be in disabledComponentsWhenRagdolling)
+        {
+            be.enabled = false;
         }
     }
 }
