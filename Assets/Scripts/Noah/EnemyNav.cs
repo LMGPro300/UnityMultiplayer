@@ -3,8 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using Unity.Netcode;
 
-public class Enemy : MonoBehaviour
+
+public class Enemy : NetworkBehaviour
 {
     [SerializeField]
     public EnemyScriptableObject enemyData;
@@ -20,6 +22,7 @@ public class Enemy : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (!IsServer) return;
         enemyAgent = GetComponent<NavMeshAgent>();
         enemyAgent.speed = Random.Range(enemyData.minSpeed, enemyData.maxSpeed);
         reachablePlayers = new List<Transform>();
@@ -29,6 +32,7 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!IsServer) return;
         if (isInRange && !isStopped && PlayerManager.Instance.playersTransform.Count > 0)
         {
             enemyAgent.destination = targetedPlayer.position;
@@ -44,6 +48,7 @@ public class Enemy : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
+        if (!IsServer) return;
         //Transform temp = PlayerManager.Instance.playersTransform[0];
         if (other.gameObject.tag == "enemy agro zone")
         {
@@ -59,6 +64,7 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
+        if (!IsServer) return;
         //Transform temp = PlayerManager.Instance.playersTransform[0];
         if (other.gameObject.tag == "enemy agro zone" && isInRange)
         {

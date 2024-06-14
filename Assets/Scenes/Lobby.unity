@@ -3132,10 +3132,10 @@ MonoBehaviour:
   NetworkConfig:
     ProtocolVersion: 0
     NetworkTransport: {fileID: 875740608}
-    PlayerPrefab: {fileID: 5906022451638123846, guid: 64ba7976d02e806459ac6706e497fe60, type: 3}
+    PlayerPrefab: {fileID: 335567957303107723, guid: a49b3d2c26a89b0429d18048aa72a860, type: 3}
     Prefabs:
       NetworkPrefabsLists:
-      - {fileID: 11400000, guid: 5d1e0076b1947ef4ab0dd5512058ab28, type: 2}
+      - {fileID: 11400000, guid: c8abb7652fd84074e9e1308fcbe5449a, type: 2}
     TickRate: 60
     ClientConnectionBufferTimeout: 10
     ConnectionApproval: 0
@@ -4579,8 +4579,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameScene:
-    asset: {fileID: 102900000, guid: 53b8652b965808b488f897617ea76bd4, type: 3}
-    guid: 53b8652b965808b488f897617ea76bd4
+    asset: {fileID: 102900000, guid: 339e8dd5e420e944bb12d9deb829b7b8, type: 3}
+    guid: 339e8dd5e420e944bb12d9deb829b7b8
   testLobby: {fileID: 1701460834}
   lobbyAuth: {fileID: 1701460832}
   lobbyListPanel: {fileID: 214941915}

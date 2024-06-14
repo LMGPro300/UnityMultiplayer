@@ -85,7 +85,9 @@ public class InventorySystem : NetworkBehaviour
         return angle;
     }
 
-    private void Awake(){
+    public override void OnNetworkSpawn(){
+        if (!IsOwner) return;
+        base.OnNetworkSpawn();
         inventory = new InventoryItem[6] {null, null, null, null, null, null};
         item_dict = new Dictionary<InventoryItemData, List<InventoryItem>>();
         numKeys.Enable();
@@ -219,6 +221,10 @@ public class InventorySystem : NetworkBehaviour
             ammoType = refWeapon.ammoType
             };
         }
+        Debug.Log("it's spawing");
+        Debug.Log(playerNetworkObject);
+        Debug.Log(itemToSpawn);
+        Debug.Log(gunPayload);
         SyncWithWorldSpace.Instance.InstantiateItemOnServer(playerNetworkObject, itemToSpawn, gunPayload, (playerTransform.position + (playerCamera.forward * 2f)), new Quaternion(0f, 0f, 0f, 1), (Vector3.up * 4f) + (playerCamera.forward * 4f));
         
 
@@ -270,8 +276,10 @@ public class InventorySystem : NetworkBehaviour
         }
         if (!hotbarChild.activeSelf) { return; }
         for (int i = 1; i <= 6; i++){
-            
             if (inventory[i - 1] != null && inventory[i - 1].data == null){
+                inventory[i - 1] = null;
+            }
+            if (inventory[i - 1] != null && inventory[i - 1].data != null && inventory[i-1].data.original == null){
                 inventory[i - 1] = null;
             }
             GameObject mySlotObject = hotbarChild.transform.Find("Section " + i).gameObject;

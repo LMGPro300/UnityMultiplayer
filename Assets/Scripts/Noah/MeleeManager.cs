@@ -27,7 +27,9 @@ public class MeleeManager : MonoBehaviour
     {
         if (other.gameObject.tag == "enemy")
         {
-            Entity myEntity = other.gameObject.GetComponent<EntityComponent>().parentEntity;
+            EntityComponent myEntityComp = other.gameObject.GetComponent<EntityComponent>();
+            if (myEntityComp == null) return;
+            Entity myEntity = myEntityComp.parentEntity;
             Debug.Log(myEntity + " NOAH LEVY");
             if (myEntity != null && !availableEnemies.Contains(myEntity))
             {
@@ -37,14 +39,15 @@ public class MeleeManager : MonoBehaviour
         }
     }
 
-    public void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.tag == "enemy" && availableEnemies.Contains(other.gameObject.GetComponent<EntityComponent>().parentEntity))
-        {
-            availableEnemies.Remove(other.gameObject.GetComponent<EntityComponent>().parentEntity);
-            if (availableEnemies.Count == 0)
-            {
-                canAttackPlayer = false;
+    public void OnTriggerExit(Collider other){
+        if (other.gameObject.tag == "enemy"){
+            EntityComponent ECom = other.gameObject.GetComponent<EntityComponent>();
+            if (ECom != null && !availableEnemies.Contains(ECom.parentEntity)){
+                availableEnemies.Remove(ECom.parentEntity);
+                if (availableEnemies.Count == 0)
+                {
+                    canAttackPlayer = false;
+                }
             }
         }
     }

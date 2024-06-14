@@ -11,7 +11,9 @@ public class SyncWithWorldSpace: NetworkBehaviour
     [SerializeField] private PrefabNetworkList prefabNetworkList;
     public GameObject lastSpawnedGameObject;
 
-    private void Awake(){
+    public override void OnNetworkSpawn(){
+        if (!IsServer) return;
+        base.OnNetworkSpawn();
         Instance = this;
     }
 
@@ -95,7 +97,10 @@ public class SyncWithWorldSpace: NetworkBehaviour
     public void SpawnByServerClientRpc(NetworkObjectReference networkObjectReference){
         Debug.Log("Client has gotten var");
         networkObjectReference.TryGet(out NetworkObject targetObject);
-        lastSpawnedGameObject = targetObject.transform.gameObject;
+        if (targetObject != null){
+            lastSpawnedGameObject = targetObject.transform.gameObject;
+        }
+        
     }
     
 
