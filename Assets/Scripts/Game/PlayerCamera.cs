@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 
+/*
+ * Program name: PlayerCamera
+ * Author: Elvin Shen
+ * What the program does: Allows the player to look around via camera
+ */
 
 public class PlayerCamera : NetworkBehaviour//MonoBehaviour
 {
@@ -24,11 +29,13 @@ public class PlayerCamera : NetworkBehaviour//MonoBehaviour
         cam = _camera.transform;
     }
 
+    //Only allow the current player to turn on their own camera (rendering 2 cameras is weird)
     public override void OnNetworkSpawn(){
         Debug.Log("spawned in");
         base.OnNetworkSpawn();
         if (!IsOwner) return; 
         _camera.enabled = true;
+        //some parts of the body are disabled on your side, but can be seen by other players, vice versa
         foreach (MeshRenderer part in hiddenObjects){
             part.enabled = false;
         }
@@ -39,11 +46,14 @@ public class PlayerCamera : NetworkBehaviour//MonoBehaviour
         //transform.rotation = Quaternion.Euler(-90f, 0f, 0f) * transform.rotation;
     }
 
+    //Recieve the mouse input
     public void RecieveInput(Vector2 mouseInput){
+        //Rotate the actual player along the y-axis (also moves the camera) and rotate the camera on the x axis
         transform.rotation *= Quaternion.Euler(0f, mouseInput.x * Time.deltaTime * sensX, 0f);
         camAngle += mouseInput.y * sensY * Time.deltaTime;
         camAngle = Mathf.Clamp(camAngle, -90, 90);
         cam.rotation = transform.rotation * Quaternion.Euler(camAngle, 0f, 0f);
+        //Rotate
         armsModel.rotation = transform.rotation * Quaternion.Euler(camAngle, 0f, 0f);
 
    
