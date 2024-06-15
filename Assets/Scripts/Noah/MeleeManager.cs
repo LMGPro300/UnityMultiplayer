@@ -5,8 +5,15 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
+/*
+ * Program name: MeleeManager.cs
+ * Author: Noah Levy, slight help from tutorial
+ * Handles attacking of enemies
+ */
+
 public class MeleeManager : MonoBehaviour
 {
+    //relavent references
     [SerializeField]
     private BoxCollider meleeHitbox;
     [SerializeField]
@@ -25,6 +32,7 @@ public class MeleeManager : MonoBehaviour
 
     List<Entity> availableEnemies;
 
+    //if can attacking enemy, update respective flags
     public void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "enemy")
@@ -41,6 +49,7 @@ public class MeleeManager : MonoBehaviour
         }
     }
 
+    //if leaving enemy, update respective flags
     public void OnTriggerExit(Collider other){
         if (other.gameObject.tag == "enemy"){
             EntityComponent ECom = other.gameObject.GetComponent<EntityComponent>();
@@ -54,6 +63,7 @@ public class MeleeManager : MonoBehaviour
         }
     }
 
+    //create attack timer
     public void Awake()
     {
         attackTimer = new CountdownTimer(1f);
@@ -61,6 +71,7 @@ public class MeleeManager : MonoBehaviour
         availableEnemies = new List<Entity>();
     }
 
+    //tick timer
     public void Update()
     {
         if (canAttackPlayer && !coolDownDone)
@@ -68,11 +79,12 @@ public class MeleeManager : MonoBehaviour
             attackTimer.Tick(Time.deltaTime);
         }
     }
-
-
+    
+    //handle attack input
     public void Attack(float shootInput)
     {
         if (shootInput == 0f) return;
+        //play attack animation and deal damage
         if (meleeData != null && coolDownDone && canAttackPlayer){
             armAnimator.Play(null);
             armAnimator.Play(meleeData.meleeSwingAnimation);
@@ -84,7 +96,7 @@ public class MeleeManager : MonoBehaviour
         
         if (canAttackPlayer && coolDownDone && meleeData != null)
         {
-            
+            //loop through range of enemies player can attack, killing off enemies if they run out of health
             for (int i = availableEnemies.Count-1; i >= 0; i--)
             {
                 Entity obj = availableEnemies[i];
@@ -104,11 +116,13 @@ public class MeleeManager : MonoBehaviour
         }
     }
     
+    //allow attacking
     public void timerStuffs()
     {
         coolDownDone = true;
     }
 
+    //handle if inventory changes to a melee weapon
     public void ChangeSlot(MeleeData newData)
     {
         if (newData == null){
@@ -122,6 +136,7 @@ public class MeleeManager : MonoBehaviour
         }
     }
 
+    //gets needed animator
     public void GetItemAnimator(Animator itemAnimator){
         meleeAnimator = itemAnimator;
     }
