@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using UnityEngine;
 
+/*
+ * Program name: ShopItemData.cs
+ * Author: Noah Levy
+ * What the program does: houses static properties of shop items, allows for scalability
+ */
+
 [CreateAssetMenu(fileName = "New Item", menuName = "Items/New Item")]
 public class InventoryItemData : ScriptableObject{
     public string displayName;

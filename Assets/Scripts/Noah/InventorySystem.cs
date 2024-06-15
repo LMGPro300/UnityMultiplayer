@@ -225,6 +225,7 @@ public class InventorySystem : NetworkBehaviour
         InventoryItemDataWrapper referenceData = inventory[curSlot-1].data;
         GameObject itemToSpawn = itemToDrop.data.prefab;
         GunScriptableObjectWrapper refWeapon = referenceData.weapon;
+        //create a new gun if necessary
         GunPayload gunPayload = new GunPayload(){
             magSize = 0,
             currentMagSize = 0,
@@ -234,7 +235,6 @@ public class InventorySystem : NetworkBehaviour
             force = 0,
             ammoType = 0
             };
-
         if (refWeapon != null){
             gunPayload = new GunPayload(){
             magSize = refWeapon.magSize,
@@ -250,6 +250,7 @@ public class InventorySystem : NetworkBehaviour
         Debug.Log(playerNetworkObject);
         Debug.Log(itemToSpawn);
         Debug.Log(gunPayload);
+        //spawn a gun into network space
         SyncWithWorldSpace.Instance.InstantiateItemOnServer(playerNetworkObject, itemToSpawn, gunPayload, (playerTransform.position + (playerCamera.forward * 2f)), new Quaternion(0f, 0f, 0f, 1), (Vector3.up * 4f) + (playerCamera.forward * 4f));
         
         //remove item from storage after dropping it
@@ -353,14 +354,14 @@ public class InventorySystem : NetworkBehaviour
         return false;
     }
 
-    public bool canAddItem(InventoryItemDataWrapper itemToCheck){
-        if (inventory.Contains(null)){
+    //checks if we can add an item based on a wrapper
+    public bool canAddItem(InventoryItemDataWrapper itemToCheck)
+    {
+        if (inventory.Contains(null))
+        {
             return true;
         }
         return false;
 
     }
-
-
-    
 }
