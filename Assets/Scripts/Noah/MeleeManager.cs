@@ -20,7 +20,7 @@ public class MeleeManager : MonoBehaviour
 
     CountdownTimer attackTimer;
 
-    bool canAttackPlayer = false;
+    bool canAttackPlayer = true;
     bool coolDownDone = true;
 
     List<Entity> availableEnemies;
