@@ -6,7 +6,7 @@ using UnityEngine.AI;
 using Unity.Netcode;
 
 /*
- * Program name: TabGroup.cs
+ * Program name: EnemyNav.cs
  * Author: Noah Levy, some code taken from tutorial
  * What the program does: controls where this enemy navagates too
  */
