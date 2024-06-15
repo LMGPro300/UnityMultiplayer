@@ -4,6 +4,13 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Unity.Netcode;
 
+/*
+ * Program name: InputHandler.cs
+ * Author: Elvin Shen
+ * What the program does: Recieves input from unity's new input system and passes it along to relative scripts 
+ */
+
+
 public class InputHandler : NetworkBehaviour//MonoBehaviour
 {
     [SerializeField] PlayerCamera playerCamera;
@@ -32,6 +39,7 @@ public class InputHandler : NetworkBehaviour//MonoBehaviour
 
     void Awake()
     {
+        //Subscribe to each keybind event for respective control to a variable value
         PlayerControlsActionMap = new PlayerControls();
         keyboardMovement = PlayerControlsActionMap.Keyboard;
         keyboardMovement.JUMP.performed += ctx => jumpInput = ctx.ReadValue<float>();
@@ -53,13 +61,17 @@ public class InputHandler : NetworkBehaviour//MonoBehaviour
     private void OnDisable(){
         keyboardMovement.Disable();
     }
+    //Lock the cursor
     void Start(){
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
     void Update(){ 
+        //Each script will take respective input
         if (!IsOwner) return;
+        
+        //This will block input if shop or inventory is active
         Debug.Log(!shopManager.shopActive + " shop input");
         if (inventoryInput == 0f && !shopManager.shopActive){
             playerCamera.RecieveInput(mouseInput);

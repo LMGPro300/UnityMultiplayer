@@ -3,6 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
+/*
+ * Program name: Entity.cs
+ * Author: Elvin Shen
+ * What the program does: Allows to make anything into an "Entity" (capable of taking damage and death) when this component it added to it
+ */
+
 public class Entity: MonoBehaviour{
 
     [SerializeField] private EnemyScriptableObject enemyScriptableObject;
@@ -19,6 +25,7 @@ public class Entity: MonoBehaviour{
     public Action OnDeath = delegate { };
 
     public void Awake(){
+        //Define the stats of the enemy
         health = enemyScriptableObject.health;
         isAlive = true;
     }
@@ -27,6 +34,7 @@ public class Entity: MonoBehaviour{
     }
 
     public void takeDamage(float damage){
+        //This is called when damage is taken, an OnDeath delegate is invoked and is no longer alive
         this.health -= damage;
         //StartCoroutine(PlaySounds());
         Debug.Log(damage + " taken damage");
@@ -48,6 +56,8 @@ public class Entity: MonoBehaviour{
     */
 
     public void DoRagdoll(Vector3 force, Vector3 hitLocation){
+        //Applies a force to a kinematic body that gives it the "ragdoll" effect certain gameobjects are disabled
+        // such as navmesh (avoid moving during ragdoll) and the hurtbox
         ragdollController.TriggerRagdoll(force, hitLocation);
         ragdollController.transform.SetParent(gameObject.transform);
         foreach (GameObject go in disabledObjectsWhenRagdolling)
