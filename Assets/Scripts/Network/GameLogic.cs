@@ -2,14 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
-using TMPro;
 
 public class GameLogic : NetworkBehaviour{
     [SerializeField] private SpawnableScriptableObject spawnableScriptableObject;
     [SerializeField] private int itemSpawnChance;
     [SerializeField] private int daySpawnChance;
-    [SerializeField] private TextMeshProUGUI notifyMsg;
-    [SerializeField] private Light lighting;
 
     [SerializeField] private Transform[] nightPos;
     private Vector3[] nightPositions;
@@ -23,36 +20,24 @@ public class GameLogic : NetworkBehaviour{
     private Vector3[] spawnPositions;
     private int numSpawnPositions;
 
-    private int[] nightWaveData = {5, 15, 50};
+    private int[] nightWaveData = {1,1,1};//{5, 15, 50};
     private int[] dayWaveData = {1,1,1};
     private int wave = -1;
 
     [SerializeField] private GameObject zombiePrefab;
-    private int enemyLeft = 0;
+    private int enemyLeft;
 
     private CountdownTimer daytimeTimer;
-    private CountdownTimer warningTimer = new CountdownTimer(5);
-    private CountdownTimer inBetweenTimer = new CountdownTimer(10);
-    private CountdownTimer clearTextTimer = new CountdownTimer(5);
     private List<GameObject> remainingDayEnemies;
-
-    private bool IsNight = false;
-    
 
     public override void OnNetworkSpawn(){
         base.OnNetworkSpawn();
         if (!IsServer) return;
         spawnableScriptableObject.Init();
         daytimeTimer = new CountdownTimer(10);
-        daytimeTimer.OnTimerStop += () => {NightWarning();};
+        daytimeTimer.OnTimerStop += () => {TriggerNight();};
         daytimeTimer.Start();
-        warningTimer.OnTimerStop += () => {TriggerNight();};
         remainingDayEnemies = new List<GameObject>();
-
-        inBetweenTimer.OnTimerStop += () => {DayStart();};
-        inBetweenTimer.Start();
-
-        clearTextTimer.OnTimerStop += () => {notifyMsg.text = "";};
 
         numNightPositions = nightPos.Length;
         nightPositions = new Vector3[numNightPositions];
@@ -76,31 +61,11 @@ public class GameLogic : NetworkBehaviour{
     private void Update(){
         if (!IsServer) return;
         daytimeTimer.Tick(Time.deltaTime);
-        warningTimer.Tick(Time.deltaTime);
-        inBetweenTimer.Tick(Time.deltaTime);
-        clearTextTimer.Tick(Time.deltaTime);
-
-        if (IsNight && lighting.intensity > 0){
-            lighting.intensity -= 0.001f;
-        } else if (!IsNight && lighting.intensity < 1){
-            lighting.intensity += 0.001f;
-        }
-
-    }
-
-    private void NightWarning(){
-        notifyMsg.text = "They will be here soon...";
-        warningTimer.Start();
-        clearTextTimer.Start();
-        IsNight = true;
-
     }
 
     private void TriggerNight(){
         //make things dark
         Debug.Log("the night has started");
-        notifyMsg.text = "The wave is coming...";
-        clearTextTimer.Start();
         wave += 1;
         enemyLeft = nightWaveData[wave];
         for (int i = 0; i < enemyLeft; i++){
@@ -116,25 +81,16 @@ public class GameLogic : NetworkBehaviour{
         }
     }
 
-    private void DayStart(){
-        notifyMsg.text = "Day " + (this.wave+1) + ", don't die out there";
-        clearTextTimer.Start();
-    }
-
     private void IsNightOver(){
         if (enemyLeft != 0) return;
         
         daytimeTimer.Start();
-        notifyMsg.text = "The night is coming to an end...";
-        clearTextTimer.Start();
-        IsNight = false;
         Debug.Log("the day is coming back!!!");
         
 
         for (int i = 0; i < numSpawnPositions; i ++){
             int chance = Random.Range(0, 100);
             if (chance > itemSpawnChance) continue;
-            Debug.Log("spawned for " + i);
 
             int itemChance = Random.Range(0, 100);
             int itemType = 0;
@@ -168,7 +124,5 @@ public class GameLogic : NetworkBehaviour{
             SyncWithWorldSpace.Instance.InstantiateOnServer(zombiePrefab, dayPositions[Random.Range(0, numDayPositions)], Quaternion.identity);
             remainingDayEnemies.Add(SyncWithWorldSpace.Instance.lastSpawnedGameObject);
         }
-
-        inBetweenTimer.Start();
     }
 }

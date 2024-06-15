@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5093103914810734075}
   - component: {fileID: 9171457588229675258}
   - component: {fileID: 3954153620598955209}
+  - component: {fileID: 6063235981630277942}
   m_Layer: 0
   m_Name: Shop Stand
   m_TagString: shop
@@ -63,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: af3410433d1ee044ba73e8f2f756adc7, type: 2}
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -127,3 +128,34 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6063235981630277942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6663124254872729341}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60d58e95c463fa14b98500a903ec9f6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  openShop:
+    m_Name: Open Shop
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: a9f34098-95dd-4343-a905-34920c2d8a18
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: daff40ea-c7ba-4d4f-b553-442575f87f51
+      m_Path: <Keyboard>/g
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Open Shop
+      m_Flags: 0
+    m_Flags: 0
+  canOpenShop: {fileID: 0}
+  shopManager: {fileID: 0}

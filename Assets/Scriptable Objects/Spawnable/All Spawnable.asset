@@ -17,10 +17,10 @@ MonoBehaviour:
   - {fileID: 7956575565189725420, guid: 59df0ca94d557bb45b069b1dfa2517e6, type: 3}
   meleeChance: 20
   melees:
-  - {fileID: 5616224908850464577, guid: 7ead29634045e714ea2254170a856489, type: 3}
+  - {fileID: 5787373178358721160, guid: b908f64d03778b24cbddb65ebe33c2e4, type: 3}
   itemChance: 30
   items:
-  - {fileID: 5787373178358721160, guid: b908f64d03778b24cbddb65ebe33c2e4, type: 3}
+  - {fileID: 4334314812708720168, guid: f2b1353c648d7884fa144a959a136def, type: 3}
   garbageChance: 40
   garbages:
   - {fileID: 5787373178358721160, guid: 32fb66c662fd9444c968c8d52c607bd7, type: 3}

@@ -422,7 +422,6 @@ MonoBehaviour:
   inventorySystem: {fileID: 4322282124954478440}
   pickUpItem: {fileID: 6433777982930457432}
   shopManager: {fileID: 6153276007796441734}
-  meleeManager: {fileID: 2527821686140117352}
 --- !u!114 &5564465997755490661
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4708,9 +4707,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   meleeHitbox: {fileID: 8169800722024016152}
+  playerClick:
+    m_Name: Player Click
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: e3ed338c-8f44-40b1-992c-741c72f19785
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: d59596ef-0d18-49e6-a282-5c48f9ad5f6c
+      m_Path: <Mouse>/leftButton
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Player Click
+      m_Flags: 0
+    m_Flags: 0
   meleeData: {fileID: 11400000, guid: 79e5b6d8ea42a68408cbe9219d1d2ed9, type: 2}
   playerTransform: {fileID: 2739172169692159761}
-  armAnimator: {fileID: 3038191473331382601}
 --- !u!1 &7747351815127031077
 GameObject:
   m_ObjectHideFlags: 0
@@ -7288,10 +7303,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 3453250118470506705}
     - target: {fileID: 3459228814633305794, guid: 2d388877f617ab045a4197c538fc7c57, type: 3}
-      propertyPath: meleeManager
-      value: 
-      objectReference: {fileID: 2527821686140117352}
-    - target: {fileID: 3459228814633305794, guid: 2d388877f617ab045a4197c538fc7c57, type: 3}
       propertyPath: playerCamera
       value: 
       objectReference: {fileID: 1977713744222802271}
@@ -7720,7 +7731,6 @@ MonoBehaviour:
   charAnimator: {fileID: 2913545278740426555}
   itemLocation: {fileID: 2591424784459335356}
   playerShoot: {fileID: 3453250118470506705}
-  meleeManager: {fileID: 2527821686140117352}
   previousDisplayItem: {fileID: 1935704283185496034}
 --- !u!114 &1397932945113445255
 MonoBehaviour:
