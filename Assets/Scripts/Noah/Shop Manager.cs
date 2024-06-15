@@ -109,6 +109,6 @@ public class ShopManager : NetworkBehaviour
     }
 
     public void UpdateBalance(){
-        playerBalanceText.text = "Credits " + playerCredits;
+        playerBalanceText.text = "Credits: " + playerCredits;
     }
 }

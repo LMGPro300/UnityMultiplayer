@@ -3208,7 +3208,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventory: {fileID: 4322282124954478440}
-  playerCredits: 1000
+  playerCredits: 100
   playerBalanceText: {fileID: 7528389745561058961}
   shopErrorText: {fileID: 2525451835255724575}
   canOpenShop: {fileID: 2525451835255724575}
@@ -6311,6 +6311,10 @@ PrefabInstance:
     - target: {fileID: 2675415868065864655, guid: 957957a2c5958e8479f9a044edbb0ea7, type: 3}
       propertyPath: m_Name
       value: ServerCube
+      objectReference: {fileID: 0}
+    - target: {fileID: 2675415868065864655, guid: 957957a2c5958e8479f9a044edbb0ea7, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8034238499767757257, guid: 957957a2c5958e8479f9a044edbb0ea7, type: 3}
       propertyPath: m_LocalPosition.x
