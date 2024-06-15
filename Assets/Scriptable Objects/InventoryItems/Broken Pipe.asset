@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7bc46021ae383348bce277e8221c88d, type: 3}
   m_Name: Broken Pipe
   m_EditorClassIdentifier: 
-  displayName: Bouncy Ball
-  icon: {fileID: 21300000, guid: 299b9b0fd38b05f44b2325b3c294f845, type: 3}
-  prefab: {fileID: 1178276715604147337, guid: ccbde28bf5920944d850d9b95cdc49c9, type: 3}
-  displayPrefab: {fileID: 1178276715604147337, guid: 9d3c9a7a3bc4c0c4292193579a7866a4, type: 3}
-  globalPrefab: {fileID: 1178276715604147337, guid: 0d926963033e88d41b6363050e2a515f, type: 3}
-  maxStackSize: 5
+  displayName: Broken Pipe
+  icon: {fileID: 21300000, guid: f920282170da4ba4eb313dd759870634, type: 3}
+  prefab: {fileID: 4957458959452717969, guid: 6511efca1201fed49be4e329f3f564bb, type: 3}
+  displayPrefab: {fileID: 4957458959452717969, guid: b9573afaf5186a34c9771f3ecc01a0a8, type: 3}
+  globalPrefab: {fileID: 4957458959452717969, guid: 1c725ec35fdc1804bbcf86b48f0024ee, type: 3}
+  maxStackSize: 3
   isGun: 0
   isMelee: 0
   refWeapon: {fileID: 0}
@@ -25,4 +25,4 @@ MonoBehaviour:
   melee: {fileID: 0}
   charAnimation: Default|HoldItem
   armAnimation: Armature|PickUp
-  sellPrice: 10
+  sellPrice: 30
