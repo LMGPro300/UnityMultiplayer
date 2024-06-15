@@ -1,7 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-//
+/*
+ * Program name: VelocityVisualizer.cs
+ * Author: Elvin Shen
+ * What the program does: Debug tool to visualize the player velocity to fix PlayerMovement
+ */
+
 public class VelocityVisualizer: MonoBehaviour
 {
     // Start is called before the first frame update
@@ -16,6 +21,8 @@ public class VelocityVisualizer: MonoBehaviour
     }
 
     // Update is called once per frame
+    //Render the line to the position of the player and the 
+    //position of the player plus it's velocity
     void Update()
     {
         Vector3 velo = rb.velocity;

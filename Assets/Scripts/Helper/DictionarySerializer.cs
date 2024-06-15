@@ -2,7 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
-
+/*
+ * Program name: DictionarySerializer.cs
+ * Author: Elvin Shen
+ * What the program does: Allows Unity to serialize Dictionaries (sort of) for other scripts
+ */
 
 [Serializable]
 public class DictionarySerializer

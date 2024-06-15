@@ -6,7 +6,11 @@ using Eflatun.SceneReference;
 using System.Threading.Tasks;
 using TMPro;
 using Unity.Services.Lobbies.Models;
-
+/*
+ * Program name: LobbyManagerUI.cs
+ * Author: Elvin Shen 
+ * What the program does: The main controller of the lobby UI
+ */
 public class LobbyManagerUI : MonoBehaviour
 {
     public static LobbyManagerUI Instance { get; private set; }
@@ -42,6 +46,8 @@ public class LobbyManagerUI : MonoBehaviour
     private int lobbyMaxPlayers = 4;
     private string inputLobbyCode;
 
+    //Hide the panels such as "create lobby" or "lobby panel"
+    //since the user is currently in the lobby menu
     void Awake(){
         Instance = this;
         lobbyListPanel.SetActive(true);
@@ -68,6 +74,7 @@ public class LobbyManagerUI : MonoBehaviour
         inputLobbyCode = input;
     }
 
+    //create a lobby and show the create lobby panel
     async void CreateLobby(){
         lobbyListPanel.SetActive(false);
         newLobbyPanel.SetActive(false);
@@ -91,6 +98,8 @@ public class LobbyManagerUI : MonoBehaviour
         
     }
 
+    //join a lobby, upon entering a valid lobby, update the players
+    //lobby codes and hide the lobby menu
     public async Task JoinLobby(string lobbyCode){
         lobbyListPanel.SetActive(false);
         lobbyPanel.SetActive(true);
@@ -105,6 +114,7 @@ public class LobbyManagerUI : MonoBehaviour
         }
     }
 
+    //same as JoinLobby but by Id this time
     public async Task JoinLobbyById(string lobbyId){
         lobbyListPanel.SetActive(false);
         lobbyPanel.SetActive(true);
@@ -119,11 +129,14 @@ public class LobbyManagerUI : MonoBehaviour
         }
     }
 
+    //The game started, and the game scene is loaded
     public async void StartGame(){
         await lobbyAuth.CreateLobbyRelay(testLobby.joinnedLobby);
         Loader.LoadScene(gameScene);
     }
 
+    //The lobby list is refreshed, for each lobby found a panel is made
+    //showing current player count, lobby name, etc.
     async void ReloadLobbyList(){
         List<Lobby> lobbies = await testLobby.GetListLobbies();
         int offset = 0;
@@ -144,6 +157,8 @@ public class LobbyManagerUI : MonoBehaviour
         }
     }
 
+    //refresh the player list, showing and updating everyone's name
+    // and if they are currently in lobby
     async void ReloadPlayerList(){
         if (testLobby.joinnedLobby == null) return;
         int offset = 0;

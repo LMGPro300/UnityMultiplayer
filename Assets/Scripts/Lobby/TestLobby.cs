@@ -7,6 +7,14 @@ using Unity.Services.Lobbies.Models;
 using Unity.Services.Core;
 using Unity.Services.Authentication;
 
+/*
+ * Program name: TestLobby.cs
+ * Author: Elvin Shen (not really)
+ * What the program does: Creates lobbies and makes them pulbic to join
+ * CREDITS: https://www.youtube.com/watch?v=7glCsF9fv3s
+ */
+
+
 public class TestLobby : MonoBehaviour
 {   
     private Lobby hostLobby;
@@ -21,6 +29,7 @@ public class TestLobby : MonoBehaviour
     public CountdownTimer heartbeatTimer = new CountdownTimer(v_lobbyHeartbeatInterval);
     public CountdownTimer pollForUpdatesTimer = new CountdownTimer(v_lobbyPollInterval);
 
+    //Authicate the join and define countdown timers
     private async void Start(){
         await Authenticate();
         
@@ -39,10 +48,11 @@ public class TestLobby : MonoBehaviour
         heartbeatTimer.Tick(Time.deltaTime);
         pollForUpdatesTimer.Tick(Time.deltaTime);
     }
+    //Give a random player ID
     async Task Authenticate(){
         await Authenticate("Player" + Random.Range(0, 1000));
     }
-
+    //If the player already exists, register them
     async Task Authenticate(string playerName){
         if (UnityServices.State == ServicesInitializationState.Uninitialized){
             InitializationOptions options = new InitializationOptions();
@@ -54,7 +64,7 @@ public class TestLobby : MonoBehaviour
         AuthenticationService.Instance.SignedIn += () => {
             Debug.Log("Signed in as " + AuthenticationService.Instance.PlayerId);
         };
-
+        //if not exists, regiester as guest
         if(!AuthenticationService.Instance.IsSignedIn) {
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
             PlayerId = AuthenticationService.Instance.PlayerId;
@@ -62,6 +72,7 @@ public class TestLobby : MonoBehaviour
         }
     }
 
+    //Create a lobby and start the heartbeat to keep it up
     public async Task CreateLobby(string lobbyName, int maxPlayers){
         try{
             CreateLobbyOptions options = new CreateLobbyOptions{
@@ -84,6 +95,7 @@ public class TestLobby : MonoBehaviour
         }
     }
 
+    //list the lobbies avaliable to join
     private async void ListLobbies(){
         try{
             QueryResponse queryResponse = await Lobbies.Instance.QueryLobbiesAsync();
@@ -97,6 +109,7 @@ public class TestLobby : MonoBehaviour
         }
     }
 
+    //Get a List of lobbies and return it
     public async Task<List<Lobby>> GetListLobbies(){
         try{
             QueryResponse queryResponse = await Lobbies.Instance.QueryLobbiesAsync();
@@ -108,6 +121,7 @@ public class TestLobby : MonoBehaviour
         return new List<Lobby>();
     }
 
+    //print the list of players in the lobby
     public void ListPlayers(Lobby lobby){
         Debug.Log("Players in lobby " + lobby.Name);
 
@@ -115,6 +129,8 @@ public class TestLobby : MonoBehaviour
             Debug.Log(player.Data["PlayerName"].Value);
         }
     }
+
+    //Join the lobby by a code and register them as a player
     public async Task JoinLobby(string lobbyCode){
         try{
             JoinLobbyByCodeOptions joinLobbyByCodeOptions = new JoinLobbyByCodeOptions{
@@ -130,6 +146,7 @@ public class TestLobby : MonoBehaviour
         }
     }
 
+    //literally no difference i dont know why I have this here
     public async Task JoinLobbyById(string lobbyId){
         try{
             JoinLobbyByIdOptions joinLobbyByIdOptions = new JoinLobbyByIdOptions{
@@ -145,7 +162,7 @@ public class TestLobby : MonoBehaviour
         }
     }
 
-
+    //Quick join a lobby
     private async void QuickJoinLobby(string lobbyCode){
         try{
             await LobbyService.Instance.QuickJoinLobbyAsync();
@@ -155,6 +172,7 @@ public class TestLobby : MonoBehaviour
         }
     }
 
+    //leave a lobby
     private async void LeaveLobby(){
         try{
             await LobbyService.Instance.RemovePlayerAsync(joinnedLobby.Id, AuthenticationService.Instance.PlayerId);
@@ -163,6 +181,7 @@ public class TestLobby : MonoBehaviour
         }
     }
 
+    //host kicked a player in lobby
     private async void KickPlayer(Player player){
         try{
             await LobbyService.Instance.RemovePlayerAsync(joinnedLobby.Id, player.Id);
@@ -170,6 +189,8 @@ public class TestLobby : MonoBehaviour
             Debug.LogError("Failed to kick player " + e.Message);
         }
     }
+
+    //Get the player information
     private Player GetPlayer(){
         return new Player{
                     Data = new Dictionary<string, PlayerDataObject>{
@@ -178,6 +199,7 @@ public class TestLobby : MonoBehaviour
                 };
     }
 
+    //Update the gamemode of the lobby and send to lobby service
     private async void UpdateLobbyGameMode(string gameMode){
         try{
             hostLobby = await Lobbies.Instance.UpdateLobbyAsync(hostLobby.Id, new UpdateLobbyOptions{
@@ -191,6 +213,7 @@ public class TestLobby : MonoBehaviour
         }
     }
 
+    //Update the playnames
     public async Task UpdatePlayerName(string newName){
         try{
             await LobbyService.Instance.UpdatePlayerAsync(joinnedLobby.Id, AuthenticationService.Instance.PlayerId, new UpdatePlayerOptions{
@@ -203,6 +226,7 @@ public class TestLobby : MonoBehaviour
         }
     }
 
+    //heartbeat the lobby to keep it showing
     async Task HandleHeartbeatAsync(){
         try{
             await LobbyService.Instance.SendHeartbeatPingAsync(joinnedLobby.Id);
@@ -211,7 +235,8 @@ public class TestLobby : MonoBehaviour
             Debug.LogError("Failed to heartbeat lobby: " + e.Message);
         }
     }
-
+    
+    //Get updates on the lobby, if the host started, start the game for the clients
     public async Task HandlePollForUpdateAsync(){
         try{
             if (joinnedLobby == null) return;

@@ -2,6 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * Program name: CircularBuffer.cs
+ * Author: Elvin Shen (not really)
+ * What the program does: A circulating arrays
+ * CREDITS: https://www.youtube.com/watch?v=-lGsuCEWkM0
+ */
+
 public class CircularBuffer<T>
 {
     private T[] buffer;

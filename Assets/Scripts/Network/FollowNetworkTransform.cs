@@ -3,6 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 
+/*
+ * Program name: FollowNetworkTranform.cs
+ * Author: Elvin Shen 
+ * What the program does: Follow the tranform or another object, used since network object spawned
+ *                        dynamically cannot be parented
+ */
+
 public class FollowNetworkTransform : MonoBehaviour
 {
     [SerializeField] private Transform targetTransform;

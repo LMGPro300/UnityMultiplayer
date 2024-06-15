@@ -4,6 +4,13 @@ using System;
 using UnityEngine;
 using Unity.Netcode;
 
+/*
+ * Program name: CountdownTimer.cs
+ * Author: Elvin Shen
+ * What the program does: A timer that counts in seconds
+ */
+
+
 public class CountdownTimer
 {
     private float seconds;
@@ -16,6 +23,7 @@ public class CountdownTimer
         this.finished = true;
         this.timeLeft = 0f;
     }
+    //set the time left to the targettime
     public void Start(){
         timeLeft = seconds;
         this.finished = false;
@@ -26,6 +34,7 @@ public class CountdownTimer
         this.finished = true;
     }
 
+    //subtract time from the time left
     public void Tick(float deltaTime){
         if (finished) return;
         if (timeLeft > 0){

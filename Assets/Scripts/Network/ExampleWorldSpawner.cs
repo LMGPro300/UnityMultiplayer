@@ -4,7 +4,11 @@ using UnityEngine;
 
 
 //Example script to spawn something in every 1 second
-
+/*
+ * Program name: ExampleWorldSpawner.cs
+ * Author: Elvin Shen 
+ * What the program does: Testing my SycnWithWorldSpace script to spawn network object into the network
+ */
 public class ExampleWorldSpawner : MonoBehaviour
 {
     [SerializeField] GameObject prefab; //prefab MUST HAVE NETWORK OBJECT COMPONENT

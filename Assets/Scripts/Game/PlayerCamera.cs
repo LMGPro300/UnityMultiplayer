@@ -53,17 +53,20 @@ public class PlayerCamera : NetworkBehaviour//MonoBehaviour
         camAngle += mouseInput.y * sensY * Time.deltaTime;
         camAngle = Mathf.Clamp(camAngle, -90, 90);
         cam.rotation = transform.rotation * Quaternion.Euler(camAngle, 0f, 0f);
-        //Rotate
+        //Rotate the arms in the direction of the camera
         armsModel.rotation = transform.rotation * Quaternion.Euler(camAngle, 0f, 0f);
 
-   
+        //Arm swaying calculation, get target rotate
         Quaternion rotationX = Quaternion.AngleAxis(-mouseInput.y * multiplier, Vector3.right);
         Quaternion rotationY = Quaternion.AngleAxis(mouseInput.x * multiplier, Vector3.up);
 
         Quaternion targetRotation = rotationX * rotationY;
+
+        //Slerp to the targetrotation 
         sway.localRotation = Quaternion.Slerp(sway.localRotation, targetRotation, smooth * Time.deltaTime);
         //targetRotation = Mathf.Clamp(targetRotation.ang, -45, 45);
         //head.rotation = new Quaternion(cam.rotation.x, head.rotation.y, head.rotation.z, 1);
+        //Rotate the head towards where the player is looking
         float camAngle2 = Mathf.Clamp(camAngle, -45, 45);
         head.rotation = transform.rotation * Quaternion.Euler(camAngle2, 0f, 0f);//head.rotation * Quaternion.Euler(camAngle, 0f, 0f);
         head.rotation *= Quaternion.Euler(0f, 180f, 0f);

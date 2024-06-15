@@ -3,6 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 
+/*
+ * Program name: ExampleFollowParent.cs
+ * Author: Elvin Shen 
+ * What the program does: Testing my SycnWithWorldSpace script to support following a parent
+ *                          Not really used in-game
+ */
+
 public class ExampleFollowParent : MonoBehaviour
 {
     [SerializeField] GameObject prefab; //prefab to follow parent
@@ -19,7 +26,7 @@ public class ExampleFollowParent : MonoBehaviour
     public void Update(){
         spawnTimer.Tick(Time.deltaTime);
     }
-
+    
     void SpawnIn(){
         SyncWithWorldSpace.Instance.InstantiateOnServer(prefab, new Vector3(0,0,0), new Quaternion(0f,0f,0f,1));
         SetTargetTransformRequest(followObject);

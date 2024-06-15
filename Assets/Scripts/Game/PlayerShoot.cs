@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 
+/*
+ * Program name: PlayerShoot.cs
+ * Author: Elvin Shen 
+ * What the program does: Handles shooting interactions with the player
+ */
+
 public class PlayerShoot : NetworkBehaviour{
     [SerializeField] private Transform cam;
     [SerializeField] private ShootingController shootingController;
@@ -16,6 +22,7 @@ public class PlayerShoot : NetworkBehaviour{
     private string gunEquipAnimation;
     //[SerializeField] private Animator shootingAnimation;
 
+    //Recieve a shoot input, if it can shoot, play the animation and shoot
     public void RecieveShootInput(float input){
         if (shootingController.canShoot(input) && isGun){
             //shootingAnimation.Play("Armature|Shoot");
@@ -25,6 +32,7 @@ public class PlayerShoot : NetworkBehaviour{
         }
     }
 
+    //Recieve a reload input, if it can reload, play the animation and reload
     public void RecieveReloadInput(float reloadInput){
         if (shootingController.canReload(reloadInput) && isGun){
             shootingController.ReloadMag();
@@ -37,7 +45,9 @@ public class PlayerShoot : NetworkBehaviour{
         }
     }
 
+    //The player has switch weapons, readjust the data to match the new weapon
     public void ChangeSlot(GunScriptableObjectWrapper gunScriptableObject){
+        //the weapon switched is not a gun
         if (gunScriptableObject == null){
             isGun = false;
             return;
@@ -49,6 +59,8 @@ public class PlayerShoot : NetworkBehaviour{
         equipAnimation = gunScriptableObject.equipAnimation;
         gunEquipAnimation = gunScriptableObject.gunEquipAnimation;
 
+        //Play the equip animations
+
         shootingController.ChangeGun(gunScriptableObject);
 
         armAnimator.Play(null);
@@ -59,6 +71,7 @@ public class PlayerShoot : NetworkBehaviour{
         }
     }
 
+    //Get the animator from the item the player spawned in
     public void GetItemAnimator(Animator itemAnimator){
         this.itemAnimator = itemAnimator;
     }

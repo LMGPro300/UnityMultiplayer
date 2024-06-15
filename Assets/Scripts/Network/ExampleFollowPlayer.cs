@@ -3,6 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 
+/*
+ * Program name: ExampleFollowPlayer.cs
+ * Author: Elvin Shen 
+ * What the program does: Testing my SycnWithWorldSpace script to support following a player
+ *                          Not really used in-game
+ */
+
 public class ExampleFollowPlayer : NetworkBehaviour
 {
     [SerializeField] GameObject prefab; //prefab to follow parent

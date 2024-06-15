@@ -3,6 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 
+/*
+ * Program name: TestMovement.cs
+ * Author: Elvin Shen
+ * What the program does: Very barebones version of PlayerMovement for network testing
+ */
+
+
 public class TestMovement : NetworkBehaviour
 {
     private Vector3 wishDirection = Vector3.zero;

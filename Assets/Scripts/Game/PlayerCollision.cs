@@ -4,6 +4,13 @@ using UnityEngine;
 using Unity.Netcode;
 using TMPro;
         //Debug.Log("<color=green>landed ground</color>");
+
+/*
+ * Program name: PlayerCollision.cs
+ * Author: Elvin Shen
+ * What the program does: Checks for collisions with the player whether it's grounded or not
+ */
+
 public class PlayerCollision : NetworkBehaviour//MonoBehaviour//
 {
     [SerializeField] private int jumpFrameBuffer = 100;
@@ -11,6 +18,7 @@ public class PlayerCollision : NetworkBehaviour//MonoBehaviour//
     private int currentJumpFrame;
 
     
+    //When it enters a collider check if it's ground and make it grounded
     private void OnTriggerEnter(Collider other){
         string gotTag = other.gameObject.tag;
         if (gotTag == "ground"){
@@ -31,6 +39,7 @@ public class PlayerCollision : NetworkBehaviour//MonoBehaviour//
         }
     }
 
+    //Exits the ground, therefore becomes airborne
     private void OnTriggerExit(Collider other){
         string gotTag = other.gameObject.tag;
         if (gotTag == "ground"){

@@ -4,6 +4,13 @@ using UnityEngine;
 using Unity.Netcode;
 using UnityEngine.SceneManagement;
 
+/*
+ * Program name: PlayerMovement.cs
+ * Author: Elvin Shen
+ * What the program does: Calculates all WASD input from the user into movement
+ * Credits: https://adrianb.io/2015/02/14/bunnyhop.html
+ */
+
 public class PlayerMovement : NetworkBehaviour//MonoBehaviour
 {
     [SerializeField] private Rigidbody rb;
@@ -17,7 +24,8 @@ public class PlayerMovement : NetworkBehaviour//MonoBehaviour
     [SerializeField] private float networkDeltaTime;
 
 
-
+    //When spawned, only toggle your own inventory and user interface
+    //also define the framerate it's going to be running at
     public override void OnNetworkSpawn(){
         base.OnNetworkSpawn();
         if (!IsOwner) return; 
@@ -36,18 +44,21 @@ public class PlayerMovement : NetworkBehaviour//MonoBehaviour
         //transform.rotation = Quaternion.Euler(-90f, 0f, 0f) * transform.rotation;
     }
 
+    //When the player loads, spawn it into one of the random spawnpoints
     public void loadComplete(Scene scene, LoadSceneMode mode){
         Debug.Log("changed");
         transform.position = SpawnPoints.Instance.RandomSpawnPoint();
         PlayerManager.Instance.AddPlayer(transform);
     }
     
+    //Apply gravity if the player isnt grounded
     private void Gravity(){
         if(playerCollision.GetIsGrounded() == false){
             rb.velocity += new Vector3(0,-gravity*networkDeltaTime,0);
         }
     }
 
+    //Apply friction by scaling the velocity based on friction.
     private Vector3 Friction(Vector3 finalVelo){
         float speed = finalVelo.magnitude;
         float initY = finalVelo.y;
@@ -59,6 +70,10 @@ public class PlayerMovement : NetworkBehaviour//MonoBehaviour
         return finalVelo;
     }
 
+    //Wishdir is the normalized vector the player wants to move towards 
+    //and accounted for player rotation
+    //if the dot product of the direction it's moving in is surpassing the maxSpeed
+    //limit the velocity
      private Vector3 Accelerate(Vector3 wishDir, float acceleration){
         //Debug.Log("Accelerating ground");
         //Debug.Log(rb.velocity.y == 0f);
@@ -71,6 +86,8 @@ public class PlayerMovement : NetworkBehaviour//MonoBehaviour
         return finalVelo +  wishDir * accelVel;
     }
 
+    //Same acceleration but without friction and uses slightly different
+    //modifications to air movement
     private Vector3 Accelerate(Vector3 wishDir, float acceleration, float airControl, float maxAccel){
         //Debug.Log("Accelerating air");
         //Debug.Log(rb.velocity.y == 0f);
@@ -95,6 +112,8 @@ public class PlayerMovement : NetworkBehaviour//MonoBehaviour
         //Debug.Log(accelVel);
         return rb.velocity +  wishDir * accelVel;
     }
+
+    //Move the player in the wish direction and the jumpInput;
     public void Move(Vector3 wishDirection, float jumpInput){
         Vector3 finalVelo = new Vector3();
         //ebug.Log(playerCollision.GetIsGrounded());
@@ -113,6 +132,7 @@ public class PlayerMovement : NetworkBehaviour//MonoBehaviour
         Gravity();
     }
 
+    //if the player somehow just falls beyond the map
     void respawn(){
         if (transform.position.y < - 200){
             transform.position = SpawnPoints.Instance.RandomSpawnPoint();
@@ -120,6 +140,7 @@ public class PlayerMovement : NetworkBehaviour//MonoBehaviour
         }
     }
 
+    //Apply a force upwards when jumping on the ground
     public void Jump(float jumpInput){
         if (jumpInput == 1 && playerCollision.GetIsGrounded()){
             Debug.Log((jumpSpeed * networkDeltaTime) + " jump speed at one point");
@@ -129,12 +150,14 @@ public class PlayerMovement : NetworkBehaviour//MonoBehaviour
         }
     }
 
+    //gotten from input handler, passes the variable on
     public void RecieveJumpInput(float jumpInput){
         //Debug.Log(jumpInput == 1);
         //Debug.Log(playerCollision.GetIsGrounded());
         this.jumpInput = jumpInput;
     }
 
+    //keys from input handler, and tranformed into world space
     public void RecieveKeyboardInput(Vector2 keyboardInput){
         wishDirection.x = keyboardInput.x;
         wishDirection.z = keyboardInput.y;

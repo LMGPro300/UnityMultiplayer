@@ -12,6 +12,13 @@ using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
 using UnityEngine;
 
+/*
+ * Program name: LobbyAuth.cs
+ * Author: Elvin Shen (not really)
+ * What the program does: Creates lobbys a relay connection with unity services
+ * CREDITS: https://www.youtube.com/watch?v=7glCsF9fv3s
+ */
+
 
 [System.Serializable]
 public enum EncryptionType{
@@ -50,10 +57,12 @@ public class LobbyAuth : MonoBehaviour
 
     }
 
+    //Give a random player ID
     async Task Authenticate(){
         await Authenticate("Player" + Random.Range(0, 1000));
     }
 
+    //Authenticate the user if it already exists
     async Task Authenticate(string playerName){
         if (UnityServices.State == ServicesInitializationState.Uninitialized){
             InitializationOptions options = new InitializationOptions();
@@ -65,7 +74,7 @@ public class LobbyAuth : MonoBehaviour
         AuthenticationService.Instance.SignedIn += () => {
             Debug.Log("Signed in as " + AuthenticationService.Instance.PlayerId);
         };
-
+        //if it does not exists, assign as guest
         if(!AuthenticationService.Instance.IsSignedIn) {
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
             PlayerId = AuthenticationService.Instance.PlayerId;
@@ -73,6 +82,7 @@ public class LobbyAuth : MonoBehaviour
         }
     }
 
+    //Create a relay connection through code and start the game
     public async Task CreateRelay(){
         try{
             Allocation allocation = await AllocateRelay();
@@ -84,6 +94,7 @@ public class LobbyAuth : MonoBehaviour
         }
     }
 
+    //join a relay connect through code and join the game
     public async Task JoinRelay2(string relayJoinCode){
         try{
             JoinAllocation joinAllocation = await JoinRelay(relayJoinCode);
@@ -94,6 +105,7 @@ public class LobbyAuth : MonoBehaviour
         }
     }
 
+    //no longer used, but create a lobby and relay and join the game
     public async Task CreateLobbyRelay(Lobby lobby){
         try{
             Allocation allocation = await AllocateRelay();
@@ -111,6 +123,7 @@ public class LobbyAuth : MonoBehaviour
         }
     }
 
+    //find a random lobby that is avaliable
     public async Task QuickJoinLobby(){
         try{
             currentLobby = await LobbyService.Instance.QuickJoinLobbyAsync();
@@ -128,7 +141,7 @@ public class LobbyAuth : MonoBehaviour
         }
     }
 
-
+    //Request a relay of player side
     async Task<Allocation> AllocateRelay(){
         try{
             Allocation allocation = await RelayService.Instance.CreateAllocationAsync(maxPlayers - 1);
@@ -139,6 +152,7 @@ public class LobbyAuth : MonoBehaviour
         }
     }
 
+    //Get the relay code to join
     async Task<string> GetRelayJoinCode(Allocation allocation){
         try{
             string relayJoinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
@@ -149,6 +163,7 @@ public class LobbyAuth : MonoBehaviour
         }
     }
 
+    //join a relay allocation
     async Task<JoinAllocation> JoinRelay(string relayJoinCode){
         try{
             JoinAllocation joinAllocation = await RelayService.Instance.JoinAllocationAsync(relayJoinCode);
@@ -159,6 +174,7 @@ public class LobbyAuth : MonoBehaviour
         }
     }
 
+    //ping the lobby to keep it up
     async Task HandleHeartbeatAsync(){
         try{
             await LobbyService.Instance.SendHeartbeatPingAsync(currentLobby.Id);
@@ -167,7 +183,7 @@ public class LobbyAuth : MonoBehaviour
             Debug.LogError("Failed to heartbeat lobby: " + e.Message);
         }
     }
-
+    //get infomation about to the lobby 
     async Task HandlePollForUpdateAsync(){
         try{
             Lobby lobby = await LobbyService.Instance.GetLobbyAsync(currentLobby.Id);

@@ -1,6 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+/*
+ * Program name: NetworkTimer.cs
+ * Author: Elvin Shen 
+ * What the program does: Tick counter for the server
+ */
 
 public class NetworkTimer
 {

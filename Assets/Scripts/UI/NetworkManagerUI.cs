@@ -4,6 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using Unity.Netcode;
 
+/*
+ * Program name: NetworkManagerUI.cs
+ * Author: Elvin Shen 
+ * What the program does: A testing tool that allows host and client within the same scene
+ */
+
 public class NetworkManagerUI : MonoBehaviour
 {
     [SerializeField] private Button hostButton;

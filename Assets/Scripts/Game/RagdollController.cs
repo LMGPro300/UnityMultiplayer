@@ -2,13 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * Program name: RagdollController.cs
+ * Author: Elvin Shen
+ * What the program does: Handles the ragdoll
+ */
+
 public class RagdollController : MonoBehaviour{
     private Rigidbody[] rigidbodies;
 
+
+    //Get a list of the rigidbodies/body parts 
     void Awake(){
         rigidbodies = GetComponentsInChildren<Rigidbody>();
         DisableRagdoll();
     }
+
     public void DisableRagdoll(){
         foreach(Rigidbody rb in rigidbodies){
             rb.isKinematic = true;
@@ -21,6 +30,8 @@ public class RagdollController : MonoBehaviour{
         }
     }
 
+    //Usually called when the entity has died, enabled the ragdoll and find the closest
+    //rigidbody the raycast hit, then apply a force to that rigidbody
     public void TriggerRagdoll(Vector3 force, Vector3 hitLocation){
         EnableRagdoll();
 

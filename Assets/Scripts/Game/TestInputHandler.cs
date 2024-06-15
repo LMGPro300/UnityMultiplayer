@@ -4,6 +4,12 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Unity.Netcode;
 
+/*
+ * Program name: TestInputHandler.cs
+ * Author: Elvin Shen
+ * What the program does: Very barebones version of InputHandler for network testing
+ */
+
 public class TestInputHandler : NetworkBehaviour//MonoBehaviour
 {
     //[SerializeField] PlayerCamera playerCamera;

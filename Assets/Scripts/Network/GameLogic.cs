@@ -4,6 +4,12 @@ using UnityEngine;
 using Unity.Netcode;
 using TMPro;
 
+/*
+ * Program name: GameLogic.cs
+ * Author: Elvin Shen 
+ * What the program does: The whole gameflow of the game.
+ */
+
 public class GameLogic : NetworkBehaviour{
     [SerializeField] private SpawnableScriptableObject spawnableScriptableObject;
     [SerializeField] private int itemSpawnChance;
@@ -38,10 +44,12 @@ public class GameLogic : NetworkBehaviour{
 
     private bool IsNight = false;
     
-
+    //when a player spawns, if it isnt the server ignore them
     public override void OnNetworkSpawn(){
         base.OnNetworkSpawn();
         if (!IsServer) return;
+        //Start some timers and define delegrates
+        //Example if the day ends, that means the night started
         spawnableScriptableObject.Init();
         daytimeTimer = new CountdownTimer(120);
         daytimeTimer.OnTimerStop += () => {NightWarning();};
@@ -54,6 +62,7 @@ public class GameLogic : NetworkBehaviour{
 
         clearTextTimer.OnTimerStop += () => {notifyMsg.text = "";};
 
+        //turn the tranforms into vector3 for better use
         numNightPositions = nightPos.Length;
         nightPositions = new Vector3[numNightPositions];
         for(int i = 0; i < numNightPositions; i++){
@@ -73,6 +82,7 @@ public class GameLogic : NetworkBehaviour{
         }
     }
 
+    //tick all the timers, and also slowly change lighting if it's nighttime
     private void Update(){
         if (!IsServer) return;
         daytimeTimer.Tick(Time.deltaTime);
@@ -88,6 +98,7 @@ public class GameLogic : NetworkBehaviour{
 
     }
 
+    //warn the players that night is coming
     private void NightWarning(){
         notifyMsg.text = "They will be here soon...";
         warningTimer.Start();
@@ -96,6 +107,7 @@ public class GameLogic : NetworkBehaviour{
 
     }
 
+    //night has fallen
     private void TriggerNight(){
         //make things dark
         Debug.Log("the night has started");
@@ -103,6 +115,8 @@ public class GameLogic : NetworkBehaviour{
         clearTextTimer.Start();
         wave += 1;
         enemyLeft = nightWaveData[wave];
+        //for every enemy that spawns this wave, assign their spawn point to a random spawnpoint
+        //in the night spawns
         for (int i = 0; i < enemyLeft; i++){
             Vector3 randPos = nightPositions[Random.Range(0, numNightPositions-1)];
             SyncWithWorldSpace.Instance.InstantiateOnServer(zombiePrefab, randPos, Quaternion.identity);
@@ -110,32 +124,37 @@ public class GameLogic : NetworkBehaviour{
             Entity enemyEntity = lastEnemy.GetComponent<Entity>();
             enemyEntity.OnDeath += () => {enemyLeft -= 1; IsNightOver();};
         }
-
+        //delete all day zombies that existed
         foreach(GameObject remain in remainingDayEnemies){
             SyncWithWorldSpace.Instance.DestoryOnServer(remain);
         }
     }
 
+    //nofity the players the day has started
     private void DayStart(){
         notifyMsg.text = "Day " + (this.wave+1) + ", don't die out there";
         clearTextTimer.Start();
     }
 
+    //Check if the night is over
     private void IsNightOver(){
+        //the player needs to kill all enemies spawned in the night
         if (enemyLeft != 0) return;
         
+        //the night is over
         daytimeTimer.Start();
         notifyMsg.text = "The night is coming to an end...";
         clearTextTimer.Start();
         IsNight = false;
         Debug.Log("the day is coming back!!!");
         
-
+        //spawn some items the player can use
         for (int i = 0; i < numSpawnPositions; i ++){
+            //check if this spawn point will spawn
             int chance = Random.Range(0, 100);
             if (chance > itemSpawnChance) continue;
             Debug.Log("spawned for " + i);
-
+            //caculate the type of item it will spawn
             int itemChance = Random.Range(0, 100);
             int itemType = 0;
             int cumulChance = 0;
@@ -148,7 +167,7 @@ public class GameLogic : NetworkBehaviour{
             }
 
             GameObject targetSpawnObject;
-
+            //get a random item according to the type of item
             if (itemType == 0){
                 targetSpawnObject = spawnableScriptableObject.RandomGun();
             } else if (itemType == 1){
@@ -158,11 +177,13 @@ public class GameLogic : NetworkBehaviour{
             } else {
                 targetSpawnObject = spawnableScriptableObject.RandomGarbage();
             }
+            //spawn it into the spawn position
             SyncWithWorldSpace.Instance.InstantiateOnServer(targetSpawnObject, spawnPositions[i], Quaternion.identity);
         }
 
-
+        //spawn some day enemies that pose a small threat
         for (int i = 0; i < dayWaveData[wave]; i++){
+            //check if it will spawn
             int chance = Random.Range(0, 100);
             if (chance > daySpawnChance) continue;
             SyncWithWorldSpace.Instance.InstantiateOnServer(zombiePrefab, dayPositions[Random.Range(0, numDayPositions)], Quaternion.identity);

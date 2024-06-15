@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 
+/*
+ * Program name: TestCamera.cs
+ * Author: Elvin Shen
+ * What the program does: Very barebones version of PlayerCamera to test networking
+ */
+
 public class TestCamera : NetworkBehaviour{
     [SerializeField] private Camera _camera;
     [SerializeField] private float sensX = 50.0f, sensY = -50.0f;

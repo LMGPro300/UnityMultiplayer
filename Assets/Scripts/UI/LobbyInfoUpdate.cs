@@ -4,6 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/*
+ * Program name: LobbyInfoUpdate.cs
+ * Author: Elvin Shen 
+ * What the program does: Updates the lobby information like players, lobby name 
+ */
+
 public class LobbyInfoUpdate : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI lobbyNameText;
@@ -19,6 +25,7 @@ public class LobbyInfoUpdate : MonoBehaviour
         await LobbyManagerUI.Instance.JoinLobbyById(lobbyId);
     }
 
+    //Gotten information of the lobby, set the text accordly
     public void SetLobbyInfo(string lobbyName, int maxPlayers, int currentPlayers, string lobbyId){
         lobbyNameText.text = lobbyName;
         maxPlayersText.text = currentPlayers + "/" + maxPlayers;
