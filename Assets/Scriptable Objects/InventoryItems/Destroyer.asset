@@ -25,4 +25,4 @@ MonoBehaviour:
   melee: {fileID: 11400000, guid: db59da0cca1eb4e4bacaa8c3223ef9bc, type: 2}
   charAnimation: Default|HoldItem
   armAnimation: Armature|AxeEquip
-  sellPrice: 10
+  sellPrice: 75

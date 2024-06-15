@@ -25,4 +25,4 @@ MonoBehaviour:
   melee: {fileID: 0}
   charAnimation: Default|HoldItem
   armAnimation: 
-  sellPrice: 10
+  sellPrice: 100
