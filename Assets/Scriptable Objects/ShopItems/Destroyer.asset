@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e76c580ebd96c6743b49f0da9fd8bf7a, type: 3}
   m_Name: Destroyer
   m_EditorClassIdentifier: 
-  price: 0
-  icon: {fileID: 0}
-  shopItemName: 
+  price: 150
+  icon: {fileID: 21300000, guid: 84905daf64596f24eb9c25cb8089ca78, type: 3}
+  shopItemName: Destroyer
   quantity: 0
-  inventory_item: {fileID: 0}
+  inventory_item: {fileID: 11400000, guid: 619dbf70f5fe1954f8bf2a5cb3fc2ed2, type: 2}
   isAmmo: 0
   ammoData: {fileID: 0}
