@@ -23,15 +23,15 @@ public class GameLogic : NetworkBehaviour{
     private Vector3[] spawnPositions;
     private int numSpawnPositions;
 
-    private int[] nightWaveData = {5, 15, 50};
-    private int[] dayWaveData = {1,1,1};
-    private int wave = -1;
+    private int[] nightWaveData = {5, 15, 25, 40, 75};
+    private int[] dayWaveData = {5, 10, 15, 20, 25};
+    private int wave = 0;
 
     [SerializeField] private GameObject zombiePrefab;
     private int enemyLeft = 0;
 
     private CountdownTimer daytimeTimer;
-    private CountdownTimer warningTimer = new CountdownTimer(5);
+    private CountdownTimer warningTimer = new CountdownTimer(10);
     private CountdownTimer inBetweenTimer = new CountdownTimer(10);
     private CountdownTimer clearTextTimer = new CountdownTimer(5);
     private List<GameObject> remainingDayEnemies;
@@ -43,7 +43,7 @@ public class GameLogic : NetworkBehaviour{
         base.OnNetworkSpawn();
         if (!IsServer) return;
         spawnableScriptableObject.Init();
-        daytimeTimer = new CountdownTimer(10);
+        daytimeTimer = new CountdownTimer(120);
         daytimeTimer.OnTimerStop += () => {NightWarning();};
         daytimeTimer.Start();
         warningTimer.OnTimerStop += () => {TriggerNight();};
