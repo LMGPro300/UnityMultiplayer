@@ -2,7 +2,6 @@
 Normal Cube (rendered when dropped)
 
 Item Object
-Item OwnerShip
 NetworkObject
 NetworkTransform
 

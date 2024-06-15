@@ -170,7 +170,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1091917562
+  GlobalObjectIdHash: 1046332836
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -247,7 +247,8 @@ MonoBehaviour:
       gunEquipAnimation: 
       ammoType: 0
     melee: {fileID: 0}
-    animation: 
+    charAnimation: 
+    armAnimation: 
     sellPrice: 0
   pickupBufferSeconds: 2
   canPickUp: 0

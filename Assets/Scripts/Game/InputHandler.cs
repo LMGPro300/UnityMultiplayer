@@ -13,6 +13,7 @@ public class InputHandler : NetworkBehaviour//MonoBehaviour
     [SerializeField] InventorySystem inventorySystem;
     [SerializeField] PickUpItem pickUpItem;
     [SerializeField] ShopManager shopManager;
+    [SerializeField] MeleeManager meleeManager;
     //[SerializeField] PlayerPrediction clientPrediction;
 
     private PlayerControls PlayerControlsActionMap;
@@ -72,6 +73,7 @@ public class InputHandler : NetworkBehaviour//MonoBehaviour
         inventorySystem.RecieveDropInput(dropInput);
         pickUpItem.RecievePickUpInput(pickUpInput);
         shopManager.RecieveShopInput(shopInput);
+        meleeManager.Attack(shootInput);
         shopInput = 0f;
         
         //clientPrediction.RecieveTeleportInput(teleportInput);

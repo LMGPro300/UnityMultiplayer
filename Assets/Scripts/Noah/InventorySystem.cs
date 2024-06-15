@@ -36,7 +36,7 @@ public class InventorySystem : NetworkBehaviour
     [SerializeField] Transform playerTransform;
     [SerializeField] Transform playerCamera;
     [SerializeField] PlayerShoot playerShoot;
-    [SerializeField] MeleeManager playerMelee;
+    [SerializeField] MeleeManager meleeManager;
     [SerializeField] ItemSync itemSync;
 
     public Dictionary<InventoryItemData, List<InventoryItem>> item_dict;
@@ -265,12 +265,12 @@ public class InventorySystem : NetworkBehaviour
             pickUpAnimation.changeSlot(inventory[curSlot - 1].data.displayPrefab, inventory[curSlot - 1].data.charAnimation, inventory[curSlot- 1].data.armAnimation);
             itemSync.GetNewObject(inventory[curSlot - 1].data.globalPrefab);
             playerShoot.ChangeSlot(inventory[curSlot - 1].data.weapon);
-            playerMelee.ChangeSlot(inventory[curSlot - 1].data.melee);
+            meleeManager.ChangeSlot(inventory[curSlot - 1].data.melee);
             
         }
         else{
             playerShoot.ChangeSlot(null);
-            playerMelee.ChangeSlot(null);
+            meleeManager.ChangeSlot(null);
             pickUpAnimation.changeSlot(null, null, null);
             itemSync.Clear();
         }

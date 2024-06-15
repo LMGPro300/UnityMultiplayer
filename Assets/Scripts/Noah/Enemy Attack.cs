@@ -7,9 +7,11 @@ public class EnemyAttack : MonoBehaviour
 {
     [SerializeField]
     public EnemyScriptableObject enemyData;
+    [SerializeField] private Animator zombieAnimatior;
     CountdownTimer timer;
 
     private PlayerHealth healthToDamage;
+
 
     bool isAttackingPlayer = false;
 
@@ -33,6 +35,7 @@ public class EnemyAttack : MonoBehaviour
         {
             healthToDamage = other.transform.parent.gameObject.GetComponent<PlayerHealth>();
             isAttackingPlayer = true;
+            zombieAnimatior.Play("Default|ZombieAttack");
             timer.SetNewTime(Random.Range(enemyData.minDamageWaitCooldown, enemyData.maxDamageWaitCooldown));
             timer.Start();
         }

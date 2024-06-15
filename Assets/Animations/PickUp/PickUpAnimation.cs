@@ -9,6 +9,7 @@ public class PickUpAnimation : NetworkBehaviour
     [SerializeField] private Animator charAnimator;
     [SerializeField] private Transform itemLocation;
     [SerializeField] private PlayerShoot playerShoot;
+    [SerializeField] private MeleeManager meleeManager;
     //[SerializeField] private GameObject noItem;
 
     public GameObject previousDisplayItem;
@@ -39,8 +40,10 @@ public class PickUpAnimation : NetworkBehaviour
         Animator itemAnimator =  droppedItem.GetComponent<Animator>();
         if (itemAnimator != null){
             playerShoot.GetItemAnimator(itemAnimator);
+            meleeManager.GetItemAnimator(itemAnimator);
         }
         armAnimator.Play(null);
+        Debug.Log("played " + armAnimation);
         armAnimator.Play(armAnimation);
         //charAnimator.Play(null);
         //charAnimator.Play(null);

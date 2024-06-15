@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7bc46021ae383348bce277e8221c88d, type: 3}
+  m_Name: Destroyer
+  m_EditorClassIdentifier: 
+  displayName: Destroyer
+  icon: {fileID: 21300000, guid: 84905daf64596f24eb9c25cb8089ca78, type: 3}
+  prefab: {fileID: 5616224908850464577, guid: 7ead29634045e714ea2254170a856489, type: 3}
+  displayPrefab: {fileID: 5616224908850464577, guid: b18c10c97644b1647bfa0b6d44ef3f03, type: 3}
+  globalPrefab: {fileID: 5616224908850464577, guid: 12831d3aa3ccc9748957cff6d3173b69, type: 3}
+  maxStackSize: 1
+  isGun: 0
+  isMelee: 1
+  refWeapon: {fileID: 0}
+  weapon: {fileID: 0}
+  melee: {fileID: 11400000, guid: db59da0cca1eb4e4bacaa8c3223ef9bc, type: 2}
+  charAnimation: Default|HoldItem
+  armAnimation: Armature|AxeEquip
+  sellPrice: 10

@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c5dc0b405803b346ac46830d3c388a8, type: 3}
   m_Name: Example Gun
   m_EditorClassIdentifier: 
-  magSize: 12
-  currentMagSize: 9053
+  magSize: 30
+  currentMagSize: 0
   damage: 25
   firerate: 0.125
   reloadTime: 3.33

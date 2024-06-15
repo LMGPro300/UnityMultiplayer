@@ -10,11 +10,13 @@ public class MeleeManager : MonoBehaviour
     [SerializeField]
     private BoxCollider meleeHitbox;
     [SerializeField]
-    private InputAction playerClick;
-    [SerializeField]
     private MeleeData meleeData;
     [SerializeField]
     private Transform playerTransform;
+    [SerializeField] private Animator armAnimator;
+
+    private Animator meleeAnimator;
+    
 
     CountdownTimer attackTimer;
 
@@ -54,8 +56,6 @@ public class MeleeManager : MonoBehaviour
 
     public void Awake()
     {
-        playerClick.Enable();
-        playerClick.performed += Attack;
         attackTimer = new CountdownTimer(1f);
         attackTimer.OnTimerStop += timerStuffs;
         availableEnemies = new List<Entity>();
@@ -69,17 +69,22 @@ public class MeleeManager : MonoBehaviour
         }
     }
 
-    public void OnDisable()
-    {
-        playerClick.Disable();
-        attackTimer.Stop();
-        playerClick.performed -= Attack;
-    }
 
-    public void Attack(InputAction.CallbackContext ctx)
+    public void Attack(float shootInput)
     {
+        if (shootInput == 0f) return;
+        if (meleeData != null && coolDownDone && canAttackPlayer){
+            armAnimator.Play(null);
+            armAnimator.Play(meleeData.meleeSwingAnimation);
+            if (meleeAnimator != null){
+                meleeAnimator.Play(null);
+                meleeAnimator.Play(meleeData.meleeSwingAnimation);
+            }
+        }
+        
         if (canAttackPlayer && coolDownDone && meleeData != null)
         {
+            
             for (int i = availableEnemies.Count-1; i >= 0; i--)
             {
                 Entity obj = availableEnemies[i];
@@ -106,6 +111,18 @@ public class MeleeManager : MonoBehaviour
 
     public void ChangeSlot(MeleeData newData)
     {
+        if (newData == null){
+            meleeData = null;
+            return;
+        }
         meleeData = newData;
+        if (meleeAnimator != null){
+            meleeAnimator.Play(null);
+            meleeAnimator.Play(meleeData.meleeEquipAnimation);
+        }
+    }
+
+    public void GetItemAnimator(Animator itemAnimator){
+        meleeAnimator = itemAnimator;
     }
 }

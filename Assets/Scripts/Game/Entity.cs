@@ -30,7 +30,7 @@ public class Entity: MonoBehaviour{
         this.health -= damage;
         //StartCoroutine(PlaySounds());
         Debug.Log(damage + " taken damage");
-        if (health <= 0){
+        if (health <= 0 && isAlive == true){
             isAlive = false; 
             OnDeath.Invoke();   
             //shootingAnimation.enabled = false;
