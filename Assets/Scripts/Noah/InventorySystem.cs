@@ -12,9 +12,16 @@ using UnityEngine.InputSystem.Controls;
 using UnityEngine.UI;
 using Unity.Netcode;
 
+/*
+ * Program name: InventorySystem.cs
+ * Author: Noah Levy
+ * What the program does: class for keeping track of player inventory
+ */
+
 [Serializable]
 public class InventorySystem : NetworkBehaviour
 {
+    //respective UI elements
     [SerializeField]
     public GameObject hotbarChild;
     [SerializeField]
@@ -32,6 +39,7 @@ public class InventorySystem : NetworkBehaviour
     [SerializeField]
     public InventoryItem[] inventory;
 
+    //respective player network references
     [SerializeField] NetworkObject playerNetworkObject;
     [SerializeField] Transform playerTransform;
     [SerializeField] Transform playerCamera;
@@ -39,11 +47,14 @@ public class InventorySystem : NetworkBehaviour
     [SerializeField] MeleeManager meleeManager;
     [SerializeField] ItemSync itemSync;
 
+    //my dictionary
     public Dictionary<InventoryItemData, List<InventoryItem>> item_dict;
 
+    //stores which slot we are on
     private int curSlot = 1;
     private bool inventoryIsDisplayed = false;
 
+    //handles updating radial mouse logic
     private void Update(){
         if (inventoryIsDisplayed){
             RadialMouseLogic();
@@ -69,6 +80,7 @@ public class InventorySystem : NetworkBehaviour
 
     private void RadialMouseLogic()
     {
+        //uses atan2 to get which segment of the circle our mouse is on
         Vector2 mousePos = getMouseCoords.ReadValue<Vector2>();
         float mouseAngle = fixAngleVal((Mathf.Atan2(-(mousePos.y - Screen.height / 2), mousePos.x - Screen.width / 2) * Mathf.Rad2Deg) - 270 + 360) % 360;
         if ((int)((mouseAngle) / 60f) + 1 != curSlot)
@@ -77,6 +89,7 @@ public class InventorySystem : NetworkBehaviour
         }
     }
 
+    //fixes negative angles from atan2
     private float fixAngleVal(float angle)
     {
         if (angle < 0){
@@ -85,6 +98,7 @@ public class InventorySystem : NetworkBehaviour
         return angle;
     }
 
+    //handles spawning item into network space
     public override void OnNetworkSpawn(){
         if (!IsOwner) return;
         base.OnNetworkSpawn();
@@ -96,7 +110,8 @@ public class InventorySystem : NetworkBehaviour
         numKeys.performed += ChangeSlot;
         UpdateHotbar();
     }
-
+    
+    //disable necessary input actions
     private void OnDisable()
     {
         numKeys.Disable();
@@ -104,6 +119,8 @@ public class InventorySystem : NetworkBehaviour
         getMouseCoords.Disable();
     }
 
+
+    //return given value, helpful getter function
     public List<InventoryItem> Get(InventoryItemDataWrapper referenceData) { 
         if (item_dict.TryGetValue(referenceData.original, out List<InventoryItem> value))
         {
@@ -112,7 +129,9 @@ public class InventorySystem : NetworkBehaviour
         return null;
     }
 
+    //try to add an item
     public void Add(InventoryItemDataWrapper referenceData){
+        //if item exists in dicitonary
         if (item_dict.TryGetValue(referenceData.original, out List<InventoryItem> value))
         {
             Debug.Log("it exists somewhere");
@@ -141,6 +160,7 @@ public class InventorySystem : NetworkBehaviour
         UpdateHotbar();
     }
 
+    //loops through inventory and adds item to best stack, returns an idex
     public int addToBestStack(List<InventoryItem> listOfPlayerStacks, int maxStackSize)
     {
         for (int i = 0; i < listOfPlayerStacks.Count; i++)
@@ -153,6 +173,7 @@ public class InventorySystem : NetworkBehaviour
         return -1;
     } 
 
+    //adds item to first slot that isn't null
     public void addToBestSlot(InventoryItem itemToAdd)
     {
         for (int i = 0; i <  inventory.Length; i++)
@@ -161,6 +182,7 @@ public class InventorySystem : NetworkBehaviour
         }
     }
 
+    //logic to remove an item, deleting it if its stack size becomes 0
     public void Remove(InventoryItemDataWrapper referenceData)
     {
         InventoryItem memoryAdressToRemovedItem = inventory[curSlot - 1];
@@ -176,6 +198,7 @@ public class InventorySystem : NetworkBehaviour
         UpdateHotbar();
     }
 
+    //handle removing item from UI
     public void removeItemFromSlot(InventoryItem itemToRemove)
     {
         for (int i = 0; i < inventory.Length; i++)
@@ -184,18 +207,21 @@ public class InventorySystem : NetworkBehaviour
         }
     }
 
+    //drop item 
     public void RecieveDropInput(float dropInput){
         if (dropInput == 1f){
             DropItem();
         }
     }
 
+    //handles dropping item
     public void DropItem()
     {
         if (inventory[curSlot-1] == null)
         {
             return;
         }
+        //necessary references for dropping
         InventoryItem itemToDrop = inventory[curSlot-1];
         InventoryItemDataWrapper referenceData = inventory[curSlot-1].data;
         GameObject itemToSpawn = itemToDrop.data.prefab;
@@ -227,10 +253,11 @@ public class InventorySystem : NetworkBehaviour
         Debug.Log(gunPayload);
         SyncWithWorldSpace.Instance.InstantiateItemOnServer(playerNetworkObject, itemToSpawn, gunPayload, (playerTransform.position + (playerCamera.forward * 2f)), new Quaternion(0f, 0f, 0f, 1), (Vector3.up * 4f) + (playerCamera.forward * 4f));
         
-
+        //remove item from storage after dropping it
         Remove(referenceData);
     }
 
+    //pick up item if you can, using a wrapper to ensure unique data
     public void PickUpItem(InventoryItemDataWrapper referenceData, GameObject go){
         if (go == null) return;
         if (canAddItem(referenceData))
@@ -240,6 +267,7 @@ public class InventorySystem : NetworkBehaviour
         }
     }
 
+    //overloaded function to change the hotbar slot
     public void ChangeSlot(InputAction.CallbackContext ctx)
     {
         if (!hotbarChild.activeSelf)
@@ -260,7 +288,9 @@ public class InventorySystem : NetworkBehaviour
         UpdateHotbar();
     }
 
+    //update the hotbar
     public void UpdateHotbar(){
+        //add respective weapons where they need to go
         if (inventory[curSlot - 1] != null && inventory[curSlot - 1].data != null){
             pickUpAnimation.changeSlot(inventory[curSlot - 1].data.displayPrefab, inventory[curSlot - 1].data.charAnimation, inventory[curSlot- 1].data.armAnimation);
             itemSync.GetNewObject(inventory[curSlot - 1].data.globalPrefab);
@@ -268,6 +298,7 @@ public class InventorySystem : NetworkBehaviour
             meleeManager.ChangeSlot(inventory[curSlot - 1].data.melee);
             
         }
+        //you are holding nothing so don't do anything
         else{
             playerShoot.ChangeSlot(null);
             meleeManager.ChangeSlot(null);
@@ -275,6 +306,7 @@ public class InventorySystem : NetworkBehaviour
             itemSync.Clear();
         }
         if (!hotbarChild.activeSelf) { return; }
+        //update UI accordingly
         for (int i = 1; i <= 6; i++){
             if (inventory[i - 1] != null && inventory[i - 1].data == null){
                 inventory[i - 1] = null;
@@ -289,6 +321,7 @@ public class InventorySystem : NetworkBehaviour
         UpdateDisplayIcon();
     }
 
+    //updates radial menu logic
     public void UpdateDisplayIcon()
     {
         InventoryItem curItem = inventory[curSlot - 1];
@@ -304,6 +337,7 @@ public class InventorySystem : NetworkBehaviour
         }
     }
 
+    //tests if can add item, overloaded functions
     public bool canAddItem(InventoryItemData itemToCheck)
     {
         if (inventory.Contains(null))
